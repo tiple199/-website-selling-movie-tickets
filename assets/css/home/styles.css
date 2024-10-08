@@ -1,0 +1,354 @@
+:root{
+    --primary-color: #e97f12;
+}
+*,::before,::after{
+    box-sizing: border-box;
+}
+html{
+    font-size: 62.5%;
+}
+body{
+    font-size: 1.6rem;
+    font-family: "Nunito Sans",sans-serif;
+}
+/* Common */
+.btn{
+    padding: 12px 20px;
+    background: var(--primary-color);
+    color: #fff;
+}
+.btn:hover{
+    opacity: 0.8;
+}
+a{
+    text-decoration: none;
+}
+/* Header */
+.header__img{
+    width: 100px;
+    height: 100px;
+}
+.header__inner{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.header__list{
+    display: flex;
+    margin-left: -140px;
+}
+.header__item{
+    padding: 25px 15px;
+    color: #4a4a4a;
+    position: relative;
+}
+.header__item:hover{
+    cursor: pointer;
+    color: var(--primary-color);
+}
+.header__item:hover .header__showfilm{
+    display: block;
+    color: black;
+}
+.btn__header{
+    margin-left: 10px;
+}
+.header__search{
+    position: relative;
+    z-index: 1;
+    padding: 10px;
+    cursor: pointer;
+}
+.search__icon{
+    color: #4a4a4a;
+}
+.header__search:hover .search__icon{
+    color: var(--primary-color);
+}
+.header__cta--wrap{
+    display: flex;
+    align-items: center;
+}
+.search__wrap{
+    display: inline;
+}
+.list-icon{
+    font-size: 10px;
+    position: relative;
+    left: 5px;
+    top: -2px;
+}
+.decor__header{
+    width: 112px;
+    height: 36px;
+    object-fit: cover;
+}
+.header__showfilm{
+    border-radius: 5px;
+    padding: 15px 20px ;
+    position: absolute;
+    top: 65px;
+    left: -40px;
+    display: none;
+    width: 650px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+    background: #fff;
+    z-index: 2;
+}
+.header__showfilm--item{
+    display: inline-block;
+    border-left: 5px solid #034ea2;
+    margin-bottom: 10px;
+    font-size: 2rem;
+    padding-left: 6px;
+}
+.header__imgfilm.img__film{
+    height: 200px; 
+}
+/* header_submenu */
+.header__item:hover .header__submenu{
+    display: block;
+    color: black;
+}
+.header__submenu{
+    position: absolute;
+    top: 50px;
+    left: -35px;
+    display: none;
+    background: #fff;
+}
+.header__submenu--item:first-child{
+    margin-top: 10px;
+}
+.header__submenu--item{
+    overflow: hidden;
+    position: relative;
+}
+.header__submenu--link{
+    color: black;
+    display: inline-block;
+    width: 200px;
+    padding: 10px 0;
+    text-align: center;
+    transition: 0.25s ease;
+}
+.header__submenu--link:hover{
+    color: #f97316;
+    background: #f0d5c3;
+}
+.header__submenu--link:hover ~ .decor__submenu{
+    transform: translateX(0%);
+}
+.decor__submenu{
+    transform: translateX(-100%);
+    position: absolute;
+    left: 0;
+    top: 0;
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 100%;
+    background: #f97316;
+    transition: 0.5s ease;
+}
+
+/* poster */
+.poster{
+    margin-top: 50px;
+}
+.home__poster{
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+}
+/* film */
+.text__film{
+    font-size: 2rem;
+    font-weight: 700;
+    border-left: 5px solid #034ea2;
+    padding-left: 10px;
+}
+.img__film{
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.type__film{
+    position: relative;
+    margin:50px 0;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+.type__film--list{
+    display: flex;
+    gap: 30px;
+}
+
+.catid__link{
+    color: #333;
+    opacity: 0.4;
+    font-size: 1.6rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+.catid__link:hover{
+    color: #034ea2;
+    opacity: 0.4;
+}
+.catid__active,.catid__active:hover{
+    color: #1023b3;
+    opacity: 1;
+}
+.catid__active{
+    position: relative;
+}
+.catid__active::before{
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    content: "";
+    display: inline-block;
+    width: 30px;
+    height: 2px;
+    background: #1023b3;
+}
+.film__name{
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.rate__star{
+    color: #fde047;
+    margin-right: 10px;
+}
+.item__film{
+    position: relative;
+    overflow: hidden;
+}
+.item__film:hover.item__film::before{
+    opacity: 1;
+}
+.item__film::before{
+    transition: 0.5s ease;
+    opacity: 0;
+    content: "";
+    display: inline-block;
+    position: absolute;
+    border-radius: 10px;
+    top: 0;
+    width: 100%;
+    height: 500px;
+    background: rgba(0, 0, 0, .4);
+    z-index: 1;
+    
+}
+.item__film:hover{
+    cursor: pointer;
+}
+.rate__film{
+    position: relative;
+    left: -90px;
+    color: #fff;
+    top: -7px;
+}
+.vote{
+    position: absolute;
+    top: 422px;
+    right: -81px;
+}
+.vote::before{
+    display: inline-block;
+    content: "";
+    width: 110px;
+    height: 25px;
+    background: rgba(0, 0, 0, .4);
+    transform: rotate(0deg) skew(-49deg);
+    -webkit-transform: rotate(0deg) skew(-49deg);
+    -moz-transform: rotate(0deg) skew(-49deg);
+    /* background: blue; */
+}
+.age__limit{
+    position: absolute;
+    top: 462px;
+    right: 5px;
+    display: inline-flex;
+    justify-content: center;
+    width: 45px;
+    padding: 8px 0;
+    height: auto;
+    background: orange;
+    border-radius: 5px;
+}
+.age__limit--text{
+    color: #fff;
+    font-weight: 700;
+}
+.item__film:hover .book_film{
+    opacity: 1;
+}
+
+.book_film{
+    transition: 0.5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: inline-flex;
+    flex-direction: column;
+    row-gap: 10px;
+    z-index: 2;
+}
+.ticket__film{
+    display: inline-block;
+    padding: 12px 23px;
+    border-radius: 5px;
+    border: 1px solid #e97f12;
+    color: #FFF;
+    background: #e97f12;
+}
+.ticket__film:hover,.trailer_film:hover{
+    background: #e4913f;
+    border: 1px solid #e4913f;
+}
+.trailer_film{
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 5px;
+    border: 1px solid #FFF;
+    color: #FFF;
+}
+#location_film{
+    opacity: 0;
+    position: absolute;
+    top: -40px;
+}
+/* Header_fix */
+.header__agelimit{
+    width: 40px;
+    padding: 4px 0;
+    top: 170px;
+}
+.header__vote{
+    top: 135px;
+}
+.header__filmname{
+    font-size: 1.4rem;
+}
+.header__ticket{
+    width: 110px;
+    padding: 10px 15px;
+    font-size: 1.4rem;
+}
+.header__itemflim::before{
+    height: 200px;
+}
+.header__bookfilm{
+    top: 42%;
+}

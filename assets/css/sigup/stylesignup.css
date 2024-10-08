@@ -1,0 +1,127 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+html{
+    font-size: 62.5%;
+}
+body{
+    font-size: 1.6rem;
+    font-family: "Poppins",sans-serif;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+button{
+    font-family: "Poppins",sans-serif;
+}
+a{
+    text-decoration: none;
+}
+.container{
+    width: 70%;
+    margin: 0 auto;
+}
+.login{
+    position: relative;
+}
+.bg_body{
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    
+}
+/* form{
+    display: flex;
+    justify-content: center;
+} */
+ .login__inner{
+    position: absolute;
+    width: 500px;
+    height: 650px;
+    background: rgba(195, 194, 194, 0.8);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+.label_form,.input_form{
+    display: block;
+}
+.title{
+    margin-bottom: 25px;
+    font-size: 3.5rem;
+    margin-top: 15px;
+    color: #578b5b;
+}
+.label_form{
+    margin-bottom: 10px;
+}
+.input__username{
+    
+    
+}
+.input_form{
+    font-size: 1.4rem;
+    width: 100%;
+    height: 45px;
+    border-radius: 10px;
+    border: transparent;
+    outline: transparent;
+    padding-left: 20px;
+}
+.form___group ~ .form___group{
+    margin-top: 10px;
+}
+.label_form{
+    font-size: 2rem;
+    color: #fff;
+    font-weight: 400;
+}
+/* .input_form::placeholder{
+    color: ;
+} */
+.btn__form{
+    font-size: 1.6rem;
+    width: 120px;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: #6ba329;
+    color: #fff;
+
+}
+.btn__form:hover{
+    opacity: 0.8;
+}
+.control__btn{
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+.btn__submit{
+    margin-right: 10px;
+}
+.label_user{
+    position: relative;
+}
+.input_form:focus{
+    outline: 1px solid #2e6655;
+}
+.text__error{
+    color: red;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.btn__signup{
+    /* display: inline-block; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

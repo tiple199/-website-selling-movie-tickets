@@ -20,13 +20,14 @@
         $result_film=$conn->query("SELECT m.*
                 FROM movie_categories mc,movies m
                 WHERE mc.cat_id = 3 and mc.movie_id = m.movie_id
-                ORDER BY 
+                ORDER BY
                 CASE 
-                    WHEN mc.cat_id = 1 THEN 1
+                    WHEN m.movie_ispremiere = 1 THEN 1
                     ELSE 2
                 END;
         ");
     }
+    $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1");
     $film_categories= $conn->query("select * from film_categories");
 ?>
 <!DOCTYPE html>
@@ -72,7 +73,7 @@
                                                 WHERE mc.cat_id = 3 and mc.movie_id = m.movie_id
                                                 ORDER BY 
                                                 CASE 
-                                                    WHEN mc.cat_id = 1 THEN 1
+                                                    WHEN m.movie_ispremiere = 1 THEN 1
                                                     ELSE 2
                                                 END                                    
                                             ");
@@ -102,6 +103,20 @@
                                                 </div>
                                                 <div class="age__limit header__agelimit">
                                                     <span class="age__limit--text"><?php echo $row1["movie_minage"]?></span>
+                                                </div>
+                                                <div class="decor__moviepremiere">
+                                                    <?php
+                                                        if($cat_id == 3){
+                                                        while($row2 = $film_premiere->fetch_assoc()){
+                                                            if($row2["movie_id"] == $row1["movie_id"]){
+                                                    ?>
+                                                        <img src="./assets/image/decor/decor__premiere.png" alt="" class="decor__premiere">
+                                                    <?php
+                                                            }
+                                                        }  
+                                                    }   
+                                                    $film_premiere->data_seek(0);                                     
+                                                    ?>
                                                 </div>
                                         </div>
                                 </div>
@@ -216,11 +231,25 @@
                                     <div class="age__limit">
                                         <span class="age__limit--text"><?php echo $row["movie_minage"]?></span>
                                     </div>
+                                    <div class="decor__moviepremiere">
+                                        <?php
+                                            if($check_catid == 3){
+                                            while($row1 = $film_premiere->fetch_assoc()){
+                                                if($row1["movie_id"] == $row["movie_id"]){
+                                        ?>
+                                            <img src="./assets/image/decor/decor__premiere.png" alt="" class="decor__premiere">
+                                        <?php
+                                                }
+                                            }  
+                                        }                                        
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
                         <?php 
-                        $count++;
-                                }
+                                    }
+                            $count++;
+                            $film_premiere->data_seek(0);
                             }
                         }
                         ?>

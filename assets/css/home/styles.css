@@ -352,3 +352,8 @@ a{
 .header__bookfilm{
     top: 42%;
 }
+.decor__moviepremiere{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}

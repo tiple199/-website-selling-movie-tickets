@@ -118,6 +118,7 @@ a{
     left: -35px;
     display: none;
     background: #fff;
+    z-index: 1;
 }
 .header__submenu--item:first-child{
     margin-top: 10px;

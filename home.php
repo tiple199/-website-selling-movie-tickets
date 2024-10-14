@@ -14,12 +14,12 @@
     $check_catid = $_REQUEST["catid"];
     $check_active = $_REQUEST["catid_active"];
     if($check_catid != "3"){
-        $result_film = $conn->query("SELECT m.* FROM movie_categories mc, movies m WHERE mc.cat_id = $check_catid AND m.movie_ishot = 1 AND mc.movie_id = m.movie_id ORDER BY m.movie_rating DESC");
+        $result_film = $conn->query("SELECT m.* FROM movie__categories mc, movies m WHERE mc.cat_id = $check_catid AND m.movie_ishot = 1 AND mc.movie_id = m.movie_id and movie_status  = 1 ORDER BY m.movie_rating DESC");
     }
     else{
         $result_film=$conn->query("SELECT m.*
-                FROM movie_categories mc,movies m
-                WHERE mc.cat_id = 3 and mc.movie_id = m.movie_id
+                FROM movie__categories mc,movies m
+                WHERE mc.cat_id = 3 and mc.movie_id = m.movie_id and movie_status  = 1
                 ORDER BY
                 CASE 
                     WHEN m.movie_ispremiere = 1 THEN 1
@@ -27,7 +27,7 @@
                 END;
         ");
     }
-    $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1");
+    $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
     $film_categories= $conn->query("select * from film_categories");
 ?>
 <!DOCTYPE html>
@@ -65,12 +65,12 @@
                                     while($row = $film_categories->fetch_assoc()){
                                         $cat_id = $row["cat_id"];
                                         if($cat_id != 3){
-                                            $result = $conn->query("SELECT m.*,mc.cat_id FROM movie_categories mc, movies m WHERE mc.cat_id = $cat_id AND m.movie_ishot = 1 AND mc.movie_id = m.movie_id ORDER BY m.movie_rating DESC");
+                                            $result = $conn->query("SELECT m.*,mc.cat_id FROM movie__categories mc, movies m WHERE mc.cat_id = $cat_id AND m.movie_ishot = 1 AND mc.movie_id = m.movie_id and movie_status  = 1 ORDER BY m.movie_rating DESC");
                                         }
                                         else{
                                             $result = $conn->query("SELECT m.*,mc.cat_id
-                                                FROM movie_categories mc,movies m
-                                                WHERE mc.cat_id = 3 and mc.movie_id = m.movie_id
+                                                FROM movie__categories mc,movies m
+                                                WHERE mc.cat_id = 3 and mc.movie_id = m.movie_id and movie_status  = 1
                                                 ORDER BY 
                                                 CASE 
                                                     WHEN m.movie_ispremiere = 1 THEN 1
@@ -96,7 +96,7 @@
                                                     <p class="film__name header__filmname"><?php echo $row1["movie_name"];?></p>
                                                 </div>
                                                 <div class="book_film header__bookfilm">
-                                                    <div class="ticket__film header__ticket"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div>
+                                                    <a href="./show_detailfilm.php?movie_id=<?php echo $row1["movie_id"];?>"><div class="ticket__film header__ticket"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
                                                 </div>
                                                 <div class="vote header__vote">
                                                     <span class="rate__film"><i class="fa-solid fa-star rate__star"></i><?php echo $row1["movie_rating"];?></span>
@@ -179,7 +179,7 @@
             <div class="container">
                 <div class="poster__list">
                     <div class="post__item">
-                        <img src="./assets/image/poster/poster01.jpg" alt="" class="home__poster">
+                        <img src="./assets/image/poster/transformersmot.jpg" alt="" class="home__poster">
                     </div>
                 </div>
             </div>
@@ -222,7 +222,7 @@
                                         <p class="film__name"><?php echo $row["movie_name"];?></p>
                                     </div>
                                     <div class="book_film">
-                                                <div class="ticket__film"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div>
+                                                <a href="./show_detailfilm.php?movie_id=<?php echo $row["movie_id"];?>"><div class="ticket__film"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
                                                 <div class="trailer_film"><i class="fa-solid fa-circle-play" style="margin-right:5px"></i> Trailer</div>
                                     </div>
                                     <div class="vote">

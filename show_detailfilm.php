@@ -1,13 +1,27 @@
 <?php
     require_once("./connect/connection.php");
     $check_movieid = $_REQUEST["movie_id"];
+    if(!isset($_REQUEST["check_date"])){
+        $_REQUEST["check_date"] = 1;
+    }
+    if(!isset($_REQUEST["select__cinema"]) || $_REQUEST["select__cinema"] == "allcinema"){
+        $check_cinemaid = "";
+        // cinema
+        $cinema = $conn->query("select * from cinema");
+    }
+    else{
+        $check_cinemaid = $_REQUEST["select__cinema"];
+        // cinema
+        $cinema = $conn->query("select * from cinema where cinema_id = $check_cinemaid");
+    }
+    $check_date = $_REQUEST["check_date"];
     // header
     $film_categories= $conn->query("select * from film_categories");
     $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
     // thong tin phim qua id
     $search__film = $conn->query("select * from movies where movie_id = $check_movieid and movie_status  = 1");
     // ad
-    $film_ad = $conn->query("select M.* from movie__ad MA join movies M on MA.movie_id = M.movie_id where MA.ad_status = 1 and movie_status  = 1");
+    $film_ad = $conn->query("select * from  movies M where movie_status  = 1 and movie_ad = 1");
     // the loai
     $genre = $conn->query("select G.g_name from movie__genre MG join genre_film G on MG.genre_id = G.g_id where MG.movie_id = $check_movieid");
     // actor
@@ -16,6 +30,12 @@
     $director = $conn->query("select d.d_name from movie__director MD join director d on d.d_id = MD.d_id where MD.movie_id = $check_movieid");
     // Content_film
     $content_film = $conn->query("select c.* from movie__content MC join content_film c on c.content_id = MC.content_id where MC.movie_id = $check_movieid");
+    // showtime
+    $showtime = $conn->query("select * from datetime");
+    // cinema__selectform
+    $cinema_form =$conn->query("select * from cinema");
+    // check premiere
+    $check_film_premiere = $conn->query("select * from movies where movie_id = $check_movieid");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +73,7 @@
                                     while($row = $film_categories->fetch_assoc()){
                                         $cat_id = $row["cat_id"];
                                         if($cat_id != 3){
-                                            $result = $conn->query("SELECT m.*,mc.cat_id FROM movie__categories mc, movies m WHERE mc.cat_id = $cat_id AND m.movie_ishot = 1 AND mc.movie_id = m.movie_id and movie_status  = 1 ORDER BY m.movie_rating DESC");
+                                            $result = $conn->query("SELECT m.*,mc.cat_id FROM movie__categories mc, movies m WHERE mc.cat_id = $cat_id AND mc.movie_id = m.movie_id and movie_status  = 1 ORDER BY m.movie_rating DESC");
                                         }
                                         else{
                                             $result = $conn->query("SELECT m.*,mc.cat_id
@@ -236,7 +256,7 @@
                                     while($row = $actor->fetch_assoc()){
                 
                                 ?>
-                                <span class="border__item"><?php echo $row["a_name"];?></span>
+                                <span class="border__item actor_border"><?php echo $row["a_name"];?></span>
                                 <?php 
                                     }
                                     }
@@ -263,44 +283,85 @@
                             <p class="summary__content"><?php echo $row["content_part5"]?></p>
                             <?php }?>
                         </div>
+                        <!-- showtime_film -->
+                        <?php 
+                            while($row = $check_film_premiere->fetch_assoc()){
+                                if($row["movie_ispremiere"] == 1){
+                        ?>
                         <div class="showtime__film">
                             <p class="text_cat text__showtime">Lịch Chiếu Phim</p>
                             <div class="box__select_day">
                                     <div class="day__wrap">
-                                        <div class="day__item">
-                                            <span class="day_name">Thứ hai</span>
-                                            <span class="date">15/10</span>
-                                        </div>
-                                        <div class="day__item">
-                                            <span class="day_name">Thứ ba</span>
-                                            <span class="date">16/10</span>
-                                        </div>
-                                        <div class="day__item">
-                                            <span class="day_name">Thứ tư</span>
-                                            <span class="date">17/10</span>
-                                        </div>
+                                        <?php 
+                                        // hiện thứ
+                                            while ($row = $showtime->fetch_assoc()){
+                                        ?>
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=<?php echo $row["d_id"];
+                                        if(isset($_REQUEST["select__cinema"]) && $_REQUEST["select__cinema"] != "allcinema"){echo "&select__cinema=$check_cinemaid";}
+                                        ?>">
+                                            <div class="day__item <?php if($row["d_id"] == $check_date) {echo "active";}?>">
+                                                <span class="day_name"><?php echo $row["d_name"];?></span>
+                                                <span class="date"><?php echo $row["d_date"];?></span>
+                                            </div>
+                                        </a>
+                                        <?php }?>
 
                                     </div>
-                                    <form action="#!" method="post">
+                                    <!-- form chọn rạp -->
+                                    <form action="?movie_id=<?php echo $check_movieid?>&check_date=<?php echo $check_date?>" method="post">
                                         <select name="select__cinema" id="" class="select__cinema">
-                                                <option value="">Tất cả rạp</option>
-                                                <option value="">TTNP Cầu Giấy</option>
+                                                <option value="allcinema">Tất cả rạp</option>
+                                                <?php 
+                                                    while($row = $cinema_form->fetch_assoc()){
+                                                ?>
+                                                    <option value="<?php echo $row["cinema_id"];?>" <?php if($row["cinema_id"] == $check_cinemaid) {echo "selected";}?>><?php echo $row["cinema_name"];?></option>
+                                                <?php 
+                                                    }
+                                                    $cinema->data_seek(0);
+                                                ?>
+                                                
+
                                             </select>
                                             <input type="submit" value = "Chọn" class="submit__btn">
                                     </form>
                             </div>
+                            <!-- select time -->
                             <div class="box_select__time">
+                                <?php while($row = $cinema->fetch_assoc()){
+                                    if(!isset($_REQUEST["select__cinema"]) || $_REQUEST["select__cinema"] = "allcinema"){
+                                        $check_cinemaid = $row["cinema_id"];
+                                    }
+                                    else{               
+                                        $check_cinemaid = $_REQUEST["select__cinema"];
+                                    }
+
+                                ?>
                                 <div class="box__item_time">
-                                    <p class="cenima__name">TTNP Cầu Giấy</p>
+                                    <p class="cenima__name"><?php echo $row["cinema_name"];?></p>
                                     <div class="select__time">
                                         <span class="text__select_time">2D Phụ Đề</span>
                                         <div class="box__border_time">
-                                            <span class="border__item_selecttime">11:00</span>
+                                            <?php
+                                            $movie_showtime = $conn->query("select CT.cinema_id,SF.sf_time from cinema_showtime CT
+                                            join showtime_detail SD on SD.showtime_detail_id = CT.showtime_detail_id
+                                            join schedule__film SF on SF.sf_id = SD.sf_id where SD.movie_id = $check_movieid and SD.d_id = $check_date and CT.cinema_id = $check_cinemaid order by SF.sf_time");
+                                            while ($row1 = $movie_showtime->fetch_assoc()){
+                                                
+                                            ?>
+                                            <span class="border__item_selecttime"><?php echo $row1["sf_time"];?></span>
+                                            <?php 
+                                                
+                                            }
+                                            $movie_showtime->data_seek(0);
+                                            ?>
                                         </div>
                                     </div>
                                 </div>
+                                <?php }?>
                             </div>
                         </div>
+                        <?php }
+                        }?>
                     </div>
                 </div>
 
@@ -338,6 +399,9 @@
                                 }
                                 
                             ?>
+                    </div>
+                    <div class="btn__showmore">
+                        <a href="" class="show__more">Xem thêm <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>

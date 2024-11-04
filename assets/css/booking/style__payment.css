@@ -1,0 +1,206 @@
+.sale{
+    background: #fff;
+    padding: 16px;
+}
+.input__discount{
+    width: 250px;
+    height: 40px;
+}
+.discount__wrap{
+    margin-top: 10px;
+}
+.btn__discount{
+    width: 100px;
+    height: 40px;
+    background: #e97f12;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    color: #fff;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.btn__discount:hover{
+    opacity: 0.7;
+}
+.title__page{
+    margin-bottom: 30px;
+}
+.text__desc{
+    font-size: 1.4rem;
+    color: #ccc7c7;
+}
+.paymethod{
+    background: #fff;
+    margin-top: 15px;
+    padding: 16px;
+}
+.method__item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.method__item + .method__item{
+    margin-top: 15px;
+}
+.label__method{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.img__method{
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+.method__desc{
+    font-size: 1.6rem;
+}
+/* confirm */
+.ticket{
+    border-radius: 10px;
+    width: 400px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 2;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    display: none;
+}
+.title__ticket{
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+.row__film{
+    display: flex;
+    gap: 5px;
+}
+.border__ticket{
+    width: 100%;
+    border: 1px solid #CCC;
+    padding: 15px;
+}
+.border__ticket--color{
+    background: #034ea2;
+}
+.span__page{
+    margin-top: 15px;
+    width: 50px;
+    font-weight: 600;
+}
+.ticket__namefilm{
+    color: #034ea2;
+}
+.text__ticketage{
+    font-size: 1.4rem;
+}
+.row__film + .row__film{
+    margin-top: 10px;
+}
+.room__name,.room__seat{
+    font-weight: 400;
+    color: #716e6e;
+}
+.ticket__price{
+    color: #fff;
+    font-weight: 600;
+}
+.decor{
+    position: relative;
+    top: 10px;
+}
+.decor::before{
+    position: absolute;
+    left: -30px;
+    top: -5px;
+    content: "";
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #CCC;
+}
+.decor::after{
+    position: absolute;
+    right: -30px;
+    top: -5px;
+    content: "";
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #CCC;
+}
+.decor__line{
+    margin-left: 14px;
+    width: 327px;
+}
+.confirm{
+    margin-top: 25px;
+}
+.confirm__pay{
+    border: none;
+    outline: none;
+    font-weight: 600;
+    display: inline-block;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.showtime__film{
+    font-weight: 550;
+}
+.overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    visibility: hidden;
+}
+.control__display [type="checkbox"]:checked ~ label .overlay{
+    visibility: visible;
+    z-index: 2;
+}
+.control__display [type="checkbox"]:checked ~ .ticket{
+    display: block;
+}
+.row__booking{
+    display: flex;
+    gap: 30px;
+}
+.style__btn{
+    width: 50%;
+}
+.label__control{
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+}
+.text__continue{
+    padding: 15px;
+}
+.btn__link{
+    display: block;
+    text-align: center;
+    padding: 15px;
+    color: #f58020;
+}
+.btn__link_continue{
+    background: #f58020;
+    border-radius: 5px;
+    text-align: center;
+    color: #fff;
+    font-weight: 600;
+}
+.btn__link_continue:hover{
+    opacity: 0.7;
+    cursor: pointer;
+}

@@ -94,7 +94,9 @@
 .movie_nation,.row__wrap{
     margin: 10px 0;
 }
-
+.movie__director{
+    padding-top: 6px;
+}
 .movie__director,.movie__performer,.movie__genre,.manufacturer{
     margin-top: 20px;
 }
@@ -102,11 +104,8 @@
     position: relative;
     right: -10px;
 }
-.movie__director span:first-child{
+.movie__director__wrap{
     margin-left: 12px;
-}
-.movie__performer span:first-child{
-    margin-left: 10px;
 }
 .movie__genre span:first-child{
     margin-left: 18px;
@@ -119,7 +118,19 @@
 .info__film{
     padding-top: 20px;
 }
-
+.movie__performer__wrap{
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 10px;
+    row-gap: 5px;
+    column-gap: 5px;
+}
+.text__movie__performer{
+    flex-shrink: 0;
+}
+.actor_border{
+    padding: 6px 10px;
+}
 /* AD*/
 .text_cat{
     font-size: 2rem;
@@ -154,10 +165,11 @@
     padding: 10px;
     border-radius: 5px;
     margin-right: 10px;
+    color: black;
 }
-.day__item:first-child{
+.day__item.active{
     background: #034ea2;
-    
+    color: #fff;
 }
 .day_name{
     margin-bottom: 10px;
@@ -198,7 +210,7 @@
     padding: 10px 25px;
     border: 1px solid #CCC;
     border-radius: 3px;
-    transition: 0.5s ease;
+    transition: 0.5s ease   ;
 }
 .border__item_selecttime:hover{
     background-color: #034ea2;
@@ -211,4 +223,17 @@
 .select__time{
     display: flex;
     align-items: center;
+}
+.show__more{
+    display: inline-flex;
+    gap: 10px;
+    padding: 12px 15px;
+    border-radius: 5px;
+    border: 1px solid #f58020;
+    color: #f58020;
+    transition: 0.5s ease;
+}
+.show__more:hover{
+    background: #f58020;
+    color: #fff;
 }

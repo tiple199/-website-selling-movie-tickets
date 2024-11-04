@@ -1,0 +1,262 @@
+.main__class{
+    padding-top: -10px;
+    background: #f9f9f9;
+    padding-bottom: 30px;
+}
+/* avatar */
+.box_user{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.avatar__userwrap{
+    padding: 10px;
+    background: #ccc;
+    border: 2px solid #9f9b9b;
+    border-radius: 50%;
+}
+.header__search{
+    margin-right: 10px;
+}
+.booking__step{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: 5px;
+    background: #fff;
+    width: 100%;
+    height: 70px;
+}
+.step_book{
+    font-size: 1.6rem;
+    color: #ccc;
+    border-bottom: 2px solid #ccc;
+    padding: 0 10px 10px;
+}
+/* Booking */
+.booking{
+    margin-top: 30px;
+}
+.booking__inner{
+    display: flex;
+    gap: 20px;
+}
+.border__time{
+    padding: 12px 20px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    transition: 0.5s ease;
+}
+.border__time:hover{
+    background: #034ea2;
+    color: #fff;
+    cursor: pointer;
+}
+.changetime{
+    display: flex;
+    background: #fff;
+    padding: 30px 20px 30px 30px;
+    align-items: center;
+    border-radius: 3px;
+}
+.showtime{
+    margin-left: 20px;
+    display: flex;
+    gap: 10px;
+    row-gap: 10px;
+}
+.column_01{
+    width: 65%;
+}
+.column_02{
+    width: 35%;
+}
+/* select_reservation */
+.select__reservation{
+    margin-top: 30px;
+    background: #fff;
+    width: 100%;
+    height: 500px;
+    position: relative;
+}
+.screen{
+    position: absolute;
+    bottom: 70px;
+    width: 100%;
+    left: 0;
+}
+.item__film_selected{
+    background: #fff;
+    width: 100%;
+    height: 380px;
+    border-top: 7px solid #f58020;
+    border-radius: 5px;
+    padding: 0 15px;
+}
+.info_film{
+    padding-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+.row__subinfo{
+    margin-top: 15px;
+}
+.text__limitage{
+    padding: 5px 10px;
+    color: #fff;
+    background: #f58020;
+    border-radius: 5px;
+    font-weight: 600;
+}
+.film__img{
+    width: 135px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 3px;
+}
+.text_namefilm{
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+.text__subnamefilm{
+    font-size: 1.4rem;
+}
+.info__cinema{
+    margin-top: 20px;
+    padding-bottom: 25px;
+    border-bottom: 1px dashed #ccc;
+}
+.name__Cinema{
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+.info__booking{
+    font-size: 1.6rem;
+}
+.text__bold{
+    font-weight: 600;
+}
+.date__current{
+    font-size: 1.4rem;
+}
+.total__booking{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+}
+.text__total{
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+.price__booking{
+    color: #f58020;
+    font-weight: 600;
+}
+
+
+.control__booking{
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 50px;
+}
+
+
+/* seat */
+.select__reservation{
+    padding :20px
+}
+.seat{
+    width: 40px;
+    height: 40px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    transition: 0.5s ease;
+}
+.seat:hover{
+    background: red;
+    cursor: pointer;
+}
+.row__seat{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+}
+.row__seat + .row__seat{
+    margin-top: 10px;
+}
+.seat__wrap{
+    display: flex;
+    gap: 10px;
+}
+.done__step{
+    border-bottom-color: #034ea2;
+    color: #034ea2;
+}
+/* btn */
+.btn__link,.btn__link_continue{
+    display: block;
+    text-align: center;
+}
+.btn__link_continue{
+    background: #f58020;
+    border-radius: 5px;
+
+}
+.btn__link_continue:hover{
+    opacity: 0.7;
+    cursor: pointer;
+}
+.btn__link{
+    color: #f58020;
+}
+.link__continue{
+    color: #fff;
+    font-weight: 500;
+}
+/* screen */
+.text__screen{
+    display: block;
+    text-align: center;
+    width: 100%;
+    color: #ccc;
+    
+}
+.text__screen::after{
+    content: "";
+    display: inline-block;
+    width: 100%;
+    height: 5px;
+    background: #f58020;
+}
+.seat__desc{
+    display: flex;
+    position: absolute;
+    justify-content: space-between;
+    bottom: 20px;
+    width: 100%;
+    padding-right: 40px;
+}
+
+.desc__wrap{
+    display: flex;
+}
+.info__seat{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.info__seat + .info__seat{
+    margin-left: 10px;
+}
+.info__seat::before{
+    content: "";
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: red;
+    border-radius: 8px;
+}

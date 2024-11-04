@@ -1,0 +1,131 @@
+<!-- <?php
+    require_once("../connect/connection.php");
+    // heading
+    $film_categories= $conn->query("select * from film_categories");
+    $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
+?> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../assets/css/home/reset.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/home/styles.css">
+    <link rel="stylesheet" href="../assets/css/home/grid.css">
+    <link rel="stylesheet" href="../assets/css/booking/styles.css">
+    <link rel="stylesheet" href="../assets/css/booking/style__food.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+<body>
+    <!-- heading -->
+    <header class="header">
+        <div class="container" style="--spacer:20px;">
+            <div class="header__inner">
+                <a href="./home.php"><img src="../logo.png" alt="" class="header__img"></a>
+                <div class="cancel_tran">
+                    <a href="#!" class="link__cancel">Hủy giao dịch <i class="fa-solid fa-xmark"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- step booking -->
+     <main class="main__class">
+        <!-- booking_-step -->
+        <div class="booking__step">
+            <span class="step_book done__step">Chọn phim/Rạp/Suất</span>
+            <span class="step_book done__step">Chọn ghế</span>
+            <span class="step_book done__step">Chọn thức ăn</span>
+            <span class="step_book">Thanh toán</span>
+            <span class="step_book">Xác nhận</span>
+        </div>
+
+        <!-- booking -->
+        <div class="booking">
+            <div class="container">
+                <div class="booking__iner">
+                    <!-- Chọn ghế -->
+                    <div class="column_01">
+                        <!-- Thay đổi thời gian -->
+                        <div class="changetime food_list">
+                            <span class="title__page">Chọn Combo</span>
+                            <!-- item 1 -->
+                            <div class="food__item">
+                                <img src="../assets/image/food/combo1.jpg" alt="" class="img__food">
+                                <div class="info__food">
+                                    <p class="food__name">iCombo 1 Big Extra STD</p>
+                                    <p class="food__desc">1 Ly nước ngọt size L + 01 Hộp bắp + 1 Snack</p>
+                                    <div class="box_price">
+                                        <span class="food_price">Giá: 109.000&nbsp;₫</span>
+                                        <div class="counter">
+                                            <button id="decrease" class="btn_count">-</button>
+                                            <span id="value">0</span>
+                                            <button id="increase" class="btn_count">+</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- item 2 -->
+                            <div class="food__item">
+                                <img src="../assets/image/food/combo1.jpg" alt="" class="img__food">
+                                <div class="info__food">
+                                    <p class="food__name">iCombo 1 Big Extra STD</p>
+                                    <p class="food__desc">1 Ly nước ngọt size L + 01 Hộp bắp + 1 Snack</p>
+                                    <div class="box_price">
+                                        <span class="food_price">Giá: 109.000&nbsp;₫</span>
+                                        <div class="counter">
+                                            <button id="decrease" class="btn_count">-</button>
+                                            <span id="value">0</span>
+                                            <button id="increase" class="btn_count">+</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                    <!-- hiện thị thông tin vé -->
+                    <div class="column_02">
+                        <div class="item__film_selected">
+                            <div class="info_film">
+                                <img src="../assets/image/image__film/alien.jpg" alt="" class="film__img">
+                                <div class="box_namefilm">
+                                    <p class="text_namefilm">Cô Dâu Hào Môn</p>
+                                    <div class="row__subinfo">
+                                        <span class="text__subnamefilm">2D Phụ Đề - </span>
+                                        <span class="text__limitage">T18</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="info__cinema">
+                                <p class="name__Cinema">TTNP Cầu Giấy</p>
+                                <p class="info__booking">Suất: <strong class="text__bold">22:15</strong> - <span class = "date__current">Chủ Nhật,<strong class="text__bold">20/10/2024</strong></span></p>
+                            </div>
+                            <div class="total__booking">
+                                <span class="text__total">Tổng cộng</span>
+                                <span class="price__booking">0&nbsp;đ</span>
+                            </div>
+                        </div>
+                        <div class="control__booking">
+                            <div class="row__booking row">
+                                <div class="col-6 btn__booking"><a href="#!" class="btn__link">Quay lại</a></div>
+                                <div class="col-6 btn__booking btn__link_continue"><a href="#!" class="link__continue">Tiếp tục</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </main>
+     <script src="../assets/js/booking/booking_food.js"></script>
+</body>
+</html>

@@ -1,61 +1,34 @@
-<?php
-    require_once("connect/connection.php");
-    session_start();
-    if(!isset($_REQUEST["catid"])){
-        $_REQUEST["catid"] = 1;
-        
-    }
-    if(!isset($_REQUEST["catid_active"])){
-        $_REQUEST["catid_active"] = "active";
-    }
-    else{
-        $_REQUEST["catid_active"] = "unactive";
-    }
-    $check_catid = $_REQUEST["catid"];
-    $check_active = $_REQUEST["catid_active"];
-    if($check_catid != "3"){
-        $result_film = $conn->query("SELECT m.* FROM movie__categories mc, movies m WHERE mc.cat_id = $check_catid  AND mc.movie_id = m.movie_id and movie_status  = 1 ORDER BY m.movie_rating DESC");
-    }
-    else{
-        $result_film=$conn->query("SELECT m.*
-                FROM movie__categories mc,movies m
-                WHERE mc.cat_id = 3 and mc.movie_id = m.movie_id and movie_status  = 1
-                ORDER BY
-                CASE 
-                    WHEN m.movie_ispremiere = 1 THEN 1
-                    ELSE 2
-                END;
-        ");
-    }
-    $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
+<!-- <?php
+    require_once("../connect/connection.php");
+    // heading
     $film_categories= $conn->query("select * from film_categories");
-?>
+    $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
+?> -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TTNP: Hệ thống đặt vé xem phim online</title>
+    <title>Bookking</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="./assets/css/home/reset.css">
+    <link rel="stylesheet" href="../assets/css/home/reset.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="./assets/css/home/styles.css">
-    <link rel="stylesheet" href="./assets/css/home/grid.css">
+    <link rel="stylesheet" href="../assets/css/home/styles.css">
+    <link rel="stylesheet" href="../assets/css/home/grid.css">
+    <link rel="stylesheet" href="../assets/css/booking/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
-
 <body>
-    <!-- header -->
+    <!-- heading -->
     <header class="header">
         <div class="container" style="--spacer:20px;">
             <div class="header__inner">
-                <a href="#"><img src="./logo.png" alt="" class="header__img"></a>
-                <img src="./assets/image/decor/decor__header.webp" alt="" class="decor__header">
+                <a href="./home.php"><img src="../logo.png" alt="" class="header__img"></a>
+                <img src="../assets/image/decor/decor__header.webp" alt="" class="decor__header">
                 <ul class="header__list">
                     <li class="header__item">Phim <i
                                 class="fa-solid fa-check list-icon"></i>
@@ -91,12 +64,12 @@
                                         ?>
                                         <div class="col-3">
                                             <div class="item__film header__itemflim">
-                                                <div class="film__title"><img src="./assets/image/image__film/<?php echo $row1["movie_img"];?>" alt=""
+                                                <div class="film__title"><img src="../assets/image/image__film/<?php echo $row1["movie_img"];?>" alt=""
                                                         class="img__film header__imgfilm">
                                                     <p class="film__name header__filmname"><?php echo $row1["movie_name"];?></p>
                                                 </div>
                                                 <div class="book_film header__bookfilm">
-                                                    <a href="./show_detailfilm.php?movie_id=<?php echo $row1["movie_id"];?>"><div class="ticket__film header__ticket"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
+                                                    <a href="./show_detailfilm.php?movie_id=<?php echo $row1["movie_id"]?>"><div class="ticket__film header__ticket"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
                                                 </div>
                                                 <div class="vote header__vote">
                                                     <span class="rate__film"><i class="fa-solid fa-star rate__star"></i><?php echo $row1["movie_rating"];?></span>
@@ -110,7 +83,7 @@
                                                         while($row2 = $film_premiere->fetch_assoc()){
                                                             if($row2["movie_id"] == $row1["movie_id"]){
                                                     ?>
-                                                        <img src="./assets/image/decor/decor__premiere.png" alt="" class="decor__premiere">
+                                                        <img src="../assets/image/decor/decor__premiere.png" alt="" class="decor__premiere">
                                                     <?php
                                                             }
                                                         }  
@@ -168,97 +141,117 @@
                                 class="fa-solid fa-magnifying-glass search__icon"></i></label>
                         <form action=""></form>
                     </div>
-                    <a href="#!" class="btn btn__header">Đăng Nhập</a>
+                    <div class="box_user">
+                        <div class="avatar__userwrap">
+                            <i class="fa-regular fa-user avatar__usser"></i>
+                        </div>
+                        <P>Lê Tiệp</P>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
-    <main>
-        <!-- Poster -->
-        <div class="poster">
-            <div class="container">
-                <div class="poster__list">
-                    <div class="post__item">
-                        <img src="./assets/image/poster/transformersmot.jpg" alt="" class="home__poster">
-                    </div>
-                </div>
-            </div>
+    <!-- step booking -->
+     <main class="main__class">
+        <!-- booking_-step -->
+        <div class="booking__step">
+            <span class="step_book done__step">Chọn phim/Rạp/Suất</span>
+            <span class="step_book done__step">Chọn ghế</span>
+            <span class="step_book">Chọn thức ăn</span>
+            <span class="step_book">Thanh toán</span>
+            <span class="step_book">Xác nhận</span>
         </div>
-        <!-- Film -->
-        <div class="film">
-            <div class="container">
-                <div class="film__inner">
-                    <div class="type__film">
-                        <span id="location_film"></span>
-                        <span class="text__film">PHIM</span>
-                        <ul class="type__film--list">
-                            <?php
-                                while($row = $film_categories->fetch_assoc()){
-                            ?>
-                                
-                                <li class="type__film--item"><label for="" class="label__film"><a class="catid__link <?php if($row["cat_id"] == $check_catid || $check_catid == "active") echo "catid__active"?>" href = "./home.php?catid=<?php echo $row["cat_id"]?>&#location_film"><?php echo $row["cat_name"];?></a></label></li>
-                            <?php
-                            }
-                            ?>
 
-                        </ul>
+        <!-- booking -->
+        <div class="booking">
+            <div class="container">
+                <div class="booking__inner">
+                    <!-- Chọn ghế -->
+                    <div class="column_01">
+                        <!-- Thay đổi thời gian -->
+                        <div class="changetime">
+                            <p class="text_changetime">Đổi suất chiếu</p>
+                            <div class="showtime">
+                                <span class="border__time">11:00</span>
+                            </div>
+                        </div>
+                        <!-- Chọn ghê -->
+                         <div class="select__reservation">
+                            <div class="row__seat">
+                                <div class="row">A</div>
+                                <div class="seat__wrap">
+                                    <div class="seat">
+                                        
+                                    </div>
+                                    <div class="seat">
+                                        
+                                    </div>
+                                    <div class="seat">
+                                        
+                                    </div>
+                                    <div class="seat">
+                                        
+                                    </div>
+                                    <div class="seat">
+                                        
+                                    </div>
+                                    <div class="seat">
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">A</div>
+                            </div>
+                            <!-- screen -->
+                            <div class="screen">
+                              <p class="text__screen">Màn hình</p>
+                            </div>
+
+                            <!-- desc -->
+                             <div class="seat__desc">
+                                <div class="desc__wrap">
+                                    <span class="info__seat">Ghế đã bán</span>
+                                    <span class="info__seat">Ghế đang bán</span>
+                                </div>
+                                <div class="desc__wrap">
+                                    <span class="info__seat">Ghế vip</span>
+                                    <span class="info__seat">Ghế thường</span>
+                                </div>
+                             </div>
+                        </div>
+                         
                     </div>
-                    <div class="row film__list">
-                        
-                        <?php
-                            $count = 0;
-                            if($result_film->num_rows == 0){
-                                echo "Khong co phim!";
-                            }
-                            else{
-                            while($row = $result_film->fetch_assoc()){
-                                if($count < 8){
-                        ?>
-                            <div class="col-3">
-                                <div class="item__film">
-                                    <div class="film__title"><img src="./assets/image/image__film/<?php echo $row["movie_img"];?>" alt=""
-                                            class="img__film">
-                                            
-                                        <p class="film__name"><?php echo $row["movie_name"];?></p>
-                                    </div>
-                                    <div class="book_film">
-                                                <a href="./show_detailfilm.php?movie_id=<?php echo $row["movie_id"];?>"><div class="ticket__film"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
-                                                <div class="trailer_film"><i class="fa-solid fa-circle-play" style="margin-right:5px"></i> Trailer</div>
-                                    </div>
-                                    <div class="vote">
-                                        <span class="rate__film"><i class="fa-solid fa-star rate__star"></i><?php echo $row["movie_rating"];?></span>
-                                    </div>
-                                    <div class="age__limit">
-                                        <span class="age__limit--text"><?php echo $row["movie_minage"]?></span>
-                                    </div>
-                                    <div class="decor__moviepremiere">
-                                        <?php
-                                            if($check_catid == 3){
-                                            while($row1 = $film_premiere->fetch_assoc()){
-                                                if($row1["movie_id"] == $row["movie_id"]){
-                                        ?>
-                                            <img src="./assets/image/decor/decor__premiere.png" alt="" class="decor__premiere">
-                                        <?php
-                                                }
-                                            }  
-                                        }                                        
-                                        ?>
+                    <!-- hiện thị thông tin vé -->
+                    <div class="column_02">
+                        <div class="item__film_selected">
+                            <div class="info_film">
+                                <img src="../assets/image/image__film/alien.jpg" alt="" class="film__img">
+                                <div class="box_namefilm">
+                                    <p class="text_namefilm">Cô Dâu Hào Môn</p>
+                                    <div class="row__subinfo">
+                                        <span class="text__subnamefilm">2D Phụ Đề - </span>
+                                        <span class="text__limitage">T18</span>
                                     </div>
                                 </div>
                             </div>
-                        <?php 
-                                    }
-                            $count++;
-                            $film_premiere->data_seek(0);
-                            }
-                        }
-                        ?>
+                            <div class="info__cinema">
+                                <p class="name__Cinema">TTNP Cầu Giấy</p>
+                                <p class="info__booking">Suất: <strong class="text__bold">22:15</strong> - <span class = "date__current">Chủ Nhật,<strong class="text__bold">20/10/2024</strong></span></p>
+                            </div>
+                            <div class="total__booking">
+                                <span class="text__total">Tổng cộng</span>
+                                <span class="price__booking">0&nbsp;đ</span>
+                            </div>
+                        </div>
+                        <div class="control__booking">
+                            <div class="row__booking row">
+                                <div class="col-6 btn__booking"><a href="#!" class="btn__link">Quay lại</a></div>
+                                <div class="col-6 btn__booking btn__link_continue"><a href="#!" class="link__continue">Tiếp tục</a></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
-    <script src="./assets/js/home/main.js"></script>
+     </main>
 </body>
-
 </html>

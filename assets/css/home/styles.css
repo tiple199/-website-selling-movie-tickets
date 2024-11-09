@@ -13,6 +13,7 @@ body{
 }
 /* Common */
 .btn{
+    border: none;
     padding: 12px 20px;
     background: var(--primary-color);
     color: #fff;

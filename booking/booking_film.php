@@ -1,9 +1,26 @@
-<!-- <?php
+<?php
     require_once("../connect/connection.php");
     // heading
     $film_categories= $conn->query("select * from film_categories");
     $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
-?> -->
+    // schedule
+    $check_schedule = $_REQUEST["schedule_id"];
+    $sql = "select S.schedule_id,S.show_time from schedules S
+        join room R on R.room_id = S.room_id
+        join cinema C on C.cinema_id = R.cinema_id
+        where S.show_date = (select show_date from schedules where schedule_id = $check_schedule)
+    ";
+    $change_time = $conn->query($sql);
+    // info_film
+    $info_film = "select * from schedules S
+        join movies M on M.movie_id = S.movie_id
+        join room R on R.room_id = S.room_id
+        join cinema C on C.cinema_id = R.cinema_id
+        where S.schedule_id = $check_schedule
+    ";
+    $result_infofilm = $conn->query($info_film);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -172,35 +189,51 @@
                         <div class="changetime">
                             <p class="text_changetime">Đổi suất chiếu</p>
                             <div class="showtime">
-                                <span class="border__time">11:00</span>
+                                <?php
+                                    while($row=$change_time->fetch_assoc()){
+                                ?>
+                                    <a href="?schedule_id=<?php echo $row["schedule_id"];?>"><span class="border__time <?php if($row["schedule_id"] == $check_schedule) echo "active";?>"><?php echo $row["show_time"];?></span></a>
+
+                                <?php
+                                    }
+                                ?>
                             </div>
                         </div>
                         <!-- Chọn ghê -->
                          <div class="select__reservation">
+                            <?php
+                                
+                                $sql_row = "SELECT DISTINCT row FROM seats";
+                                $result_row = $conn->query("$sql_row");
+                                
+                                while($row1 = $result_row->fetch_assoc()){
+                                    $check_row = $row1["row"];
+                                    
+                            ?>
                             <div class="row__seat">
-                                <div class="row">A</div>
+                                <div class="row"><?php echo $row1["row"];?></div>
                                 <div class="seat__wrap">
+                                    <?php 
+                                        $sql_seat = "select S.row,S.seat_number,S.seat_id from seats S
+                                        join room R on R.room_id = S.room_id
+                                        join schedules SD on SD.room_id = R.room_id
+                                        where SD.schedule_id = $check_schedule and S.row = '$check_row' order by S.row ASC,S.seat_number ASC
+                                        ";
+                                        $result_seat = $conn->query($sql_seat);
+                                        while($row = $result_seat->fetch_assoc()){
+                                    ?>
                                     <div class="seat">
-                                        
+                                        <?php echo $row["seat_number"];?>
                                     </div>
-                                    <div class="seat">
-                                        
-                                    </div>
-                                    <div class="seat">
-                                        
-                                    </div>
-                                    <div class="seat">
-                                        
-                                    </div>
-                                    <div class="seat">
-                                        
-                                    </div>
-                                    <div class="seat">
-                                        
-                                    </div>
+                                    <?php 
+                                        }
+                                    ?>
                                 </div>
-                                <div class="row">A</div>
+                                <div class="row"><?php echo $row1["row"];?></div>
                             </div>
+                            <?php 
+                            }
+                            ?>
                             <!-- screen -->
                             <div class="screen">
                               <p class="text__screen">Màn hình</p>
@@ -223,20 +256,27 @@
                     <!-- hiện thị thông tin vé -->
                     <div class="column_02">
                         <div class="item__film_selected">
-                            <div class="info_film">
-                                <img src="../assets/image/image__film/alien.jpg" alt="" class="film__img">
-                                <div class="box_namefilm">
-                                    <p class="text_namefilm">Cô Dâu Hào Môn</p>
-                                    <div class="row__subinfo">
-                                        <span class="text__subnamefilm">2D Phụ Đề - </span>
-                                        <span class="text__limitage">T18</span>
+                            <?php
+                                while($row = $result_infofilm->fetch_assoc()){
+                            ?>
+                                <div class="info_film">
+                                    <img src="../assets/image/image__film/<?php echo $row["movie_img"];?>" alt="" class="film__img">
+                                    <div class="box_namefilm">
+                                        <p class="text_namefilm"><?php echo $row["movie_name"];?></p>
+                                        <div class="row__subinfo">
+                                            <span class="text__subnamefilm">2D Phụ Đề - </span>
+                                            <span class="text__limitage"><?php echo $row["movie_minage"];?></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="info__cinema">
-                                <p class="name__Cinema">TTNP Cầu Giấy</p>
-                                <p class="info__booking">Suất: <strong class="text__bold">22:15</strong> - <span class = "date__current">Chủ Nhật,<strong class="text__bold">20/10/2024</strong></span></p>
-                            </div>
+                                <div class="info__cinema">
+                                    <p class="name__Cinema"><?php echo $row["cinema_name"];?> - <span class="room_name"><?php echo $row["room_name"];?></span></p>
+                                    <p class="info__booking">Suất: <strong class="text__bold"><?php echo $row["show_time"];?></strong> - <span class = "date__current"><?php echo $row["show_day"];?>,<strong class="text__bold"><?php $date = new DateTime($row["show_date"]);echo $date->format("d/m/Y"); ?></strong></span></p>
+                                </div>
+
+                            <?php
+                                }
+                            ?>
                             <div class="total__booking">
                                 <span class="text__total">Tổng cộng</span>
                                 <span class="price__booking">0&nbsp;đ</span>

@@ -47,6 +47,7 @@
     border: 1px solid #ccc;
     border-radius: 3px;
     transition: 0.5s ease;
+    color: black;
 }
 .border__time:hover{
     background: #034ea2;
@@ -169,14 +170,18 @@
     padding :20px
 }
 .seat{
-    width: 40px;
-    height: 40px;
-    border: 1px solid #000;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
     border-radius: 10px;
     transition: 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .seat:hover{
-    background: red;
+    background: #f58020;
+    border-color: #f58020;
     cursor: pointer;
 }
 .row__seat{
@@ -259,4 +264,12 @@
     height: 30px;
     background: red;
     border-radius: 8px;
+}
+.active{
+    background: #034ea2;
+    color: #fff;
+}
+.room_name{
+    font-weight: 500;
+    font-size: 1.6rem;
 }

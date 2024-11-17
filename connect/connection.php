@@ -1,5 +1,5 @@
 <?php
-    $conn = new mysqli("localhost","root","","doan");
+    $conn = new mysqli("localhost","root","","webbanve");
     if($conn->connect_error){
         die("Connection failed: " .$conn->connect_error);
     }

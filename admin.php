@@ -2,6 +2,28 @@
     require_once("connect/connection.php");
     session_start();
 
+    $option = $_REQUEST['option'] ?? ''; // Biến dùng lựa chọn quản lý
+    $catfilm = $_REQUEST['catfilm'] ?? ''; // Biến dùng để Lọc danh mục phim
+
+    $action = $_POST['action'] ?? '';
+
+    $searchQuery = $_POST['txtSearch'] ?? ''; // Search
+    // Điều kiện tìm kiếm phim theo tên
+    $searchCondition = "";
+    if (!empty($searchQuery)) {
+        $searchCondition = " AND m.movie_name LIKE '%" . $conn->real_escape_string($searchQuery) . "%'";
+    }
+
+
+    $categoryCondition = "";
+    if ($catfilm === "dangchieu") {
+        $categoryCondition = "WHERE fc.cat_name = 'Đang chiếu'";
+    } elseif ($catfilm === "sapchieu") {
+        $categoryCondition = "WHERE fc.cat_name = 'Sắp chiếu'";
+    } elseif ($catfilm === "imax") {
+        $categoryCondition = "WHERE fc.cat_name = 'Phim IMAX'";
+    }
+
     
 ?>
 <!DOCTYPE html>
@@ -23,23 +45,103 @@
 
 <body>
     <main>
-        <div class="container">
-
+        <div class="container d-flex">
                 <div class="sidebar">
                     <div class="inner-sidebar">
-                        <a href="#" class=""><img src="./logo.png" alt="logo">TTNP Cinema</a>
-                        <a href="#" class="menu-item" id="movie">Phim</a>
-                        <a href="#" class="menu-item" id="schedule">Suất chiếu</a>
-                        <a href="#" class="menu-item" id="cinema">Rạp chiếu</a>
-                        <a href="#" class="menu-item" id="product">Đồ ăn</a>
-                        <a href="#" class="menu-item" id="promotion">Khuyến mãi</a>
-                        <a href="#" class="menu-item" id="ticket-type">Loại vé</a>
-                        <a href="#" class="menu-item" id="website">Người dùng</a>
+                        <a href="admin.php" class=""><img src="./logo.png" alt="logo">TTNP Cinema</a>
+                        <a href="?option=movie" class="menu-item <?php if($option === "movie") echo "active";?>" id="movie">Phim</a>
+                        <a href="#" class="menu-item <?php if($option === "schedule") echo "active";?>" id="schedule">Suất chiếu</a>
+                        <a href="#" class="menu-item <?php if($option === "cinema") echo "active";?>" id="cinema">Rạp chiếu</a>
+                        <a href="#" class="menu-item <?php if($option === "product") echo "active";?>" id="product">Đồ ăn</a>
+                        <a href="#" class="menu-item <?php if($option === "promotion") echo "active";?>" id="promotion">Khuyến mãi</a>
+                        <a href="#" class="menu-item <?php if($option === "ticket") echo "active";?>" id="ticket-type">Loại vé</a>
+                        <a href="?option=user" class="menu-item <?php if($option === "user") echo "active";?>" id="website">Người dùng</a>
                         <a href="#" class="menu-item" id="website">Đăng xuất</a>
                     </div>
                 </div>
+                <!-- Quản Lý Phim -->
                 <div class="content">
+                    <!-- <div class="banner">
+                        <h1>Chào mừng quản trị viên</h1>
+                    </div> -->
+                    <?php if ($option === "movie"): ?>
+                    <form action="admin.php?option=<?php echo $option."&catfilm=$catfilm";?>" method="post">
+                        <div class="inner-content">
+                            <div class="categories-film">
+                                <a href="?option=movie&catfilm=tatca" id="tab-tatca" class="tab-option <?php if($catfilm === "tatca") echo "active";?>" onclick="selectTab(this)">Tất cả</a>
+                                <a href="?option=movie&catfilm=dangchieu" class="tab-option <?php if($catfilm === "dangchieu") echo "active";?>" onclick="selectTab(this)">Đang chiếu</a>
+                                <a href="?option=movie&catfilm=sapchieu" class="tab-option <?php if($catfilm === "sapchieu") echo "active";?>" onclick="selectTab(this)">Sắp chiếu</a>
+                                <a href="?option=movie&catfilm=imax" class="tab-option <?php if($catfilm === "imax") echo "active";?>" onclick="selectTab(this)">Phim IMAX</a>
+                                <div class="underline"></div>
+                            </div>
+                            <div class="function">
+                                <div class="function-search">
+                                    <input type="text" placeholder="Nhập tên phim cần tìm" name="txtSearch" value="<?php echo htmlspecialchars($searchQuery); ?>">
 
+                                    <input type="hidden" name="action" value="search">
+                                    <button class="search-button">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                                <div class="function-add-film">
+                                    <button class="add-movie-button">Thêm phim mới</button>
+                                </div>
+                            </div>
+                            <?php 
+                                if($catfilm != "" || $action = "search"){
+                            ?>  
+                            <div class="table-content">
+                                <form action="">
+                                    <table class="movie-table">
+                                        <tr class="table-header">
+                                            <th class="movie-id-header">Mã phim</th>
+                                            <th class="movie-name-header">Tên phim</th>
+                                            <th class="movie-tag-header">Tag</th>
+                                            <th class="movie-duration-header">Thời lượng</th>
+                                            <th class="movie-nation-header">Quốc gia</th>
+                                            <th class="movie-release-header">Phát hành</th>
+                                            <th class="movie-category-header">Danh mục</th>
+                                        </tr>
+                                        <?php 
+                                            $sql = "SELECT * FROM movies m 
+                                            INNER JOIN movie__categories mc ON m.movie_id = mc.movie_id
+                                            INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id  
+                                            {$categoryCondition} {$searchCondition}";
+
+                                            $result = $conn->query($sql);
+                                            while ($row = $result->fetch_assoc()): 
+                                        ?>
+                                            <tr class="table-row">
+                                                <td class="movie-id"><?php echo $row['movie_id']; ?></td>
+                                                <td class="movie-name">
+                                                    <img src="assets/image/image__film/<?php echo $row['movie_img']; ?>" alt="anh" class="movie-img">
+                                                    <?php echo $row['movie_name']; ?>
+                                                </td>
+                                                <td class="movie-tag"><?php echo $row['movie_minage']; ?></td>
+                                                <td class="movie-duration"><?php echo $row['movie_time']; ?> Phút</td>
+                                                <td class="movie-nation"><?php echo $row['movie_nation']; ?></td>
+                                                <td class="movie-release"><?php echo $row['movie_date']; ?></td>
+                                                <td class="movie-category"><?php echo $row['cat_name']; ?></td>
+                                                <td class="movie-action">
+                                                    <div class="action-menu">
+                                                        <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+                                                        <div class="action-dropdown">
+                                                            <a href="edit_movie.php?movie_id=<?php echo $row['movie_id']; ?>">Sửa</a>
+                                                            <a href="delete_movie.php?movie_id=<?php echo $row['movie_id']; ?>">Xóa</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    </table>
+                                </form>
+                            </div>
+                            <?php 
+                                }
+                            ?>
+                        </div>
+                    </form>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

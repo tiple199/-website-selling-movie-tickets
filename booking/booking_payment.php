@@ -1,9 +1,22 @@
-<!-- <?php
+<?php
+    session_start();
+    
     require_once("../connect/connection.php");
     // heading
     $film_categories= $conn->query("select * from film_categories");
     $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
-?> -->
+    $check_schedule = $_SESSION["schedule_id"];
+    // info_film
+    $info_film = "select * from schedules S
+        join movies M on M.movie_id = S.movie_id
+        join room R on R.room_id = S.room_id
+        join cinema C on C.cinema_id = R.cinema_id
+        where S.schedule_id = $check_schedule
+    ";
+    $result_infofilm = $conn->query($info_film);
+
+    
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,24 +125,97 @@
                     </div>
                     <!-- hiện thị thông tin vé -->
                     <div class="column_02">
-                        <div class="item__film_selected">
-                            <div class="info_film">
-                                <img src="../assets/image/image__film/alien.jpg" alt="" class="film__img">
-                                <div class="box_namefilm">
-                                    <p class="text_namefilm">Cô Dâu Hào Môn</p>
-                                    <div class="row__subinfo">
-                                        <span class="text__subnamefilm">2D Phụ Đề - </span>
-                                        <span class="text__limitage">T18</span>
+                    <div class="item__film_selected">
+                            <?php
+                                while($row = $result_infofilm->fetch_assoc()){
+                            ?>
+                                <div class="info_film">
+                                    <img src="../assets/image/image__film/<?php echo $row["movie_img"];?>" alt="" class="film__img">
+                                    <div class="box_namefilm">
+                                        <p class="text_namefilm"><?php echo $row["movie_name"];?></p>
+                                        <div class="row__subinfo">
+                                            <span class="text__subnamefilm">2D Phụ Đề - </span>
+                                            <span class="text__limitage"><?php echo $row["movie_minage"];?></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="info__cinema">
-                                <p class="name__Cinema">TTNP Cầu Giấy</p>
-                                <p class="info__booking">Suất: <strong class="text__bold">22:15</strong> - <span class = "date__current">Chủ Nhật,<strong class="text__bold">20/10/2024</strong></span></p>
-                            </div>
+                                <div class="info__cinema">
+                                    <p class="name__Cinema"><?php echo $row["cinema_name"];?> - <span class="room_name"><?php echo $row["room_name"];?></span></p>
+                                    <p class="info__booking">Suất: <strong class="text__bold"><?php echo $row["show_time"];?></strong> - <span class = "date__current"><?php echo $row["show_day"];?>,<strong class="text__bold"><?php $date = new DateTime($row["show_date"]);echo $date->format("d/m/Y"); ?></strong></span></p>
+                                </div>
+
+                            <?php
+                                }
+                            ?>
+                            
+                            <!-- selected_seat -->
+                             <div class="info_seat">
+                                <div class="info_seat___selected">
+                                    <span class="seat__quantity"><strong class="bold">
+                                        <?php
+                                            $count = 0;
+                                            foreach($_SESSION["info_seat_selected"] as $k=>$v){
+                                                $count++;
+                                            }
+                                            echo $count;
+                                        ?>x</strong> Ghế đơn</span>
+                                    <span class="seat__selected">Ghế: 
+                                    <?php   
+                                        $money_seat = 0;
+                                        $count1 = 0;
+                                        foreach($_SESSION["info_seat_selected"] as $k=>$v){
+                                            $count1++;
+                                            $sql = "select S.seat_number,S.row,S.seat_price from seats S
+                                            join room R on R.room_id = S.room_id
+                                            join schedules SD on SD.room_id = R.room_id
+                                            where SD.schedule_id = $check_schedule and S.seat_id = $v
+                                            ";
+                                            $result = $conn->query($sql);
+                                            while($row = $result->fetch_assoc()){
+                                                $money_seat += $row["seat_price"];
+
+                                        
+                                    ?>
+                                        <strong class="bold"><?php echo $row["row"].$row["seat_number"]; if($count != $count1) echo ",";?>  </strong>
+                                    <?php
+                                            }
+                                        // $result->data_seek(0);
+                                        $_SESSION["price_seat"] = $money_seat;
+                                    }
+                                    ?>
+                                    </span>
+                                </div>
+                                <span class="price_total_seat bold"><?php echo number_format($money_seat)?>&nbspđ</span>
+                             </div>
+                             <!-- selected_food -->
+                              <div class="info_food selected-foods">             
+                                <ul class="food__quantity" id="selected-foods-list">
+                                    <!-- danh sách list food -->
+                                    <?php
+                                        $total_food=0;
+                                        if(!empty($_SESSION["foods"])){
+                                            foreach($_SESSION["foods"] as $k=>$v){
+                                                $sql_food="select * from food where food_id = $k";
+                                                $result_food=$conn->query($sql_food);
+                                                while($r = $result_food->fetch_assoc()){
+                                                    $total_food += $r["food_price"]*$v;
+                                    ?>
+
+                                        <li class="item__food">
+                                            <div><span class="bold"><?=$v?>x</span> <?=$r["food_name"]?></div> <div class="bold"><?=number_format($r["food_price"]*$v)?> đ</div>
+                                        </li>
+
+                                    <?php
+                                                }
+                                            }
+                                        }
+                                    ?>
+                                </ul>
+                                
+                              </div>
                             <div class="total__booking">
                                 <span class="text__total">Tổng cộng</span>
-                                <span class="price__booking">0&nbsp;đ</span>
+                                <span class="price__booking" id="total-price"><?=number_format($_SESSION["price_seat"] + $total_food)?> đ</span>
                             </div>
                         </div>
                         <div class="control__booking">

@@ -14,7 +14,7 @@
         $searchCondition = " AND m.movie_name LIKE '%" . $conn->real_escape_string($searchQuery) . "%'";
     }
 
-
+    // Lọc để lấy ra danh sách theo danh mục phim
     $categoryCondition = "";
     if ($catfilm === "dangchieu") {
         $categoryCondition = "WHERE fc.cat_name = 'Đang chiếu'";
@@ -24,7 +24,20 @@
         $categoryCondition = "WHERE fc.cat_name = 'Phim IMAX'";
     }
 
-    
+    // Pagination
+    $recordsPerPage = 8; // Số bản ghi trên mỗi trang
+    $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Trang hiện tại
+    $offset = ($currentPage - 1) * $recordsPerPage; // Vị trí bắt đầu
+
+    // Đếm tổng số bản ghi
+    $countSql = "SELECT COUNT(*) as total 
+                 FROM movies m 
+                 INNER JOIN movie__categories mc ON m.movie_id = mc.movie_id
+                 INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id 
+                 {$categoryCondition} {$searchCondition}";
+    $countResult = $conn->query($countSql);
+    $totalRecords = $countResult->fetch_assoc()['total'];
+    $totalPages = ceil($totalRecords / $recordsPerPage); // Tổng số trang
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,7 +97,7 @@
                                     </button>
                                 </div>
                                 <div class="function-add-film">
-                                    <button class="add-movie-button">Thêm phim mới</button>
+                                    <a href = "add-movie.php" class="add-movie-button">Thêm phim mới</a>
                                 </div>
                             </div>
                             <?php 
@@ -106,7 +119,8 @@
                                             $sql = "SELECT * FROM movies m 
                                             INNER JOIN movie__categories mc ON m.movie_id = mc.movie_id
                                             INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id  
-                                            {$categoryCondition} {$searchCondition}";
+                                            {$categoryCondition} {$searchCondition}
+                                            LIMIT $offset, $recordsPerPage";
 
                                             $result = $conn->query($sql);
                                             while ($row = $result->fetch_assoc()): 
@@ -135,6 +149,15 @@
                                         <?php endwhile; ?>
                                     </table>
                                 </form>
+                            </div>
+                            <!-- Hiển thị phân trang -->
+                            <div class="pagination">
+                                <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                                    <a href="?option=movie&catfilm=<?php echo $catfilm; ?>&page=<?php echo $page; ?>"
+                                       class="pagination-link <?php if ($page == $currentPage) echo 'active'; ?>">
+                                        <?php echo $page; ?>
+                                    </a>
+                                <?php endfor; ?>
                             </div>
                             <?php 
                                 }

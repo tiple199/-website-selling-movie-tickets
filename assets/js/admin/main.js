@@ -87,3 +87,17 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+
+// Js để xử phần thêm phim
+// Thêm đạo diễn
+function addDirectorField() {
+    const container = document.getElementById("directorsContainer");
+    const input = document.createElement("input");
+    input.type = "text";
+    input.name = "txtNameDirector[]"; // Mỗi đạo diễn là một phần tử của mảng
+    container.appendChild(input);
+    container.appendChild(document.createElement("br"));
+}
+
+
+//

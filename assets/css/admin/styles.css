@@ -231,3 +231,24 @@ a{
     background-color: #f1f1f1;
 }
 
+/* Chân trang */
+.pagination {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.pagination-link {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.pagination-link.active {
+    background-color: #e97f12;
+    color: #fff;
+    font-weight: bold;
+}

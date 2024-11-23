@@ -6,6 +6,9 @@
     width: 250px;
     height: 40px;
 }
+.input__discount::placeholder{
+    color: #ccc7c7;
+}
 .discount__wrap{
     margin-top: 10px;
 }
@@ -210,4 +213,36 @@
 }
 .info_food{
     display: block;
+}
+.discount{
+    padding: 20px 0;
+    border-bottom: 1px dashed #CCC;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.4rem;
+}
+.show_error{
+    padding: 15px;
+    border: 1px solid red;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.text_error{
+    margin-bottom: 10px;
+}
+#show_error_method{
+    display: none;
+}
+.error_confirm{
+    color: red;
+    font-size: 1.2rem;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    margin-top: 5px;
+    display: none;
 }

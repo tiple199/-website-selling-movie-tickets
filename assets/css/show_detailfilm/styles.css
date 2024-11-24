@@ -1,3 +1,6 @@
+a{
+    color: inherit;
+}
 /* poster */
 .trailer__Film{
     position: relative;
@@ -159,9 +162,10 @@
 }
 .day__wrap{
     display: flex;
-    margin-left: 35px;
+    margin-left: 20px;
 }
 .day__item{
+    width: 90px;
     padding: 10px;
     border-radius: 5px;
     margin-right: 10px;

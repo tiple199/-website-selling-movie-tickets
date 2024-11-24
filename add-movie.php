@@ -23,89 +23,94 @@ function checkAndInsert($conn, $table, $column, $value) {
 }
 
 // Lấy dữ liệu từ form
-$movieName = $_POST['txtMovieName'];
-$movieImage = $_FILES['txtMovieImage']['name'];
-$movieMinage = $_POST['txtMovieMinage'];
-$movieTime = $_POST['txtMovieTime'];
-$movieDate = $_POST['txtMovieDate'];
-$movieNation = $_POST['txtMovieNation'];
-$movieManufacturer = $_POST['txtMovieManufac'];
-$movieStatus = $_POST['txtMovieStatus'];
-$movieContent = $_POST['txtMovieContent'];
-$directors = $_POST['txtNameDirector'];
-$actors = $_POST['txtNameActor'];
-$genres = $_POST['txtNameGenre'];
-$categories = $_POST['txtMovieCategories'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $movieName = isset($_POST['txtMovieName']) ? $_POST['txtMovieName'] : "";
+    $movieImage = isset($_FILES['txtMovieImage']['name']) ? $_FILES['txtMovieImage']['name'] : "";
+    $movieMinage = isset($_POST['txtMovieMinage']) ? $_POST['txtMovieMinage'] : "";
+    $movieTime = isset($_POST['txtMovieTime']) ? $_POST['txtMovieTime'] : "";
+    $movieDate = isset($_POST['txtMovieDate']) ? $_POST['txtMovieDate'] : "";
+    $movieNation = isset($_POST['txtMovieNation']) ? $_POST['txtMovieNation'] : "";
+    $movieManufacturer = isset($_POST['txtMovieManufac']) ? $_POST['txtMovieManufac'] : "";
+    $movieStatus = isset($_POST['txtMovieStatus']) ? $_POST['txtMovieStatus'] : "";
+    $contentPart1 = !empty($_POST['txtMovieContentPart1']) ? $_POST['txtMovieContentPart1'] : "";
+    $contentPart2 = !empty($_POST['txtMovieContentPart2']) ? $_POST['txtMovieContentPart2'] : "";
+    $contentPart3 = !empty($_POST['txtMovieContentPart3']) ? $_POST['txtMovieContentPart3'] : "";
+    $contentPart4 = !empty($_POST['txtMovieContentPart4']) ? $_POST['txtMovieContentPart4'] : "";
+    $contentPart5 = !empty($_POST['txtMovieContentPart5']) ? $_POST['txtMovieContentPart5'] : "";
+    $directors = $_POST['txtNameDirector'];
+    $actors = $_POST['txtNameActor'];
+    $genres = $_POST['txtNameGenre'];
+    $categories = $_POST['txtMovieCategories'];
 
-// Xử lý tải hình ảnh
-$targetDir = "assets/image/image__film/";
-$targetFile = $targetDir . basename($movieImage);
-if (!move_uploaded_file($_FILES["txtMovieImage"]["tmp_name"], $targetFile)) {
-    die("Có lỗi xảy ra khi tải hình ảnh.");
-}
-
-// Chèn vào bảng movies
-$stmt = $conn->prepare("INSERT INTO movies (movie_name, movie_img, movie_minage, movie_time, movie_date, movie_nation, movie_manufacturer, movie_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("sssssssi", $movieName, $movieImage, $movieMinage, $movieTime, $movieDate, $movieNation, $movieManufacturer, $movieStatus);
-$stmt->execute();
-$movieId = $stmt->insert_id;
-
-// Chèn nội dung phim vào bảng content_film
-$stmt = $conn->prepare("INSERT INTO content_film (content_part1) VALUES (?)");
-$stmt->bind_param("s", $movieContent);
-$stmt->execute();
-$contentId = $stmt->insert_id;
-
-// Liên kết phim và nội dung
-$stmt = $conn->prepare("INSERT INTO movie_content (movie_id, content_id) VALUES (?, ?)");
-$stmt->bind_param("ii", $movieId, $contentId);
-$stmt->execute();
-
-// Xử lý thêm đạo diễn
-foreach ($directors as $director) {
-    if (!empty($director)) {
-        $directorId = checkAndInsert($conn, "director", "d_name", $director);
-
-        // Liên kết phim và đạo diễn
-        $stmt = $conn->prepare("INSERT INTO movie_director (movie_id, d_id) VALUES (?, ?)");
-        $stmt->bind_param("ii", $movieId, $directorId);
-        $stmt->execute();
+    // Xử lý tải hình ảnh
+    $targetDir = "./assets/image/image__film/";
+    $targetFile = $targetDir . basename($movieImage);
+    if (!move_uploaded_file($_FILES["txtMovieImage"]["tmp_name"], $targetFile)) {
+        die("Có lỗi xảy ra khi tải hình ảnh.");
     }
-}
 
-// Xử lý thêm diễn viên
-foreach ($actors as $actor) {
-    if (!empty($actor)) {
-        $actorId = checkAndInsert($conn, "actor", "a_name", $actor);
+    // Chèn vào bảng movies
+    $stmt = $conn->prepare("INSERT INTO movies (movie_name, movie_img, movie_minage, movie_time, movie_date, movie_nation, movie_manufacturer, movie_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssssi", $movieName, $movieImage, $movieMinage, $movieTime, $movieDate, $movieNation, $movieManufacturer, $movieStatus);
+    $stmt->execute();
+    $movieId = $stmt->insert_id;
 
-        // Liên kết phim và diễn viên
-        $stmt = $conn->prepare("INSERT INTO movie_actor (movie_id, a_id) VALUES (?, ?)");
-        $stmt->bind_param("ii", $movieId, $actorId);
-        $stmt->execute();
+    // Chèn nội dung phim vào bảng content_film
+    $stmt = $conn->prepare("INSERT INTO content_film (movie_id, content_part1, content_part2, content_part3, content_part4, content_part5) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("isssss", $movieId, $contentPart1, $contentPart2, $contentPart3, $contentPart4, $contentPart5);
+    $stmt->execute();
+
+    // Xử lý thêm đạo diễn
+    foreach ($directors as $director) {
+        if (!empty($director)) {
+            $directorId = checkAndInsert($conn, "director", "d_name", $director);
+
+            // Liên kết phim và đạo diễn
+            $stmt = $conn->prepare("INSERT INTO movie__director (d_id, movie_id) VALUES (?, ?)");
+            $stmt->bind_param("ii",$directorId, $movieId);
+            $stmt->execute();
+        }
     }
-}
 
-// Xử lý thêm thể loại
-foreach ($genres as $genre) {
-    if (!empty($genre)) {
-        $genreId = checkAndInsert($conn, "genre_film", "g_name", $genre);
+    // Xử lý thêm diễn viên
+    foreach ($actors as $actor) {
+        if (!empty($actor)) {
+            $actorId = checkAndInsert($conn, "actor", "a_name", $actor);
 
-        // Liên kết phim và thể loại
-        $stmt = $conn->prepare("INSERT INTO movie_genre (movie_id, genre_id) VALUES (?, ?)");
-        $stmt->bind_param("ii", $movieId, $genreId);
-        $stmt->execute();
+            // Liên kết phim và diễn viên
+            $stmt = $conn->prepare("INSERT INTO movie__actor (a_id, movie_id) VALUES (?, ?)");
+            $stmt->bind_param("ii",$actorId, $movieId);
+            $stmt->execute();
+        }
     }
-}
 
-// Xử lý thêm danh mục phim
-foreach ($categories as $categoryId) {
-    if (!empty($categoryId)) {
-        // Liên kết phim và danh mục
-        $stmt = $conn->prepare("INSERT INTO movie_categories (movie_id, cat_id) VALUES (?, ?)");
-        $stmt->bind_param("ii", $movieId, $categoryId);
-        $stmt->execute();
+    // Xử lý thêm thể loại
+    foreach ($genres as $genre) {
+        if (!empty($genre)) {
+            $genreId = checkAndInsert($conn, "genre_film", "g_name", $genre);
+
+            // Liên kết phim và thể loại
+            $stmt = $conn->prepare("INSERT INTO movie__genre (genre_id, movie_id) VALUES (?, ?)");
+            $stmt->bind_param("ii",  $genreId, $movieId);
+            $stmt->execute();
+        }
     }
-}
+
+    // Xử lý thêm danh mục phim
+    foreach ($categories as $categoryId) {
+        if (!empty($categoryId)) {
+            // Liên kết phim và danh mục
+            $stmt = $conn->prepare("INSERT INTO movie__categories (movie_id, cat_id) VALUES (?, ?)");
+            $stmt->bind_param("ii", $movieId, $categoryId );
+            $stmt->execute();
+        }
+    }
+    $_SESSION["add-movie-error"] = "Thêm mới phim thành công!";
+} 
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -116,7 +121,8 @@ foreach ($categories as $categoryId) {
 </head>
 <body>
     <h1>Thêm Mới Phim</h1>
-    <form action="movie_add.php" method="post" enctype="multipart/form-data">
+    <p color="green"><?php echo $_SESSION["add-movie-error"];?></p>
+    <form action="add-movie.php" method="post" enctype="multipart/form-data">
         <table border="0">
             <!-- Thông tin phim -->
             <tr>
@@ -158,7 +164,11 @@ foreach ($categories as $categoryId) {
             <tr>
                 <td align="right">Nội dung phim:</td>
                 <td>
-                    <textarea name="txtMovieContent" rows="5" cols="40"></textarea>
+                    <textarea name="txtMovieContentPart1" rows="3" cols="40" placeholder="Nội dung phần 1"></textarea><br>
+                    <textarea name="txtMovieContentPart2" rows="3" cols="40" placeholder="Nội dung phần 2"></textarea><br>
+                    <textarea name="txtMovieContentPart3" rows="3" cols="40" placeholder="Nội dung phần 3"></textarea><br>
+                    <textarea name="txtMovieContentPart4" rows="3" cols="40" placeholder="Nội dung phần 4"></textarea><br>
+                    <textarea name="txtMovieContentPart5" rows="3" cols="40" placeholder="Nội dung phần 5"></textarea>
                 </td>
             </tr>
 
@@ -240,4 +250,5 @@ foreach ($categories as $categoryId) {
         }
     </script>
 </body>
+<?php $_SESSION["add-movie-error"] = "";?>
 </html>

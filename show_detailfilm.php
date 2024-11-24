@@ -29,9 +29,9 @@
     // director
     $director = $conn->query("select d.d_name from movie__director MD join director d on d.d_id = MD.d_id where MD.movie_id = $check_movieid");
     // Content_film
-    $content_film = $conn->query("select c.* from movie__content MC join content_film c on c.content_id = MC.content_id where MC.movie_id = $check_movieid");
+    $content_film = $conn->query("select c.* from movies M join content_film c on c.movie_id = M.movie_id where M.movie_id = $check_movieid");
     // showtime
-    $showtime = $conn->query("select * from datetime");
+    //$showtime = $conn->query("select * from datetime");
     // cinema__selectform
     $cinema_form =$conn->query("select * from cinema");
     // check premiere

@@ -375,3 +375,12 @@
 .error-message button:hover {
     background-color: #cc0000;
 }
+
+/* phần accout bên trên */
+.account {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+}
+/*  */
+

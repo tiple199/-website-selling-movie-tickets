@@ -241,3 +241,9 @@ a{
     background: #f58020;
     color: #fff;
 }
+
+.account {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+}

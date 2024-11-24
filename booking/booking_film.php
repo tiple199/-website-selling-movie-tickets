@@ -160,11 +160,31 @@
                                 class="fa-solid fa-magnifying-glass search__icon"></i></label>
                         <form action=""></form>
                     </div>
-                    <div class="box_user">
-                        <div class="avatar__userwrap">
-                            <i class="fa-regular fa-user avatar__usser"></i>
-                        </div>
-                        <P>Lê Tiệp</P>
+                    <!-- Xử lý phần đăng nhập tài khoản -->
+                    <?php
+                    if(!isset($_SESSION["login_status"])){
+                    ?>
+                    <button id="loginBtn" class="btn btn__header">Đăng Nhập</button>
+                    <?php
+                    } else {
+                        $userdb = $_SESSION["login_status"][1];
+                        $sqtaccount= $conn->query("select * from user where username = '$userdb'");
+                        $row1 = $sqtaccount->fetch_assoc();
+                        if($_SESSION["login_status"][0] == "1"){
+                    
+                    ?>
+                    <div class="account">
+                        <img src="../assets/image/avatar.jpg" alt="taikhoan" width="50px" height="50px">
+                        <h2 class="header__item"><?php echo $row1["fullname"];?>
+                            <ul class="header__submenu">
+                                <li class="header__submenu--item"><a href="#!" class="header__submenu--link">Tài Khoản</a> <span class="decor__submenu"></span></li>
+                                <li class="header__submenu--item"><a href="./login/logout.php" class="header__submenu--link">Đăng Xuất</a> <span class="decor__submenu"></span></li>
+                            </ul>
+                        </h2>
+                        <?php
+                        }
+                    }
+                        ?>
                     </div>
                 </div>
             </div>

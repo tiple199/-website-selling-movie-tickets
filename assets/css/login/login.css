@@ -94,4 +94,8 @@ input {
     justify-content: space-around;
 }
 
-
+.account {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+}

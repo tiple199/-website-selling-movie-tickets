@@ -1,11 +1,12 @@
 
 <?php
+session_start();
 // Lấy tên người dùng và mật khẩu từ form
 $user = $_POST['txtusername'];
 $password = $_POST['txtpassword'];
 require_once("../connect/connection.php");
 // Truy vấn
-$result = $conn->query("SELECT password, status, level_id FROM `user` WHERE username = '$user'") or die($conn->error);
+$result = $conn->query("SELECT fullname, username, password, status, level_id FROM `user` WHERE username = '$user'") or die($conn->error);
 
 
 // Kiểm tra xem tên người dùng có tồn tại và so sánh mật khẩu
@@ -18,6 +19,10 @@ if ($password == $row["password"]) {
                 header("Location: ../usera/admin.php");
                 break;
             case 2:
+                $userdb1 = $row["username"];
+                $_SESSION["login_status"] = array("1", "$userdb1");
+                
+                
                 header("Location: ../home.php");
                 break;
         }

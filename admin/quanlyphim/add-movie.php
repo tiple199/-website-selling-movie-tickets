@@ -1,6 +1,10 @@
 <?php
 session_start();
-require_once("connect/connection.php");
+require_once("../../connect/connection.php");
+
+if(!isset($_SESSION["add-movie-error"])){
+        $_SESSION["add-movie-error"] = "";
+    }
 
 // Hàm kiểm tra và chèn nếu chưa tồn tại
 function checkAndInsert($conn, $table, $column, $value) {
@@ -43,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $categories = $_POST['txtMovieCategories'];
 
     // Xử lý tải hình ảnh
-    $targetDir = "./assets/image/image__film/";
+    $targetDir = "../.././assets/image/image__film/";
     $targetFile = $targetDir . basename($movieImage);
     if (!move_uploaded_file($_FILES["txtMovieImage"]["tmp_name"], $targetFile)) {
         die("Có lỗi xảy ra khi tải hình ảnh.");
@@ -107,9 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $_SESSION["add-movie-error"] = "Thêm mới phim thành công!";
 } 
-
-
-
 
 ?>
 <!DOCTYPE html>

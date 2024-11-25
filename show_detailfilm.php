@@ -1,8 +1,9 @@
 <?php
+    session_start();
     require_once("./connect/connection.php");
     $check_movieid = $_REQUEST["movie_id"];
     if(!isset($_REQUEST["check_date"])){
-        $_REQUEST["check_date"] = 1;
+        $_REQUEST["check_date"] = "2024-11-11";
     }
     if(!isset($_REQUEST["select__cinema"]) || $_REQUEST["select__cinema"] == "allcinema"){
         $check_cinemaid = "";
@@ -29,9 +30,11 @@
     // director
     $director = $conn->query("select d.d_name from movie__director MD join director d on d.d_id = MD.d_id where MD.movie_id = $check_movieid");
     // Content_film
+
     $content_film = $conn->query("select c.* from movies M join content_film c on c.movie_id = M.movie_id where M.movie_id = $check_movieid");
     // showtime
     //$showtime = $conn->query("select * from datetime");
+
     // cinema__selectform
     $cinema_form =$conn->query("select * from cinema");
     // check premiere
@@ -176,7 +179,32 @@
                                 class="fa-solid fa-magnifying-glass search__icon"></i></label>
                         <form action=""></form>
                     </div>
-                    <a href="#!" class="btn btn__header">Đăng Nhập</a>
+                    <!-- Xử lý phần đăng nhập tài khoản -->
+                    <?php
+                    if(!isset($_SESSION["login_status"])){
+                    ?>
+                    <button id="loginBtn" class="btn btn__header">Đăng Nhập</button>
+                    <?php
+                    } else {
+                        $userdb = $_SESSION["login_status"][1];
+                        $sqtaccount= $conn->query("select * from user where username = '$userdb'");
+                        $row1 = $sqtaccount->fetch_assoc();
+                        if($_SESSION["login_status"][0] == "1"){
+                    
+                    ?>
+                    <div class="account">
+                        <img src="assets/image/avatar.jpg" alt="taikhoan" width="50px" height="50px">
+                        <h2 class="header__item"><?php echo $row1["fullname"];?>
+                            <ul class="header__submenu">
+                                <li class="header__submenu--item"><a href="#!" class="header__submenu--link">Tài Khoản</a> <span class="decor__submenu"></span></li>
+                                <li class="header__submenu--item"><a href="./login/logout.php" class="header__submenu--link">Đăng Xuất</a> <span class="decor__submenu"></span></li>
+                            </ul>
+                        </h2>
+                        <?php
+                        }
+                    }
+                        ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -292,19 +320,50 @@
                             <p class="text_cat text__showtime">Lịch Chiếu Phim</p>
                             <div class="box__select_day">
                                     <div class="day__wrap">
-                                        <?php 
-                                        // hiện thứ
-                                            while ($row = $showtime->fetch_assoc()){
-                                        ?>
-                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=<?php echo $row["d_id"];
-                                        if(isset($_REQUEST["select__cinema"]) && $_REQUEST["select__cinema"] != "allcinema"){echo "&select__cinema=$check_cinemaid";}
-                                        ?>">
-                                            <div class="day__item <?php if($row["d_id"] == $check_date) {echo "active";}?>">
-                                                <span class="day_name"><?php echo $row["d_name"];?></span>
-                                                <span class="date"><?php echo $row["d_date"];?></span>
+                                        
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-11">
+                                            <div class="day__item <?php if($check_date == "2024-11-11") echo "active"?>">
+                                                <span class="day_name">Thứ Hai</span>
+                                                <span class="date">11/11</span>
                                             </div>
                                         </a>
-                                        <?php }?>
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-12">
+                                            <div class="day__item <?php if($check_date == "2024-11-12") echo "active"?>">
+                                                <span class="day_name">Thứ Ba</span>
+                                                <span class="date">12/11</span>
+                                            </div>
+                                        </a>
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-13">
+                                            <div class="day__item <?php if($check_date == "2024-11-13") echo "active"?>">
+                                                <span class="day_name">Thứ Tư</span>
+                                                <span class="date">13/11</span>
+                                            </div>
+                                        </a>
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-14">
+                                            <div class="day__item <?php if($check_date == "2024-11-14") echo "active"?>">
+                                                <span class="day_name">Thứ Năm</span>
+                                                <span class="date">14/11</span>
+                                            </div>
+                                        </a>
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-15">
+                                            <div class="day__item <?php if($check_date == "2024-11-15") echo "active"?>">
+                                                <span class="day_name">Thứ Sáu</span>
+                                                <span class="date">15/11</span>
+                                            </div>
+                                        </a>
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-16">
+                                            <div class="day__item <?php if($check_date == "2024-11-16") echo "active"?>">
+                                                <span class="day_name">Thứ Bảy</span>
+                                                <span class="date">16/11</span>
+                                            </div>
+                                        </a>
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-17">
+                                            <div class="day__item <?php if($check_date == "2024-11-17") echo "active"?>">
+                                                <span class="day_name">Chủ Nhật</span>
+                                                <span class="date">17/11</span>
+                                            </div>
+                                        </a>
+                                        
 
                                     </div>
                                     <!-- form chọn rạp -->
@@ -342,13 +401,15 @@
                                         <span class="text__select_time">2D Phụ Đề</span>
                                         <div class="box__border_time">
                                             <?php
-                                            $movie_showtime = $conn->query("select CT.cinema_id,SF.sf_time from cinema_showtime CT
-                                            join showtime_detail SD on SD.showtime_detail_id = CT.showtime_detail_id
-                                            join schedule__film SF on SF.sf_id = SD.sf_id where SD.movie_id = $check_movieid and SD.d_id = $check_date and CT.cinema_id = $check_cinemaid order by SF.sf_time");
+                                            $movie_showtime = $conn->query("select C.cinema_id,S.show_time,S.schedule_id from schedules S
+                                            join room R on R.room_id = S.room_id
+                                            join cinema C on R.cinema_id = C.cinema_id
+                                            where S.movie_id = $check_movieid and S.show_date = '$check_date' and C.cinema_id = $check_cinemaid order by S.show_time
+                                            ");
                                             while ($row1 = $movie_showtime->fetch_assoc()){
                                                 
                                             ?>
-                                            <span class="border__item_selecttime"><?php echo $row1["sf_time"];?></span>
+                                            <a href="./booking/booking_film.php?schedule_id=<?php echo $row1["schedule_id"]?>"><span class="border__item_selecttime"><?php echo $row1["show_time"];?></span></a>
                                             <?php 
                                                 
                                             }

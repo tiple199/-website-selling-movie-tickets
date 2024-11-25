@@ -69,14 +69,22 @@
                         <a href="#" class="menu-item <?php if($option === "promotion") echo "active";?>" id="promotion">Khuyến mãi</a>
                         <a href="#" class="menu-item <?php if($option === "ticket") echo "active";?>" id="ticket-type">Loại vé</a>
                         <a href="?option=user" class="menu-item <?php if($option === "user") echo "active";?>" id="website">Người dùng</a>
-                        <a href="#" class="menu-item" id="website">Đăng xuất</a>
+                        <a href="home.php" class="menu-item" id="website">Đăng xuất</a>
                     </div>
                 </div>
                 <!-- Quản Lý Phim -->
                 <div class="content">
-                    <!-- <div class="banner">
-                        <h1>Chào mừng quản trị viên</h1>
-                    </div> -->
+                    <!-- Chào -->
+                    <?php
+                    if($option == ""){
+                    ?>
+                    <div class="banner">
+                        <h1>Chào mừng bạn đã đến với trang quản trị</h1>
+                    </div>
+                    <?php
+                    }
+                    ?>
+                    <!-- Xử lý -->
                     <?php if ($option === "movie"): ?>
                     <form action="admin.php?option=<?php echo $option."&catfilm=$catfilm";?>" method="post">
                         <div class="inner-content">
@@ -97,7 +105,7 @@
                                     </button>
                                 </div>
                                 <div class="function-add-film">
-                                    <a href = "add-movie.php" class="add-movie-button">Thêm phim mới</a>
+                                    <a href = "./admin/quanlyphim/add-movie.php" class="add-movie-button">Thêm phim mới</a>
                                 </div>
                             </div>
                             <?php 
@@ -140,8 +148,9 @@
                                                     <div class="action-menu">
                                                         <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
                                                         <div class="action-dropdown">
-                                                            <a href="edit_movie.php?movie_id=<?php echo $row['movie_id']; ?>">Sửa</a>
-                                                            <a href="delete_movie.php?movie_id=<?php echo $row['movie_id']; ?>">Xóa</a>
+                                                            <a href="edit_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                            <a onclick="return confirm('are you sure to delete')" href="admin/quanlyphim/delete_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                            <a href="schedule_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-solid fa-calendar-days"></i></a>
                                                         </div>
                                                     </div>
                                                 </td>

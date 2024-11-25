@@ -69,6 +69,13 @@ a{
     color: white;
 }
 
+/* Banner */
+.banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Quản Lý Phim */
 .content {
     width: 85%;
@@ -211,8 +218,6 @@ a{
 .action-dropdown {
     display: none;
     position: absolute;
-    top: 15px;
-    left: 0;
     right: 0;
     background-color: #fff;
     border-radius: 4px;
@@ -223,7 +228,7 @@ a{
 .action-dropdown a {
     display: block;
     padding: 8px 12px;
-    color: #333;
+    color: #e97f12;
     text-decoration: none;
 }
 

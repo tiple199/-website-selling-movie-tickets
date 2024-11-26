@@ -218,9 +218,10 @@ a{
 .action-dropdown {
     display: none;
     position: absolute;
-    right: 0;
+    top: 0;
+    left: -10px;
     background-color: #fff;
-    border-radius: 4px;
+    border-radius: 20px;
     overflow: hidden;
     z-index: 1;
 }

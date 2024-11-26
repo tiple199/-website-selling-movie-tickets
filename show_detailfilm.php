@@ -1,6 +1,24 @@
 <?php
     session_start();
     require_once("./connect/connection.php");
+
+    // xử lý phần đăng nhập
+    if(!isset($_SESSION["login_error"])){
+        $_SESSION["login_error"] = '';
+    }
+    $loginError = $_SESSION["login_error"];
+
+    // kiểm tra nếu chưa đăng nhập thì yêu cầu đăng nhập
+    $is_logged_in = isset($_SESSION['login_status']);
+    // Nếu chưa đăng nhập, tạo thông báo lỗi
+    if (!$is_logged_in) {
+        $loginError1 = "Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục!";
+    } else {
+        $loginError1 = "";
+    }
+    // Lưu lại URL của trang hiện tại (showfilmdetail) vào session
+    $_SESSION['current_url'] = $_SERVER['REQUEST_URI'];
+
     $check_movieid = $_REQUEST["movie_id"];
     if(!isset($_REQUEST["check_date"])){
         $_REQUEST["check_date"] = "2024-11-11";
@@ -54,6 +72,7 @@
         href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/home/styles.css">
+    <link rel="stylesheet" href="./assets/css/login/login.css"> 
     <link rel="stylesheet" href="./assets/css/show_detailfilm/styles.css">
     <link rel="stylesheet" href="./assets/css/home/grid.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
@@ -181,15 +200,15 @@
                     </div>
                     <!-- Xử lý phần đăng nhập tài khoản -->
                     <?php
-                    if(!isset($_SESSION["login_status"])){
+                    if(!isset($_SESSION["login_status"]) && !isset($_SESSION["id_user"])){
                     ?>
                     <button id="loginBtn" class="btn btn__header">Đăng Nhập</button>
                     <?php
                     } else {
-                        $userdb = $_SESSION["login_status"][1];
-                        $sqtaccount= $conn->query("select * from user where username = '$userdb'");
+                        $iduserdb = $_SESSION["id_user"];
+                        $sqtaccount= $conn->query("select * from user where id = $iduserdb");
                         $row1 = $sqtaccount->fetch_assoc();
-                        if($_SESSION["login_status"][0] == "1"){
+                        if($_SESSION["login_status"] == "1"){
                     
                     ?>
                     <div class="account">
@@ -409,7 +428,9 @@
                                             while ($row1 = $movie_showtime->fetch_assoc()){
                                                 
                                             ?>
-                                            <a href="./booking/booking_film.php?schedule_id=<?php echo $row1["schedule_id"]?>"><span class="border__item_selecttime"><?php echo $row1["show_time"];?></span></a>
+                                            <a href="javascript:void(0)" onclick="checkLogin(<?php echo $is_logged_in ? 'true' : 'false'; ?>, <?php echo $row1['schedule_id']; ?>)">
+                                                <span class="border__item_selecttime"><?php echo $row1["show_time"];?></span>
+                                            </a>
                                             <?php 
                                                 
                                             }
@@ -469,3 +490,85 @@
         </div>
     </div>
 </body>
+<div class="container-login">
+
+    <!-- Lớp phủ làm tối -->d
+    <div id="overlay"></div>
+
+    <!-- Khung đăng nhập -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img src="logo.png" alt="Login Image" class="form-image">
+            <h2>Đăng Nhập Tài Khoản</h2>
+            <p class="text__error">
+                <?php echo $_SESSION["login_error"]?>
+            </p>
+            <form action="./login/login__action.php" method="post" name="f" onsubmit="return check()">
+                <input type="text" placeholder="Username" name="txtusername">
+                <input type="password" placeholder="Password" name="txtpassword">
+                <button type="submit" class="action-btn">Đăng Nhập</button>
+            </form>
+            <p>Bạn chưa có tài khoản? <button id="showRegister" class="link-btn">Đăng ký</button></p>
+        </div>
+    </div>
+
+    <!-- Khung đăng ký -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img src="logo.png" alt="Register Image" class="form-image">
+            <h2>Đăng Ký Tài Khoản</h2>
+            <form action="./login/login__action.php" method="post">
+                <input type="text" placeholder="Nhập Họ và tên">
+                <input type="email" placeholder="Nhập Email">
+                <input type="text" placeholder="Nhập Số điện thoại">
+                <input type="password" placeholder="Nhập Mật khẩu">
+                <input type="password" placeholder="Nhập lại Mật khẩu">
+            <button class="action-btn">Hoàn thành</button>
+            </form>
+            <p>Bạn đã có tài khoản? <button id="showLogin" class="link-btn">Đăng nhập</button></p>
+        </div>
+    </div>
+</div>
+<script>
+    // Kiểm tra nếu có lỗi từ PHP để mở form đăng nhập tự động
+    document.addEventListener('DOMContentLoaded', function() {
+        const overlay = document.getElementById('overlay');
+        const loginModal = document.getElementById('loginModal');
+        const loginError = <?php echo json_encode($loginError); ?>;
+        
+        if (loginError) {
+            overlay.style.display = 'block';
+            loginModal.style.display = 'block';
+        }
+
+    });
+
+    document.addEventListener1('DOMContentLoaded', function() {
+        const overlay = document.getElementById('overlay');
+        const loginModal = document.getElementById('loginModal');
+        const loginError = <?php echo json_encode($loginError1); ?>;
+        
+        if (loginError) {
+            overlay.style.display = 'block';
+            loginModal.style.display = 'block';
+        }
+
+    });
+    
+
+    // Kiểm tra nếu người dùng đã đăng nhập và mở modal đăng nhập nếu chưa
+    function checkLogin(isLoggedIn, scheduleId) {
+        if (!isLoggedIn) {
+            // Hiển thị overlay và modal đăng nhập
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('loginModal').style.display = 'block';
+        } else {
+            // Nếu đã đăng nhập, chuyển hướng đến trang đặt vé
+            window.location.href = "./booking/booking_film.php?schedule_id=" + scheduleId;
+        }
+    }
+</script>
+<script src = "./assets/js/home/main.js"></script>
+</html>

@@ -7,7 +7,6 @@
         $_SESSION["login_error"] = '';
     }
     $loginError = $_SESSION["login_error"];
-
     //
 
     if(!isset($_REQUEST["catid"])){
@@ -182,15 +181,15 @@
                     </div>
                     <!-- Xử lý phần đăng nhập tài khoản -->
                     <?php
-                    if(!isset($_SESSION["login_status"])){
+                    if(!isset($_SESSION["login_status"]) && !isset($_SESSION["id_user"])){
                     ?>
                     <button id="loginBtn" class="btn btn__header">Đăng Nhập</button>
                     <?php
                     } else {
-                        $userdb = $_SESSION["login_status"][1];
-                        $sqtaccount= $conn->query("select * from user where username = '$userdb'");
+                        $iduserdb = $_SESSION["id_user"];
+                        $sqtaccount= $conn->query("select * from user where id = $iduserdb");
                         $row1 = $sqtaccount->fetch_assoc();
-                        if($_SESSION["login_status"][0] == "1"){
+                        if($_SESSION["login_status"] == "1"){
                     
                     ?>
                     <div class="account">
@@ -347,7 +346,6 @@
         if (loginError) {
             overlay.style.display = 'block';
             loginModal.style.display = 'block';
-            document.getElementById('loginError').innerText = loginError;
         }
 
         // Các sự kiện khác cho nút đóng và mở form có thể được đặt ở đây

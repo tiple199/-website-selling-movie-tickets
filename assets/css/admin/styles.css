@@ -27,10 +27,12 @@ a{
     text-decoration: none;
 }
 
-.flex {
+.d-flex {
     display: flex;
 }
-
+.container {
+    width: auto;
+}
 /* sidebar */
 
 .sidebar {
@@ -38,7 +40,7 @@ a{
     justify-content: center;
     width: 250px;
     height: 100vh;
-    background-color: #f0f0f0;
+    background-color: white;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -58,13 +60,201 @@ a{
     transition: background-color 0.3s ease;
 }
 
-.sidebar a:hover {
+/* .sidebar a:hover {
     background-color: #ddd;
-}
+} */
 
 .sidebar a.active {
     background-color: #e97f12;
     color: white;
-    border-radius: 25px;
 }
 
+/* Banner */
+.banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Quản Lý Phim */
+.content {
+    width: 85%;
+    padding: 50px;
+    background-color: #f0f2f5;
+}
+.inner-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* width: 80%; */
+    /* max-width: 1200px; */
+}
+.categories-film {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #ccc;
+}
+.tab-option {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #666;
+    font-size: 16px;
+    text-decoration: none;
+}
+.tab-option.active {
+    color: black;
+    font-weight: bold;
+}
+.underline {
+    position: absolute;
+    bottom: -2px;
+    height: 2px;
+    width: 0;
+    background-color: black;
+    transition: left 0.3s ease, width 0.3s ease;
+}
+
+/* function */
+
+.function {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+.function-search {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    flex: 1;
+}
+.function-search input {
+    border: none;
+    outline: none;
+    padding: 5px;
+    font-size: 14px;
+    width: 100%;
+}
+.search-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.add-movie-button {
+    background-color: #e97f12;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+/* phim table */
+.table-content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.movie-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    background-color: #f5f5f5;
+}
+
+.table-header th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.table-row {
+    border-bottom: 1px solid #ddd;
+}
+
+.table-row:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.movie-id, .movie-tag, .movie-duration, .movie-nation, .movie-release, .movie-category, .movie-action {
+    padding: 12px 15px;
+}
+
+.movie-name {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+}
+
+.movie-img {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.movie-action {
+    position: relative;
+}
+
+.action-menu {
+    display: inline-block;
+}
+
+.action-button {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.action-dropdown {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: -10px;
+    background-color: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.action-dropdown a {
+    display: block;
+    padding: 8px 12px;
+    color: #e97f12;
+    text-decoration: none;
+}
+
+.action-dropdown a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Chân trang */
+.pagination {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.pagination-link {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.pagination-link.active {
+    background-color: #e97f12;
+    color: #fff;
+    font-weight: bold;
+}

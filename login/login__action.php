@@ -6,7 +6,7 @@ $user = $_POST['txtusername'];
 $password = $_POST['txtpassword'];
 require_once("../connect/connection.php");
 // Truy vấn
-$result = $conn->query("SELECT fullname, username, password, status, level_id FROM `user` WHERE username = '$user'") or die($conn->error);
+$result = $conn->query("SELECT id, fullname, username, password, status, level_id FROM `user` WHERE username = '$user'") or die($conn->error);
 
 
 // Kiểm tra xem tên người dùng có tồn tại và so sánh mật khẩu
@@ -16,22 +16,33 @@ if ($password == $row["password"]) {
 
         switch ($row["level_id"]) {
             case 1:
-                header("Location: ../usera/admin.php");
+                header("Location: ../admin.php");
                 break;
             case 2:
-                $userdb1 = $row["username"];
-                $_SESSION["login_status"] = array("1", "$userdb1");
-                
-                
-                header("Location: ../home.php");
+                $_SESSION["login_status"] = "1";
+                $_SESSION["id_user"] = $row["id"];
+                // Kiểm tra xem có URL hiện tại không
+                if (isset($_SESSION['current_url'])) {
+                    // Nếu có, chuyển hướng về trang đó (showfilmdetail hoặc trang người dùng đang đứng)
+                    header("Location: " . $_SESSION['current_url']);
+                    unset($_SESSION['current_url']); // Xóa URL sau khi sử dụng
+                } else {
+                    // Nếu không có, chuyển về trang home mặc định
+                    header("Location: ../home.php");
+                }
                 break;
         }
         exit();
     }else {
         session_start();
         $_SESSION["login_error"] = "Username or Password is incorect";
-        // echo $_SESSION["login_error"];
-        header("Location: ../home.php");
+        
+        // Kiểm tra xem có trang referrer không (nếu có thì quay lại trang đó)
+        $redirectUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../home.php';
+
+        // Chuyển hướng về trang trước đó nếu có, nếu không thì chuyển về trang home.php
+        header("Location: $redirectUrl");
+
         exit();
 }
 

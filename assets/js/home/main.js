@@ -35,6 +35,7 @@ const closeBtns = document.querySelectorAll('.close');
 const showRegisterBtn = document.getElementById('showRegister');
 const showLoginBtn = document.getElementById('showLogin');
 
+
 // Khi người dùng click vào nút Đăng nhập để hiển thị form đăng nhập
 loginBtn.onclick = function() {
     overlay.style.display = 'block';
@@ -56,6 +57,7 @@ overlay.onclick = function() {
     overlay.style.display = 'none';
     loginModal.style.display = 'none';
     registerModal.style.display = 'none';
+    
 }
 
 // Khi người dùng click vào nút Đăng ký trong form đăng nhập
@@ -86,3 +88,30 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+    // Show trailer
+    function show_trailer(movie_id){
+        const hidden_trailer = document.querySelectorAll(".show_trailer");
+        const show_trailer = document.getElementById(`show_trailer_${movie_id}`);
+        hidden_trailer.forEach(trailer => {
+        trailer.style.display = "none";
+        });
+    
+        if (show_trailer) {
+            overlay.style.display = "block";
+            show_trailer.style.display = "block";
+        }
+    
+        overlay.onclick = function() {
+        overlay.style.display = 'none';
+        const iframe = document.getElementById(`show_trailer_${movie_id}`);
+        if (iframe) {
+            iframe.src = iframe.src; // Dừng video bằng cách làm mới src
+            iframe.style.display = "none";
+            overlay.onclick = function() {
+                overlay.style.display = 'none';
+                loginModal.style.display = 'none';
+                registerModal.style.display = 'none';
+            }
+        }
+    };
+    }

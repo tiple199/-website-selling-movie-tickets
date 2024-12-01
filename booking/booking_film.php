@@ -1,6 +1,5 @@
 <?php
     session_start();
-    
     require_once("../connect/connection.php");
     // heading
     $film_categories= $conn->query("select * from film_categories");
@@ -177,8 +176,8 @@
                         <img src="../assets/image/avatar.jpg" alt="taikhoan" width="50px" height="50px">
                         <h2 class="header__item"><?php echo $row1["fullname"];?>
                             <ul class="header__submenu">
-                                <li class="header__submenu--item"><a href="#!" class="header__submenu--link">Tài Khoản</a> <span class="decor__submenu"></span></li>
-                                <li class="header__submenu--item"><a href="./login/logout.php" class="header__submenu--link">Đăng Xuất</a> <span class="decor__submenu"></span></li>
+                                <li class="header__submenu--item"><a href="../profile/profile.php" class="header__submenu--link">Tài Khoản</a> <span class="decor__submenu"></span></li>
+                                <li class="header__submenu--item"><a href="../login/logout.php" class="header__submenu--link">Đăng Xuất</a> <span class="decor__submenu"></span></li>
                             </ul>
                         </h2>
                         <?php

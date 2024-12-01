@@ -26,7 +26,6 @@ a{
 /* body */
 .body__file__inner{
     display: flex;
-    height: 500px;
     gap: 30px;
     margin-top: 30px;
 }
@@ -228,19 +227,7 @@ a{
     display: flex;
     align-items: center;
 }
-.show__more{
-    display: inline-flex;
-    gap: 10px;
-    padding: 12px 15px;
-    border-radius: 5px;
-    border: 1px solid #f58020;
-    color: #f58020;
-    transition: 0.5s ease;
-}
-.show__more:hover{
-    background: #f58020;
-    color: #fff;
-}
+
 
 .account {
     display: flex;

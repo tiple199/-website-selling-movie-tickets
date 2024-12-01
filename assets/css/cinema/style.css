@@ -1,0 +1,121 @@
+.cinema{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+.title_cinema{
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+.cinema_desc,.hotline{
+    font-size: 1.4rem;
+
+}
+.blue{
+    color: #034EA2;
+}
+.hotline{
+    padding-bottom: 25px;
+}
+.select_cinema{
+    padding: 10px;
+}
+
+/* container_film */
+.container_film{
+    background: #f4f4f4;
+    padding: 40px 0;
+}
+.container_film__inner{
+    background: #FFF;
+    padding: 16px;
+
+}
+.title_page{
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    position: relative;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.title_page::before{
+    position: absolute;
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background: #034EA2;
+    left: -8px;
+}
+.date_wrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #034EA2;
+}
+.date{
+    padding: 7px 15px;
+}
+.date_name{
+    margin-bottom: 8px;
+    display: block;
+    text-align: center;
+}
+.day_name{
+    display: block;
+    text-align: center;
+}
+.date{
+    color: black;
+}
+.active_day{
+    background: #034EA2;
+    color: #FFF;
+    border-radius: 5px;
+}
+/* film */
+.img__film {
+    height: 300px;
+}
+.body_itemfilm::before{
+    height: 300px;
+}
+.body_vote{
+    top: 235px;
+}
+.body_agelimit{
+    top: 270px;
+}
+.film_item{
+    padding-top: 30px;
+}
+.img_price{
+    width: 100%;
+}
+
+
+.price_ticket{
+    margin-right: auto;
+    margin-left: auto;
+    width: 100%;
+    margin-top: 30px;
+    background: #FFF;
+    padding: 16px;
+}
+.cinema_address,.cinema_hotline{
+    color: #a0a3a7;
+}
+.cinema_address{
+    margin-bottom: 10px;
+}
+.cinema_hotline{
+    margin-bottom: 20px;
+}
+.strong{
+    font-weight: bolder;
+    color: #4A4A4A;
+}

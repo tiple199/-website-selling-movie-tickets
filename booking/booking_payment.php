@@ -228,14 +228,17 @@
                                <?php 
                                
                                 if($check_discount){  
+                                    $_SESSION["discount_id"] = $row_discount["discount_id"];
                                     $discount = $row_discount["discount_price"];                         
                                ?>
                                     <div class="discount">
+                                        
                                         <span class="text_discount">Mã giảm giá: <?php echo $row_discount["discount_id"];?></span>
                                         <span class="bold"> -<?=number_format($row_discount["discount_price"])?> đ</span>
                                     </div>
                                <?php }
                                $_SESSION["amount"] = $_SESSION["price_seat"] + $total_food - $discount;
+                               $_SESSION["price_ticket"] = $_SESSION["price_seat"] + $total_food;
                                ?>
                                <!-- show error discount -->
                                <?php
@@ -248,6 +251,7 @@
                                <?php 
                                 }
                                ?>
+                               <!--  -->
                             <div class="total__booking">
                                 <span class="text__total">Tổng cộng</span>
                                 <span class="price__booking" id="total-price"><?=number_format($_SESSION["price_seat"] + $total_food - $discount)?> đ</span>

@@ -23,3 +23,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     Header("Location: booking_payment.php");
     
 }
+?>

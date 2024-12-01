@@ -215,7 +215,7 @@
                         <img src="assets/image/avatar.jpg" alt="taikhoan" width="50px" height="50px">
                         <h2 class="header__item"><?php echo $row1["fullname"];?>
                             <ul class="header__submenu">
-                                <li class="header__submenu--item"><a href="#!" class="header__submenu--link">Tài Khoản</a> <span class="decor__submenu"></span></li>
+                                <li class="header__submenu--item"><a href="./profile/profile.php" class="header__submenu--link">Tài Khoản</a> <span class="decor__submenu"></span></li>
                                 <li class="header__submenu--item"><a href="./login/logout.php" class="header__submenu--link">Đăng Xuất</a> <span class="decor__submenu"></span></li>
                             </ul>
                         </h2>
@@ -236,11 +236,13 @@
                     while($row = $search__film->fetch_assoc()){
                 ?>
                 <img src="./assets/image/image__trailer/<?php echo $row["movie_img"];?>" alt="" class="img__poster">
+                <iframe class="show_trailer" id="show_trailer" src="<?=$row["movie_trailer"]?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            
                 <?php
                     }
                     $search__film->data_seek(0);
                 ?>
-                <i class="fa-solid fa-circle-play button_play"></i>
+                <i class="fa-solid fa-circle-play button_play" id="button_play"></i>
             </div>
         </div>
     </div>
@@ -340,43 +342,43 @@
                             <div class="box__select_day">
                                     <div class="day__wrap">
                                         
-                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-11">
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-11<?php if(isset($_REQUEST['select__cinema'])){ $cinema_id = $_REQUEST['select__cinema']; echo '&select__cinema='. $cinema_id ;}?>">
                                             <div class="day__item <?php if($check_date == "2024-11-11") echo "active"?>">
                                                 <span class="day_name">Thứ Hai</span>
                                                 <span class="date">11/11</span>
                                             </div>
                                         </a>
-                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-12">
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-12<?php if(isset($_REQUEST['select__cinema'])){ $cinema_id = $_REQUEST['select__cinema']; echo '&select__cinema='. $cinema_id ;}?>">
                                             <div class="day__item <?php if($check_date == "2024-11-12") echo "active"?>">
                                                 <span class="day_name">Thứ Ba</span>
                                                 <span class="date">12/11</span>
                                             </div>
                                         </a>
-                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-13">
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-13<?php if(isset($_REQUEST['select__cinema'])){ $cinema_id = $_REQUEST['select__cinema']; echo '&select__cinema='. $cinema_id ;}?>">
                                             <div class="day__item <?php if($check_date == "2024-11-13") echo "active"?>">
                                                 <span class="day_name">Thứ Tư</span>
                                                 <span class="date">13/11</span>
                                             </div>
                                         </a>
-                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-14">
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-14<?php if(isset($_REQUEST['select__cinema'])){ $cinema_id = $_REQUEST['select__cinema']; echo '&select__cinema='. $cinema_id ;}?>">
                                             <div class="day__item <?php if($check_date == "2024-11-14") echo "active"?>">
                                                 <span class="day_name">Thứ Năm</span>
                                                 <span class="date">14/11</span>
                                             </div>
                                         </a>
-                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-15">
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-15<?php if(isset($_REQUEST['select__cinema'])){ $cinema_id = $_REQUEST['select__cinema']; echo '&select__cinema='. $cinema_id ;}?>">
                                             <div class="day__item <?php if($check_date == "2024-11-15") echo "active"?>">
                                                 <span class="day_name">Thứ Sáu</span>
                                                 <span class="date">15/11</span>
                                             </div>
                                         </a>
-                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-16">
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-16<?php if(isset($_REQUEST['select__cinema'])){ $cinema_id = $_REQUEST['select__cinema']; echo '&select__cinema='. $cinema_id ;}?>">
                                             <div class="day__item <?php if($check_date == "2024-11-16") echo "active"?>">
                                                 <span class="day_name">Thứ Bảy</span>
                                                 <span class="date">16/11</span>
                                             </div>
                                         </a>
-                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-17">
+                                        <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-17<?php if(isset($_REQUEST['select__cinema'])){ $cinema_id = $_REQUEST['select__cinema']; echo '&select__cinema='. $cinema_id ;}?>">
                                             <div class="day__item <?php if($check_date == "2024-11-17") echo "active"?>">
                                                 <span class="day_name">Chủ Nhật</span>
                                                 <span class="date">17/11</span>
@@ -483,54 +485,99 @@
                             ?>
                     </div>
                     <div class="btn__showmore">
-                        <a href="" class="show__more">Xem thêm <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="./all_film.php" class="show__more">Xem thêm <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Xử lý login -->
+    <div class="container-login">
+
+        <!-- Lớp phủ làm tối -->
+        <div id="overlay"></div>
+
+        <!-- Khung đăng nhập -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <img src="logo.png" alt="Login Image" class="form-image">
+                <h2>Đăng Nhập Tài Khoản</h2>
+                <p class="text__error">
+                    <?php echo $_SESSION["login_error"]?>
+                </p>
+                <form action="./login/login__action.php" method="post" name="f" onsubmit="return check()">
+                    <input type="text" placeholder="Username" name="txtusername">
+                    <input type="password" placeholder="Password" name="txtpassword">
+                    <button type="submit" class="action-btn">Đăng Nhập</button>
+                </form>
+                <p>Bạn chưa có tài khoản? <button id="showRegister" class="link-btn">Đăng ký</button></p>
+            </div>
+        </div>
+
+        <!-- Khung đăng ký -->
+        <div id="registerModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <img src="logo.png" alt="Register Image" class="form-image">
+                <h2>Đăng Ký Tài Khoản</h2>
+                <form action="./login/login__action.php" method="post">
+                    <input type="text" placeholder="Nhập Họ và tên">
+                    <input type="email" placeholder="Nhập Email">
+                    <input type="text" placeholder="Nhập Số điện thoại">
+                    <input type="password" placeholder="Nhập Mật khẩu">
+                    <input type="password" placeholder="Nhập lại Mật khẩu">
+                <button class="action-btn">Hoàn thành</button>
+                </form>
+                <p>Bạn đã có tài khoản? <button id="showLogin" class="link-btn">Đăng nhập</button></p>
+            </div>
+        </div>
+    </div>
+    <!-- footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="row">
+                    <div class="col-3">
+                        <h3 class="title_footer">GIỚI THIỆU</h3>
+                        <ul>
+                            <li class="item__footer">Về Chúng Tôi</li>
+                            <li class="item__footer">Thỏa Thuận Sử Dụng</li>
+                            <li class="item__footer">Quy Chế Hoạt Động</li>
+                            <li class="item__footer">Chính Sách Bảo Mật</li>
+                        </ul>
+                    </div>
+                    <div class="col-3">
+                        <h3 class="title_footer">GÓC ĐIỆN ẢNH</h3>
+                        <ul>
+                            <li class="item__footer">Thể Loại Phim</li>
+                            <li class="item__footer">Bình Luận Phim</li>
+                            <li class="item__footer">Blog Điện Ảnh</li>
+                            <li class="item__footer">Phim Hay Tháng</li>
+                            <li class="item__footer">Phim IMAX</li>
+                        </ul>
+                    </div>
+                    <div class="col-3">
+                        <h3 class="title_footer">HỖ TRỢ</h3>
+                        <ul>
+                            <li class="item__footer">Góp ý</li>
+                            <li class="item__footer">Sale & Services</li>
+                            <li class="item__footer">Rạp / Giá vé</li>
+                            <li class="item__footer">Tuyển Dụng</li>
+                            <li class="item__footer">FAG</li>
+                        </ul>
+                    </div>
+                    <div class="col-3">
+                        <div><img src="./logo.png" alt="" class="logo_footer"></div>
+                        <div class="row__icon">
+                            <i class="fa-brands fa-facebook  icon__footer"></i><i class="fa-brands fa-youtube icon__footer"></i><i class="fa-brands fa-instagram icon__footer"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
-<div class="container-login">
-
-    <!-- Lớp phủ làm tối -->d
-    <div id="overlay"></div>
-
-    <!-- Khung đăng nhập -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <img src="logo.png" alt="Login Image" class="form-image">
-            <h2>Đăng Nhập Tài Khoản</h2>
-            <p class="text__error">
-                <?php echo $_SESSION["login_error"]?>
-            </p>
-            <form action="./login/login__action.php" method="post" name="f" onsubmit="return check()">
-                <input type="text" placeholder="Username" name="txtusername">
-                <input type="password" placeholder="Password" name="txtpassword">
-                <button type="submit" class="action-btn">Đăng Nhập</button>
-            </form>
-            <p>Bạn chưa có tài khoản? <button id="showRegister" class="link-btn">Đăng ký</button></p>
-        </div>
-    </div>
-
-    <!-- Khung đăng ký -->
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <img src="logo.png" alt="Register Image" class="form-image">
-            <h2>Đăng Ký Tài Khoản</h2>
-            <form action="./login/login__action.php" method="post">
-                <input type="text" placeholder="Nhập Họ và tên">
-                <input type="email" placeholder="Nhập Email">
-                <input type="text" placeholder="Nhập Số điện thoại">
-                <input type="password" placeholder="Nhập Mật khẩu">
-                <input type="password" placeholder="Nhập lại Mật khẩu">
-            <button class="action-btn">Hoàn thành</button>
-            </form>
-            <p>Bạn đã có tài khoản? <button id="showLogin" class="link-btn">Đăng nhập</button></p>
-        </div>
-    </div>
-</div>
 <script>
     // Kiểm tra nếu có lỗi từ PHP để mở form đăng nhập tự động
     document.addEventListener('DOMContentLoaded', function() {
@@ -571,4 +618,5 @@
     }
 </script>
 <script src = "./assets/js/home/main.js"></script>
+<script src = "./assets/js/show_detailfilm/main.js"></script>
 </html>

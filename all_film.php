@@ -217,16 +217,6 @@
         </div>
     </header>
     <main>
-        <!-- Poster -->
-        <div class="poster">
-            <div class="container">
-                <div class="poster__list">
-                    <div class="post__item">
-                        <img src="./assets/image/poster/transformersmot.jpg" alt="" class="home__poster">
-                    </div>
-                </div>
-            </div>
-        </div>
         <!-- Film -->
         <div class="film">
             <div class="container">
@@ -239,7 +229,7 @@
                                 while($row = $film_categories->fetch_assoc()){
                             ?>
                                 
-                                <li class="type__film--item"><label for="" class="label__film"><a class="catid__link <?php if($row["cat_id"] == $check_catid || $check_catid == "active") echo "catid__active"?>" href = "./home.php?catid=<?php echo $row["cat_id"]?>&#location_film"><?php echo $row["cat_name"];?></a></label></li>
+                                <li class="type__film--item"><label for="" class="label__film"><a class="catid__link <?php if($row["cat_id"] == $check_catid || $check_catid == "active") echo "catid__active"?>" href = "./all_film.php?catid=<?php echo $row["cat_id"]?>&#location_film"><?php echo $row["cat_name"];?></a></label></li>
                             <?php
                             }
                             ?>
@@ -249,13 +239,13 @@
                     <div class="row film__list">
                         
                         <?php
-                            $count = 0;
+                            
                             if($result_film->num_rows == 0){
                                 echo "Khong co phim!";
                             }
                             else{
                             while($row = $result_film->fetch_assoc()){
-                                if($count < 8){
+                                
                         ?>
                             <div class="col-3">
                                 <div class="item__film">
@@ -265,8 +255,8 @@
                                         <p class="film__name"><?php echo $row["movie_name"];?></p>
                                     </div>
                                     <div class="book_film">
-                                        <a href="./show_detailfilm.php?movie_id=<?php echo $row["movie_id"];?>"><div class="ticket__film"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
-                                        <div><button id="trailer_film" class="trailer_film" type="button" onclick="show_trailer(<?=$row["movie_id"]?>)"><i class="fa-solid fa-circle-play" style="margin-right:5px"></i> Trailer</button></div>
+                                                <a href="./show_detailfilm.php?movie_id=<?php echo $row["movie_id"];?>"><div class="ticket__film"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
+                                                <div><button id="trailer_film" class="trailer_film" type="button" onclick="show_trailer(<?=$row["movie_id"]?>)"><i class="fa-solid fa-circle-play" style="margin-right:5px"></i> Trailer</button></div>
                                     </div>
                                     <div class="vote">
                                         <span class="rate__film"><i class="fa-solid fa-star rate__star"></i><?php echo $row["movie_rating"];?></span>
@@ -291,17 +281,14 @@
                                 <iframe class="show_trailer" id="show_trailer_<?=$row["movie_id"]?>" src="<?=$row["movie_trailer"]?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                             </div>
                         <?php 
-                                    }
-                            $count++;
+                                    
+                            
                             $film_premiere->data_seek(0);
                             }
                         }
                         ?>
                     </div>
                 </div>
-            </div>
-            <div class="btn__showmore" align="center">
-                <a  href="./all_film.php" class="show__more">Xem thêm <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
     </main>
@@ -403,9 +390,8 @@
             loginModal.style.display = 'block';
         }
 
-        
+        // Các sự kiện khác cho nút đóng và mở form có thể được đặt ở đây
     });
-
 </script>
 <script src = "./assets/js/home/main.js"></script>
 <?php $_SESSION["login_error"] = ''?>

@@ -17,6 +17,7 @@ body{
     padding: 12px 20px;
     background: var(--primary-color);
     color: #fff;
+    cursor: pointer;
 }
 .btn:hover{
     opacity: 0.8;
@@ -82,6 +83,7 @@ a{
     top: -2px;
 }
 .decor__header{
+    margin-right: 20px;
     width: 112px;
     height: 36px;
     object-fit: cover;
@@ -319,11 +321,15 @@ a{
     border: 1px solid #e4913f;
 }
 .trailer_film{
+    background: transparent;
     display: inline-block;
     padding: 12px 20px;
     border-radius: 5px;
     border: 1px solid #FFF;
     color: #FFF;
+    font-size: 1.6rem;
+    width: 100%;
+    cursor: pointer;
 }
 #location_film{
     opacity: 0;
@@ -357,4 +363,73 @@ a{
     position: absolute;
     top: 5px;
     right: 5px;
+}
+/* footer */
+.footer{
+    background: #333333;
+    padding-top: 40px;
+    margin-top: 40px;
+}
+.title_footer{
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: 700;
+    font-style: normal;
+    margin-bottom: 25px;
+}
+.item__footer{
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+    font-weight: 700;
+    font-style: normal;
+    margin-bottom: 20px;
+    color: #d0d0d0;
+}
+.item__footer:hover{
+    color: #e4913f;
+    cursor: pointer;
+}
+.logo_footer{
+    width: 100px;
+    height:100px;
+    object-fit: cover;
+}
+.icon__footer{
+    font-size: 2rem;
+}
+.row__icon{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.icon__footer:hover{
+    color: #e97f12;
+    cursor: pointer;
+}
+
+.show__more{
+    display: inline-flex;
+    gap: 10px;
+    padding: 12px 15px;
+    border-radius: 5px;
+    border: 1px solid #f58020;
+    color: #f58020;
+    transition: 0.5s ease;
+    margin-top: 15px;
+}
+.show__more:hover{
+    background: #f58020;
+    color: #fff;
+}
+/* trailer */
+.show_trailer{
+    display: none;
+    position: fixed;
+    inset: 80px;
+    z-index: 4;
+    width: 88vw;
+    height: 80vh;
 }

@@ -1,42 +1,41 @@
 <?php
-    require_once("connect/connection.php");
     session_start();
+    require_once("../connect/connection.php");
 
     // xử lý phần đăng nhập
     if(!isset($_SESSION["login_error"])){
         $_SESSION["login_error"] = '';
     }
     $loginError = $_SESSION["login_error"];
-    //
 
-    if(!isset($_REQUEST["catid"])){
-        $_REQUEST["catid"] = 1;
-        
+    // kiểm tra nếu chưa đăng nhập thì yêu cầu đăng nhập
+    $is_logged_in = isset($_SESSION['login_status']);
+    // Nếu chưa đăng nhập, tạo thông báo lỗi
+    if (!$is_logged_in) {
+        $loginError1 = "Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục!";
+    } else {
+        $loginError1 = "";
     }
-    if(!isset($_REQUEST["catid_active"])){
-        $_REQUEST["catid_active"] = "active";
-    }
-    else{
-        $_REQUEST["catid_active"] = "unactive";
-    }
-    $check_catid = $_REQUEST["catid"];
-    $check_active = $_REQUEST["catid_active"];
-    if($check_catid != "3"){
-        $result_film = $conn->query("SELECT m.* FROM movie__categories mc, movies m WHERE mc.cat_id = $check_catid  AND mc.movie_id = m.movie_id and movie_status  = 1 ORDER BY m.movie_rating DESC");
-    }
-    else{
-        $result_film=$conn->query("SELECT m.*
-                FROM movie__categories mc,movies m
-                WHERE mc.cat_id = 3 and mc.movie_id = m.movie_id and movie_status  = 1
-                ORDER BY
-                CASE 
-                    WHEN m.movie_ispremiere = 1 THEN 1
-                    ELSE 2
-                END;
-        ");
-    }
-    $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
+    // Lưu lại URL của trang hiện tại (showfilmdetail) vào session
+    $_SESSION['current_url'] = $_SERVER['REQUEST_URI'];
+
+
+
+    // header
     $film_categories= $conn->query("select * from film_categories");
+    $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
+
+
+    // ad
+    $film_ad = $conn->query("select * from  movies M where movie_status  = 1 and movie_ad = 1");
+
+
+    // check id
+    $check_discount_id = $_REQUEST["discount_id"];
+    $sql_discount = "select * from discount where discount_id = '$check_discount_id'";
+    $r_discount = $conn->query($sql_discount);
+
+ 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,15 +46,18 @@
     <title>TTNP: Hệ thống đặt vé xem phim online</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="./assets/css/home/reset.css">
+    <link rel="stylesheet" href="../assets/css/home/reset.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
         rel="stylesheet">
-    <!-- link css phan login -->
-    <link rel="stylesheet" href="./assets/css/login/login.css"> 
-    <!--  -->
-    <link rel="stylesheet" href="./assets/css/home/styles.css">
-    <link rel="stylesheet" href="./assets/css/home/grid.css">
+    <link rel="stylesheet" href="../assets/css/home/styles.css">
+    <link rel="stylesheet" href="../assets/css/login/login.css"> 
+    <link rel="stylesheet" href="../assets/css/show_detailfilm/styles.css">
+    <link rel="stylesheet" href="../assets/css/home/grid.css">
+    <link rel="stylesheet" href="../assets/css/discount/show_discount.css">
+    <link rel="stylesheet" href="../assets/css/discount/detail_discount.css">
+
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
@@ -65,8 +67,8 @@
     <header class="header">
         <div class="container" style="--spacer:20px;">
             <div class="header__inner">
-                <a href="home.php"><img src="./logo.png" alt="" class="header__img"></a>
-                <img src="./assets/image/decor/decor__header.webp" alt="" class="decor__header">
+                <a href="../home.php"><img src="../logo.png" alt="" class="header__img"></a>
+                <img src="../assets/image/decor/decor__header.webp" alt="" class="decor__header">
                 <ul class="header__list">
                     <li class="header__item">Phim <i
                                 class="fa-solid fa-check list-icon"></i>
@@ -102,12 +104,12 @@
                                         ?>
                                         <div class="col-3">
                                             <div class="item__film header__itemflim">
-                                                <div class="film__title"><img src="./assets/image/image__film/<?php echo $row1["movie_img"];?>" alt=""
+                                                <div class="film__title"><img src="../assets/image/image__film/<?php echo $row1["movie_img"];?>" alt=""
                                                         class="img__film header__imgfilm">
                                                     <p class="film__name header__filmname"><?php echo $row1["movie_name"];?></p>
                                                 </div>
                                                 <div class="book_film header__bookfilm">
-                                                    <a href="./show_detailfilm.php?movie_id=<?php echo $row1["movie_id"];?>"><div class="ticket__film header__ticket"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
+                                                    <a href="../show_detailfilm.php?movie_id=<?php echo $row1["movie_id"]?>"><div class="ticket__film header__ticket"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
                                                 </div>
                                                 <div class="vote header__vote">
                                                     <span class="rate__film"><i class="fa-solid fa-star rate__star"></i><?php echo $row1["movie_rating"];?></span>
@@ -121,7 +123,7 @@
                                                         while($row2 = $film_premiere->fetch_assoc()){
                                                             if($row2["movie_id"] == $row1["movie_id"]){
                                                     ?>
-                                                        <img src="./assets/image/decor/decor__premiere.png" alt="" class="decor__premiere">
+                                                        <img src="../assets/image/decor/decor__premiere.png" alt="" class="decor__premiere">
                                                     <?php
                                                             }
                                                         }  
@@ -158,7 +160,7 @@
                     <li class="header__item">Sự Kiện <i
                                 class="fa-solid fa-check list-icon"></i>
                         <ul class="header__submenu">
-                            <li class="header__submenu--item"><a href="./discount/show_discount.php" class="header__submenu--link">Ưu Đãi</a> <span class="decor__submenu"></span></li>
+                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">Ưu Đãi</a> <span class="decor__submenu"></span></li>
                             <li class="header__submenu--item"><a href="#!" class="header__submenu--link">Phim Hay Tháng</a> <span class="decor__submenu"></span></li>
                         </ul>
                     </li>
@@ -166,17 +168,10 @@
                     <li class="header__item">Rạp/Giá Vé <i
                                 class="fa-solid fa-check list-icon"></i>
                         <ul class="header__submenu">
-                        <?php 
-                                //truy vấn lấy tên rạp
-                                $sql_cinema = "select * from cinema";
-                                $result_cinema = $conn->query($sql_cinema);
-                                
-                                while($r_cinema = $result_cinema->fetch_assoc()){
-                            ?>
-                            <li class="header__submenu--item"><a href="./cinema/cinema_detail.php?cinema_id=<?=$r_cinema['cinema_id']?>" class="header__submenu--link"><?=$r_cinema["cinema_name"]?></a> <span class="decor__submenu"></span></li>
-                            <?php
-                                }
-                            ?>
+                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">TTNP Cầu Giấy</a> <span class="decor__submenu"></span></li>
+                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">TTNP Giải Phóng</a> <span class="decor__submenu"></span></li>
+                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">TTNP Lê Văn Lương</a> <span class="decor__submenu"></span></li>
+                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">TTNP Láng Hạ</a> <span class="decor__submenu"></span></li>
                         </ul>
                     </li>
                 </ul>
@@ -216,147 +211,137 @@
             </div>
         </div>
     </header>
-    <main>
-        <!-- Poster -->
-        <div class="poster">
-
-                <div class="poster__list">
-                    <?php 
-                        $sql_poter = "select * from poster";
-                        $rs_poster = $conn->query($sql_poter);
-                        while($r = $rs_poster->fetch_assoc()){
+    
+    <div class="body__file">
+        <div class="container">
+            <div class="body__file__inner">
+                <!-- body__discount -->
+                 
+                <div class="content__film__wrap">
+                <?php while($r = $r_discount->fetch_assoc()){
                     ?>
-                    <div class="poster__item">
-                        <a href="./show_detailfilm.php?movie_id=<?=$r["movie_id"]?>"><img src="./assets/image/poster/<?=$r["mv_imgposter"]?>" alt="" class="home__poster"></a>
-                    </div>
+                    <h2 class="title_discount"><?=$r["discount_title"]?></h2>
+                    <p>Mã giảm giá: <span class="bold"><?=$r["discount_id"]?></span></p>
+                    <img src="../assets/image/image_discount/<?=$r["discount_img"]?>" alt="" class="img__discount">
+                    <p class="bold">Điều kiện áp dụng:</p>
+                    <p>- Áp dụng Thứ Ba hàng tuần cho tất cả khách hàng.</p>
+                    <p>- Giá vé Happy Day không áp dụng vào các ngày Lễ/Tết (giá vé Lễ Tết sẽ áp dụng theo bảng giá niêm yết của từng rạp), suất chiếu đặc biệt và định dạng IMAX Laser, phòng chiếu đặc biệt.</p>
+                    <p>- Giá vé Happy Day không áp dụng cho các chương trình giảm giá khác.</p>
+                    <p>- Trong mọi trường hợp, quyết định của Galaxy Cinema là quyết định cuối cùng.</p>
                     <?php }?>
-                </div>
 
-                <!-- button prev and next-->
-
-                <div class="buttons">
-                    <button id="prev"><</button>
-                    <button id="next">></button>
-                </div>
-
-                <!-- dots -->
-                 <ul class="dots">
-                    <li class="active_dot"></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                 </ul>
-
-        </div>
-        <!-- Film -->
-        <div class="film">
-            <div class="container">
-                <div class="film__inner">
-                    <div class="type__film">
-                        <span id="location_film"></span>
-                        <span class="text__film">PHIM</span>
-                        <ul class="type__film--list">
-                            <?php
-                                while($row = $film_categories->fetch_assoc()){
-                            ?>
-                                
-                                <li class="type__film--item"><label for="" class="label__film"><a class="catid__link <?php if($row["cat_id"] == $check_catid || $check_catid == "active") echo "catid__active"?>" href = "./home.php?catid=<?php echo $row["cat_id"]?>&#location_film"><?php echo $row["cat_name"];?></a></label></li>
-                            <?php
-                            }
-                            ?>
-
-                        </ul>
-                    </div>
-                    <div class="row film__list">
-                        
-                        <?php
-                            $count = 0;
-                            if($result_film->num_rows == 0){
-                                echo "Khong co phim!";
-                            }
-                            else{
-                            while($row = $result_film->fetch_assoc()){
-                                if($count < 8){
-                        ?>
-                            <div class="col-3">
-                                <div class="item__film">
-                                    <div class="film__title"><img src="./assets/image/image__film/<?php echo $row["movie_img"];?>" alt=""
-                                            class="img__film">
-                                            
-                                        <p class="film__name"><?php echo $row["movie_name"];?></p>
-                                    </div>
-                                    <div class="book_film">
-                                        <a href="./show_detailfilm.php?movie_id=<?php echo $row["movie_id"];?>"><div class="ticket__film"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
-                                        <div><button id="trailer_film" class="trailer_film" type="button" onclick="show_trailer(<?=$row["movie_id"]?>)"><i class="fa-solid fa-circle-play" style="margin-right:5px"></i> Trailer</button></div>
-                                    </div>
-                                    <div class="vote">
-                                        <span class="rate__film"><i class="fa-solid fa-star rate__star"></i><?php echo $row["movie_rating"];?></span>
-                                    </div>
-                                    <div class="age__limit">
-                                        <span class="age__limit--text"><?php echo $row["movie_minage"]?></span>
-                                    </div>
-                                    <div class="decor__moviepremiere">
-                                        <?php
-                                            if($check_catid == 3){
-                                            while($row1 = $film_premiere->fetch_assoc()){
-                                                if($row1["movie_id"] == $row["movie_id"]){
-                                        ?>
-                                            <img src="./assets/image/decor/decor__premiere.png" alt="" class="decor__premiere">
-                                        <?php
-                                                }
-                                            }  
-                                        }                                        
-                                        ?>
-                                    </div>
-                                </div>
-                                <iframe class="show_trailer" id="show_trailer_<?=$row["movie_id"]?>" src="<?=$row["movie_trailer"]?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                            </div>
-                        <?php 
-                                    }
-                            $count++;
-                            $film_premiere->data_seek(0);
-                            }
-                        }
-                        ?>
-                    </div>
-                </div>
-            </div>
-            <div class="btn__showmore" align="center">
-                <a  href="./all_film.php" class="show__more">Xem thêm <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-        </div>
-        <!-- discount -->
-         <div class="discount">
-            <div class="container">
-                <div class="discount__inner">
-                    <span class="text__film">TIN KHUYẾN MÃI</span>
+                    <p class="text_cat">TIN LIÊN QUAN</p>
                     <div class="list__discount">
-                        <?php
-                            $sql_discount = "select * from discount";
-                            $r_discount = $conn->query($sql_discount);
-                            while($r = $r_discount->fetch_assoc()){
-
+                        <?php 
+                            $count = 0;
+                            $sql_discount1 = "select * from discount";
+                            $r_discount_1 = $conn->query($sql_discount1);
+                            while($r = $r_discount_1->fetch_assoc()){
+                                if($count != 4){
                         ?>
                         <div class="discount__item">
-                            <a href="./discount/detail_discount.php?discount_id=<?=$r["discount_id"]?>">
-                                <figure class="img__wrap_discount">
-                                    <img src="./assets/image/image_discount/<?=$r["discount_img"]?>" alt="" class="img__discount">
-                                    <figcaption class="title__img_discount"><?=$r["discount_title"]?></figcaption>
-                                </figure>
 
+                            <a href="?discount_id=<?=$r["discount_id"]?>">
+                                <img src="../assets/image/image_discount/<?=$r["discount_img"]?>" alt="" class="img__discount_other">
+                                <p class="bold"><?=$r["discount_title"]?></p>
                             </a>
-                            
                         </div>
                         <?php
+                                }
+                                else{
+                                    break;
+                                }
+                                $count++;
                             }
                         ?>
                     </div>
-                    <button id="next_discount" hidden></button>
+                </div>
+                
+
+                <!-- ad__film -->
+                <div class="ad_film">
+                    <p class="text_cat">PHIM ĐANG CHIẾU</p>
+                    <div class="row__filmad">
+                        <?php       
+                            $count= 0;
+                            while($row1 = $film_ad->fetch_assoc()){
+                            if($count < 3){
+                            ?>
+                                <div class="item__filmad">
+                                    <div class="item__film header__itemflim">
+                                        <div class="film__title"><img src="../assets/image/image__film/<?php echo $row1["movie_img"];?>" alt=""
+                                                class="img__film header__imgfilm">
+                                            <p class="film__name header__filmname"><?php echo $row1["movie_name"];?></p>
+                                        </div>
+                                        <div class="book_film header__bookfilm">
+                                            <a href="../show_detailfilm.php?movie_id=<?php echo $row1["movie_id"]?>"><div class="ticket__film header__ticket"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
+                                        </div>
+                                        <div class="vote header__vote">
+                                            <span class="rate__film"><i class="fa-solid fa-star rate__star"></i><?php echo $row1["movie_rating"];?></span>
+                                        </div>
+                                        <div class="age__limit header__agelimit">
+                                            <span class="age__limit--text"><?php echo $row1["movie_minage"]?></span>
+                                        </div>
+                        
+                                    </div>
+                                </div>
+                            <?php
+                                    }
+                                $count++;
+                                
+                                }
+                                
+                            ?>
+                    </div>
+                    <div class="btn__showmore">
+                        <a href="../all_film.php" class="show__more">Xem thêm <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
                 </div>
             </div>
-         </div>
-    </main>
+        </div>
+    </div>
+    <!-- Xử lý login -->
+    <div class="container-login">
+
+        <!-- Lớp phủ làm tối -->
+        <div id="overlay"></div>
+
+        <!-- Khung đăng nhập -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <img src="logo.png" alt="Login Image" class="form-image">
+                <h2>Đăng Nhập Tài Khoản</h2>
+                <p class="text__error">
+                    <?php echo $_SESSION["login_error"]?>
+                </p>
+                <form action="./login/login__action.php" method="post" name="f" onsubmit="return check()">
+                    <input type="text" placeholder="Username" name="txtusername">
+                    <input type="password" placeholder="Password" name="txtpassword">
+                    <button type="submit" class="action-btn">Đăng Nhập</button>
+                </form>
+                <p>Bạn chưa có tài khoản? <button id="showRegister" class="link-btn">Đăng ký</button></p>
+            </div>
+        </div>
+
+        <!-- Khung đăng ký -->
+        <div id="registerModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <img src="logo.png" alt="Register Image" class="form-image">
+                <h2>Đăng Ký Tài Khoản</h2>
+                <form action="./login/login__action.php" method="post">
+                    <input type="text" placeholder="Nhập Họ và tên">
+                    <input type="email" placeholder="Nhập Email">
+                    <input type="text" placeholder="Nhập Số điện thoại">
+                    <input type="password" placeholder="Nhập Mật khẩu">
+                    <input type="password" placeholder="Nhập lại Mật khẩu">
+                <button class="action-btn">Hoàn thành</button>
+                </form>
+                <p>Bạn đã có tài khoản? <button id="showLogin" class="link-btn">Đăng nhập</button></p>
+            </div>
+        </div>
+    </div>
     <!-- footer -->
     <footer class="footer">
         <div class="container">
@@ -392,7 +377,7 @@
                         </ul>
                     </div>
                     <div class="col-3">
-                        <div><img src="./logo.png" alt="" class="logo_footer"></div>
+                        <div><img src="../logo.png" alt="" class="logo_footer"></div>
                         <div class="row__icon">
                             <i class="fa-brands fa-facebook  icon__footer"></i><i class="fa-brands fa-youtube icon__footer"></i><i class="fa-brands fa-instagram icon__footer"></i>
                         </div>
@@ -402,47 +387,6 @@
         </div>
     </footer>
 </body>
-<div class="container-login">
-
-    <!-- Lớp phủ làm tối -->
-    <div id="overlay"></div>
-
-    <!-- Khung đăng nhập -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <img src="logo.png" alt="Login Image" class="form-image">
-            <h2>Đăng Nhập Tài Khoản</h2>
-            <p class="text__error">
-                <?php echo $_SESSION["login_error"]?>
-            </p>
-            <form action="./login/login__action.php" method="post" name="f" onsubmit="return check()">
-                <input type="text" placeholder="Username" name="txtusername">
-                <input type="password" placeholder="Password" name="txtpassword">
-                <button type="submit" class="action-btn">Đăng Nhập</button>
-            </form>
-            <p>Bạn chưa có tài khoản? <button id="showRegister" class="link-btn">Đăng ký</button></p>
-        </div>
-    </div>
-
-    <!-- Khung đăng ký -->
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <img src="logo.png" alt="Register Image" class="form-image">
-            <h2>Đăng Ký Tài Khoản</h2>
-            <form action="./login/login__action.php" method="post">
-                <input type="text" placeholder="Nhập Họ và tên">
-                <input type="email" placeholder="Nhập Email">
-                <input type="text" placeholder="Nhập Số điện thoại">
-                <input type="password" placeholder="Nhập Mật khẩu">
-                <input type="password" placeholder="Nhập lại Mật khẩu">
-            <button class="action-btn">Hoàn thành</button>
-            </form>
-            <p>Bạn đã có tài khoản? <button id="showLogin" class="link-btn">Đăng nhập</button></p>
-        </div>
-    </div>
-</div>
 <script>
     // Kiểm tra nếu có lỗi từ PHP để mở form đăng nhập tự động
     document.addEventListener('DOMContentLoaded', function() {
@@ -455,11 +399,33 @@
             loginModal.style.display = 'block';
         }
 
-        
     });
 
+    document.addEventListener1('DOMContentLoaded', function() {
+        const overlay = document.getElementById('overlay');
+        const loginModal = document.getElementById('loginModal');
+        const loginError = <?php echo json_encode($loginError1); ?>;
+        
+        if (loginError) {
+            overlay.style.display = 'block';
+            loginModal.style.display = 'block';
+        }
+
+    });
+    
+
+    // Kiểm tra nếu người dùng đã đăng nhập và mở modal đăng nhập nếu chưa
+    function checkLogin(isLoggedIn, scheduleId) {
+        if (!isLoggedIn) {
+            // Hiển thị overlay và modal đăng nhập
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('loginModal').style.display = 'block';
+        } else {
+            // Nếu đã đăng nhập, chuyển hướng đến trang đặt vé
+            window.location.href = "./booking/booking_film.php?schedule_id=" + scheduleId;
+        }
+    }
 </script>
 <script src = "./assets/js/home/main.js"></script>
-<script src = "./assets/js/slider.js"></script>
-<?php $_SESSION["login_error"] = ''?>
+<script src = "./assets/js/show_detailfilm/main.js"></script>
 </html>

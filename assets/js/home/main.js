@@ -115,3 +115,33 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
     }
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let list_discount = document.querySelector('.list__discount');
+        let discount_items = document.querySelectorAll('.discount__item');
+        let next_discount = document.getElementById('next_discount');
+    
+        let active_item = 0;
+        let lengthItems_discount = discount_items.length - 1;
+    
+        next_discount.onclick = function () {
+            if (active_item + 4 >= lengthItems_discount) {
+                active_item = 0;
+            } else {
+                active_item += 4;
+            }
+            reloadSlider();
+        };
+    
+        setInterval(() => {
+            next_discount.click();
+        }, 5000);
+    
+        function reloadSlider() {
+            let checkLeft = discount_items[active_item].offsetLeft;
+            list_discount.style.left = -checkLeft + 'px';
+        }
+    });
+    

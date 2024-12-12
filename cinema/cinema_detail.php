@@ -39,8 +39,8 @@
     <!-- link css phan login -->
     <link rel="stylesheet" href="../assets/css/login/login.css"> 
     <!--  -->
-    <link rel="stylesheet" href="../assets/css/home/styles.css">
     <link rel="stylesheet" href="../assets/css/home/grid.css">
+    <link rel="stylesheet" href="../assets/css/home/styles.css">
     <link rel="stylesheet" href="../assets/css/cinema/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
@@ -204,40 +204,70 @@
     <main>
         <!-- poster -->
         <div class="poster">
-            <div class="container">
-                <div class="poster__list">
-                    <div class="post__item">
+
+                <div class="poster__list">    
+                    <div class="poster__item">
                         <img src="../assets/image/image_cinema/anh1.jpg" alt="" class="home__poster">
                     </div>
+                    <div class="poster__item">
+                        <img src="../assets/image/image_cinema/anh2.jpg" alt="" class="home__poster">
+                    </div>
+                    <div class="poster__item">
+                        <img src="../assets/image/image_cinema/anh3.jpg" alt="" class="home__poster">
+                    </div>
+                    <div class="poster__item">
+                        <img src="../assets/image/image_cinema/anh4.jpg" alt="" class="home__poster">
+                    </div>
                 </div>
-                <!-- info_cinema -->
-                 <div class="cinema">
-                    <div class="info_cinema">
-                        <h2 class="title_cinema"><?=$r["cinema_name"]?></h2>
-                        <p class="cinema_desc">Địa chỉ: <?=$r["location"]?></p>
-                        <p class="hotline">Hotline: <span class="blue">19002004</span></p>
-                    </div>
-                    <!-- chọn rạp -->
-                    <div class="cinema_trl">
-                        <form>
-                            <select name="" id="" class="select_cinema">
-                                <option value="">Hà Nội</option>
-                            </select>
-                            <select name="cinema_id" id="" class= "select_cinema">
-                                <?php
-                                    // truy vấn lấy tất cả rạp
-                                    $sql_all_cinema = "select * from cinema";
-                                    $result_all_cinema = $conn->query($sql_all_cinema);
-                                    
-                                    while($r_all_cinema = $result_all_cinema->fetch_assoc()){
-                                ?>
-                                    <option value="<?=$r_all_cinema["cinema_id"]?>" <?php if($r_all_cinema["cinema_id"] == $cinema_id) echo "selected";?>><?=$r_all_cinema["cinema_name"]?></option>   
-                                <?php }?>
-                            </select>
-                            <button class="select_cinema">Chọn</button>
-                        </form>
-                    </div>
-                 </div>
+
+                <!-- button prev and next-->
+
+                <div class="buttons">
+                    <button id="prev"><</button>
+                    <button id="next">></button>
+                </div>
+
+                <!-- dots -->
+                 <ul class="dots">
+                    <li class="active_dot"></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                 </ul>
+
+        </div>
+
+        <div class="cinema_wrap">
+            <!-- info_cinema -->
+            <div class="container">
+                <div class="cinema">
+                        <div class="info_cinema">
+                            <h2 class="title_cinema"><?=$r["cinema_name"]?></h2>
+                            <p class="cinema_desc">Địa chỉ: <?=$r["location"]?></p>
+                            <p class="hotline">Hotline: <span class="blue">19002004</span></p>
+                        </div>
+                        <!-- chọn rạp -->
+                        <div class="cinema_trl">
+                            <form>
+                                <select name="" id="" class="select_cinema">
+                                    <option value="">Hà Nội</option>
+                                </select>
+                                <select name="cinema_id" id="" class= "select_cinema">
+                                    <?php
+                                        // truy vấn lấy tất cả rạp
+                                        $sql_all_cinema = "select * from cinema";
+                                        $result_all_cinema = $conn->query($sql_all_cinema);
+                                        
+                                        while($r_all_cinema = $result_all_cinema->fetch_assoc()){
+                                    ?>
+                                        <option value="<?=$r_all_cinema["cinema_id"]?>" <?php if($r_all_cinema["cinema_id"] == $cinema_id) echo "selected";?>><?=$r_all_cinema["cinema_name"]?></option>   
+                                    <?php }?>
+                                </select>
+                                <button class="select_cinema">Chọn</button>
+                            </form>
+                        </div>
+                     </div>
             </div>
         </div>
 
@@ -396,5 +426,6 @@
             </div>
         </div>
     </footer>
+    <script src = "../assets/js/slider.js"></script>
 </body>
 </html>

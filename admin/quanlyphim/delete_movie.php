@@ -12,7 +12,6 @@ if (isset($_GET['movie_id'])) {
         "DELETE FROM content_film WHERE movie_id = $movie_id",
         "DELETE FROM movie__categories WHERE movie_id = $movie_id",
         "DELETE FROM movie__genre WHERE movie_id = $movie_id",
-        "DELETE FROM movie__poster WHERE movie_id = $movie_id",
         "DELETE FROM movies WHERE movie_id = $movie_id"
     ];
 

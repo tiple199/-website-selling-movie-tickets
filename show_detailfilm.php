@@ -492,7 +492,7 @@
 </body>
 <div class="container-login">
 
-    <!-- Lớp phủ làm tối -->d
+    <!-- Lớp phủ làm tối -->
     <div id="overlay"></div>
 
     <!-- Khung đăng nhập -->

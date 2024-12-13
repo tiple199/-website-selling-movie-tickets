@@ -1,10 +1,5 @@
 <?php
-session_start();
 require_once("../../connect/connection.php");
-
-if(!isset($_SESSION["add-movie-error"])){
-        $_SESSION["add-movie-error"] = "";
-    }
 
 // Hàm kiểm tra và chèn nếu chưa tồn tại
 function checkAndInsert($conn, $table, $column, $value) {
@@ -32,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $movieImage = isset($_FILES['txtMovieImage']['name']) ? $_FILES['txtMovieImage']['name'] : "";
     $movieMinage = isset($_POST['txtMovieMinage']) ? $_POST['txtMovieMinage'] : "";
     $movieTime = isset($_POST['txtMovieTime']) ? $_POST['txtMovieTime'] : "";
+    $movieTrailer = isset($_POST['txtMovieTrailer']) ? $_POST['txtMovieTrailer'] : "";
     $movieDate = isset($_POST['txtMovieDate']) ? $_POST['txtMovieDate'] : "";
     $movieNation = isset($_POST['txtMovieNation']) ? $_POST['txtMovieNation'] : "";
     $movieManufacturer = isset($_POST['txtMovieManufac']) ? $_POST['txtMovieManufac'] : "";
@@ -54,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Chèn vào bảng movies
-    $stmt = $conn->prepare("INSERT INTO movies (movie_name, movie_img, movie_minage, movie_time, movie_date, movie_nation, movie_manufacturer, movie_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssssi", $movieName, $movieImage, $movieMinage, $movieTime, $movieDate, $movieNation, $movieManufacturer, $movieStatus);
+    $stmt = $conn->prepare("INSERT INTO movies (movie_name, movie_img, movie_minage, movie_time, movie_date, movie_nation, movie_manufacturer, movie_status, movie_trailer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssssis", $movieName, $movieImage, $movieMinage, $movieTime, $movieDate, $movieNation, $movieManufacturer, $movieStatus, $movieTrailer);
     $stmt->execute();
     $movieId = $stmt->insert_id;
 
@@ -109,8 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
         }
     }
-    $_SESSION["add-movie-error"] = "Thêm mới phim thành công!";
-} 
+    
+    echo "<script>alert('Phim đã được thêm thành công'); window.location.href='../../admin.php?option=movie';</script>";
+}
 
 ?>
 <!DOCTYPE html>
@@ -122,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <h1>Thêm Mới Phim</h1>
-    <p color="green"><?php echo $_SESSION["add-movie-error"];?></p>
     <form action="add-movie.php" method="post" enctype="multipart/form-data">
         <table border="0">
             <!-- Thông tin phim -->
@@ -133,6 +129,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tr>
                 <td align="right">Hình ảnh:</td>
                 <td><input type="file" name="txtMovieImage"></td>
+            </tr>
+            <tr>
+                <td align="right">Trailer:</td>
+                <td><input type="text" name="txtMovieTrailer"></td>
             </tr>
             <tr>
                 <td align="right">Nhãn:</td>
@@ -251,5 +251,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </script>
 </body>
-<?php $_SESSION["add-movie-error"] = "";?>
 </html>

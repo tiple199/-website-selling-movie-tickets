@@ -148,7 +148,7 @@
                                                     <div class="action-menu">
                                                         <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
                                                         <div class="action-dropdown">
-                                                            <a href="edit_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                            <a href="./admin/quanlyphim/edit_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
                                                             <a onclick="return confirm('are you sure to delete')" href="admin/quanlyphim/delete_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
                                                             <a href="schedule_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-solid fa-calendar-days"></i></a>
                                                         </div>

@@ -402,8 +402,6 @@
             overlay.style.display = 'block';
             loginModal.style.display = 'block';
         }
-
-        
     });
 
 </script>

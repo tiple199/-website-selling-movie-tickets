@@ -45,7 +45,7 @@
     <header class="header">
         <div class="container" style="--spacer:20px;">
             <div class="header__inner">
-                <a href="./home.php"><img src="../logo.png" alt="" class="header__img"></a>
+                <a href="../home.php"><img src="../logo.png" alt="" class="header__img"></a>
                 <img src="../assets/image/decor/decor__header.webp" alt="" class="decor__header">
                 <ul class="header__list">
                     <li class="header__item">Phim <i
@@ -161,23 +161,23 @@
                     </div>
                     <!-- Xử lý phần đăng nhập tài khoản -->
                     <?php
-                    if(!isset($_SESSION["login_status"])){
+                    if(!isset($_SESSION["login_status"]) && !isset($_SESSION["id_user"])){
                     ?>
                     <button id="loginBtn" class="btn btn__header">Đăng Nhập</button>
                     <?php
                     } else {
-                        $userdb = $_SESSION["login_status"][1];
-                        $sqtaccount= $conn->query("select * from user where username = '$userdb'");
+                        $iduserdb = $_SESSION["id_user"];
+                        $sqtaccount= $conn->query("select * from user where id = $iduserdb");
                         $row1 = $sqtaccount->fetch_assoc();
-                        if($_SESSION["login_status"][0] == "1"){
+                        if($_SESSION["login_status"] == "1"){
                     
                     ?>
                     <div class="account">
                         <img src="../assets/image/avatar.jpg" alt="taikhoan" width="50px" height="50px">
                         <h2 class="header__item"><?php echo $row1["fullname"];?>
                             <ul class="header__submenu">
-                                <li class="header__submenu--item"><a href="../profile/profile.php" class="header__submenu--link">Tài Khoản</a> <span class="decor__submenu"></span></li>
-                                <li class="header__submenu--item"><a href="../login/logout.php" class="header__submenu--link">Đăng Xuất</a> <span class="decor__submenu"></span></li>
+                                <li class="header__submenu--item"><a href="./profile/profile.php" class="header__submenu--link">Tài Khoản</a> <span class="decor__submenu"></span></li>
+                                <li class="header__submenu--item"><a href="./login/logout.php" class="header__submenu--link">Đăng Xuất</a> <span class="decor__submenu"></span></li>
                             </ul>
                         </h2>
                         <?php

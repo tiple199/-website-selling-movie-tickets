@@ -7,7 +7,7 @@
 
     $action = $_POST['action'] ?? '';
 
-    $searchQuery = $_POST['txtSearch'] ?? ''; // Search
+    $searchQuery = $_POST['txtSearch'] ?? ''; // Search Movies
     // Điều kiện tìm kiếm phim theo tên
     $searchCondition = "";
     if (!empty($searchQuery)) {
@@ -65,7 +65,7 @@
                         <a href="?option=movie" class="menu-item <?php if($option === "movie") echo "active";?>" id="movie">Phim</a>
                         <a href="#" class="menu-item <?php if($option === "schedule") echo "active";?>" id="schedule">Suất chiếu</a>
                         <a href="#" class="menu-item <?php if($option === "cinema") echo "active";?>" id="cinema">Rạp chiếu</a>
-                        <a href="#" class="menu-item <?php if($option === "product") echo "active";?>" id="product">Đồ ăn</a>
+                        <a href="?option=food" class="menu-item <?php if($option === "food") echo "active";?>" id="product">Đồ ăn</a>
                         <a href="#" class="menu-item <?php if($option === "promotion") echo "active";?>" id="promotion">Khuyến mãi</a>
                         <a href="#" class="menu-item <?php if($option === "ticket") echo "active";?>" id="ticket-type">Loại vé</a>
                         <a href="?option=user" class="menu-item <?php if($option === "user") echo "active";?>" id="website">Người dùng</a>
@@ -173,6 +173,50 @@
                             ?>
                         </div>
                     </form>
+                    <?php endif; ?>
+                    <?php if ($option === "food"): ?>
+                        <div class="inner-content">                         
+                            <div class="function">                             
+                                <a href = "./admin/quanlydoan/add-food.php" class="add-movie-button">Thêm đồ ăn mới</a>
+                            </div>
+                            <div >
+                                <form action="">
+                                    <table class="movie-table">
+                                        <tr class="table-header">
+                                            <th>Mã đồ ăn</th>
+                                            <th>Ảnh</th>
+                                            <th>Tên đồ ăn</th>
+                                            <th>Mô tả</th>
+                                            <th>Giá</th>
+                                            <th>Xóa</th>
+                                        </tr>
+                                        <?php 
+                                            $sql1 = "SELECT * FROM food";
+
+                                            $result1 = $conn->query($sql1);
+                                            while ($row1 = $result1->fetch_assoc()): 
+                                        ?>
+                                            <tr class="table-row">
+                                                <td class="centered-cell"><?php echo $row1['food_id']; ?></td>
+                                                <td>
+                                                    <img src="assets/image/food/<?php echo $row1['food_image']; ?>" class="food-img">
+                                                </td>
+                                                <td>
+                                                    <?php echo $row1['food_name']; ?>
+                                                </td>
+                                                <td><?php echo $row1['food_desc']; ?></td>
+                                                <td><?php echo $row1['food_price']; ?></td>
+                                                <td class="delete-icon-cell">                                                         
+                                                    <a onclick="return confirm('are you sure to delete')" href="admin/quanlydoan/delete_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                </td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+                        
+
                     <?php endif; ?>
                 </div>
             </div>

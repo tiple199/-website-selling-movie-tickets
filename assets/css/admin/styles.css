@@ -60,10 +60,6 @@ a{
     transition: background-color 0.3s ease;
 }
 
-/* .sidebar a:hover {
-    background-color: #ddd;
-} */
-
 .sidebar a.active {
     background-color: #e97f12;
     color: white;

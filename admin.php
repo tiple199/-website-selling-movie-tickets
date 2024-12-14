@@ -72,8 +72,9 @@
                         <a href="home.php" class="menu-item" id="website">Đăng xuất</a>
                     </div>
                 </div>
-                <!-- Quản Lý Phim -->
                 <div class="content">
+                    <!-- Quản Lý Phim -->
+
                     <!-- Chào -->
                     <?php
                     if($option == ""){
@@ -167,6 +168,81 @@
                                         <?php echo $page; ?>
                                     </a>
                                 <?php endfor; ?>
+                            </div>
+                            <?php 
+                                }
+                            ?>
+                        </div>
+                    </form>
+                    <?php endif; ?>
+                    <!-- Quản người dùng -->
+                    <?php if ($option === "user"): ?>
+                    <form action="admin.php?option=<?php echo $option;?>" method="post">
+                        <div class="inner-content">
+                            <div class="function">
+                                <div class="function-search">
+                                    <input type="text" placeholder="Nhập tên người dùng cần tìm" name="txtSearch" value="<?php echo htmlspecialchars($searchQuery); ?>">
+                                    <input type="hidden" name="action" value="search">
+                                    <button class="search-button">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                                <div class="function-add-film">
+                                    <a href = "./admin/quanlyphim/add-movie.php" class="add-movie-button">Thêm người dùng mới</a>
+                                </div>
+                            </div>
+                            <?php 
+                                if($option = "user" || $action = "search"){
+                            ?>  
+                            <div class="table-content">
+                                <form action="">
+                                    <table class="movie-table">
+                                        <tr class="table-header">
+                                            <th class="movie-id-header">Mã người dùng</th>
+                                            <th class="movie-name-header">Tên người dùng</th>
+                                            <th class="movie-tag-header">Email</th>
+                                            <th class="movie-duration-header">Ngày sinh</th>
+                                            <th class="movie-nation-header">Quyền</th>
+                                            <th class="movie-release-header">Trạng thái</th>
+                                        </tr>
+                                        <?php 
+                                            // Xử lý phần tìm kiếm người dùng
+                                            if (!empty($searchQuery)) {
+                                                $searchCondition = "WHERE fullname LIKE '%" . $conn->real_escape_string($searchQuery) . "%'";
+                                            }
+                                            $sql = "SELECT * FROM user u 
+                                            INNER JOIN level_id l ON u.level_id = l.level_id {$searchCondition}";
+
+                                            $result = $conn->query($sql);
+                                            while ($row = $result->fetch_assoc()): 
+                                        ?>
+                                            <tr class="table-row">
+                                                <td class="movie-id"><?php echo $row['id']; ?></td>
+                                                <td class="movie-name"><?php echo $row['fullname']; ?></td>
+                                                <td class="movie-tag"><?php echo $row['email']; ?></td>
+                                                <td class="movie-duration"><?php echo $row['date']; ?></td>
+                                                <td class="movie-nation"><?php echo $row['level_name']; ?></td>
+                                                <td class="movie-release"><?php 
+                                                    if ($row['status'] == 1) {
+                                                        echo 'Đang hoạt động';
+                                                    } else {
+                                                        echo 'Ngừng hoạt động';
+                                                    }
+                                                ?>
+                                                </td>
+                                                <td class="movie-action">
+                                                    <div class="action-menu">
+                                                        <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+                                                        <div class="action-dropdown">
+                                                            <a href="./admin/manage_user/edit_user.php?id=<?php echo $row['id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                            <a onclick="return confirm('Bạn có chắc chắn muốn xóa')" href="./admin/manage_user/delete_user.php?id=<?php echo $row['id'];?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    </table>
+                                </form>
                             </div>
                             <?php 
                                 }

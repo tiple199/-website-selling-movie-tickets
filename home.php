@@ -356,6 +356,48 @@
                 </div>
             </div>
          </div>
+        <!-- form đăng ký -->
+         <div class="container-login">
+
+            <!-- Lớp phủ làm tối -->
+            <div id="overlay"></div>
+
+            <!-- Khung đăng nhập -->
+            <div id="loginModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <img src="logo.png" alt="Login Image" class="form-image">
+                    <h2>Đăng Nhập Tài Khoản</h2>
+                    <p class="text__error">
+                        <?php echo $_SESSION["login_error"]?>
+                    </p>
+                    <form action="./login/login__action.php" method="post" name="f" onsubmit="return check()">
+                        <input type="text" placeholder="Username" name="txtusername">
+                        <input type="password" placeholder="Password" name="txtpassword">
+                        <button type="submit" class="action-btn">Đăng Nhập</button>
+                    </form>
+                    <p>Bạn chưa có tài khoản? <button id="showRegister" class="link-btn">Đăng ký</button></p>
+                </div>
+            </div>
+
+            <!-- Khung đăng ký -->
+            <div id="registerModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <img src="logo.png" alt="Register Image" class="form-image">
+                    <h2>Đăng Ký Tài Khoản</h2>
+                    <form action="./login/login__action.php" method="post">
+                        <input type="text" placeholder="Nhập Họ và tên">
+                        <input type="email" placeholder="Nhập Email">
+                        <input type="text" placeholder="Nhập Số điện thoại">
+                        <input type="password" placeholder="Nhập Mật khẩu">
+                        <input type="password" placeholder="Nhập lại Mật khẩu">
+                    <button class="action-btn">Hoàn thành</button>
+                    </form>
+                    <p>Bạn đã có tài khoản? <button id="showLogin" class="link-btn">Đăng nhập</button></p>
+                </div>
+             </div>
+        </div>
     </main>
     <!-- footer -->
     <footer class="footer">
@@ -402,47 +444,6 @@
         </div>
     </footer>
 </body>
-<div class="container-login">
-
-    <!-- Lớp phủ làm tối -->
-    <div id="overlay"></div>
-
-    <!-- Khung đăng nhập -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <img src="logo.png" alt="Login Image" class="form-image">
-            <h2>Đăng Nhập Tài Khoản</h2>
-            <p class="text__error">
-                <?php echo $_SESSION["login_error"]?>
-            </p>
-            <form action="./login/login__action.php" method="post" name="f" onsubmit="return check()">
-                <input type="text" placeholder="Username" name="txtusername">
-                <input type="password" placeholder="Password" name="txtpassword">
-                <button type="submit" class="action-btn">Đăng Nhập</button>
-            </form>
-            <p>Bạn chưa có tài khoản? <button id="showRegister" class="link-btn">Đăng ký</button></p>
-        </div>
-    </div>
-
-    <!-- Khung đăng ký -->
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <img src="logo.png" alt="Register Image" class="form-image">
-            <h2>Đăng Ký Tài Khoản</h2>
-            <form action="./login/login__action.php" method="post">
-                <input type="text" placeholder="Nhập Họ và tên">
-                <input type="email" placeholder="Nhập Email">
-                <input type="text" placeholder="Nhập Số điện thoại">
-                <input type="password" placeholder="Nhập Mật khẩu">
-                <input type="password" placeholder="Nhập lại Mật khẩu">
-            <button class="action-btn">Hoàn thành</button>
-            </form>
-            <p>Bạn đã có tài khoản? <button id="showLogin" class="link-btn">Đăng nhập</button></p>
-        </div>
-    </div>
-</div>
 <script>
     // Kiểm tra nếu có lỗi từ PHP để mở form đăng nhập tự động
     document.addEventListener('DOMContentLoaded', function() {

@@ -340,6 +340,7 @@
                         <div class="showtime__film">
                             <p class="text_cat text__showtime">Lịch Chiếu Phim</p>
                             <div class="box__select_day">
+                                <!-- ngày -->
                                     <div class="day__wrap">
                                         
                                         <a href="?movie_id=<?php echo $check_movieid;?>&check_date=2024-11-11<?php if(isset($_REQUEST['select__cinema'])){ $cinema_id = $_REQUEST['select__cinema']; echo '&select__cinema='. $cinema_id ;}?>">
@@ -430,7 +431,7 @@
                                             while ($row1 = $movie_showtime->fetch_assoc()){
                                                 
                                             ?>
-                                            <a href="javascript:void(0)" onclick="checkLogin(<?php echo $is_logged_in ? 'true' : 'false'; ?>, <?php echo $row1['schedule_id']; ?>)">
+                                            <a href="javascript:void(0)" onclick="checkLogin(<?php echo $is_logged_in ? 'true' : 'false'; ?>, <?php echo $row1['schedule_id']; ?>,<?php echo $row1['cinema_id']?>)">
                                                 <span class="border__item_selecttime"><?php echo $row1["show_time"];?></span>
                                             </a>
                                             <?php 
@@ -606,14 +607,14 @@
     
 
     // Kiểm tra nếu người dùng đã đăng nhập và mở modal đăng nhập nếu chưa
-    function checkLogin(isLoggedIn, scheduleId) {
+    function checkLogin(isLoggedIn, scheduleId,cinema_id) {
         if (!isLoggedIn) {
             // Hiển thị overlay và modal đăng nhập
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('loginModal').style.display = 'block';
         } else {
             // Nếu đã đăng nhập, chuyển hướng đến trang đặt vé
-            window.location.href = "./booking/booking_film.php?schedule_id=" + scheduleId;
+            window.location.href = "./booking/booking_film.php?schedule_id=" + scheduleId + "&cinema_id=" + cinema_id;
         }
     }
 </script>

@@ -1,5 +1,4 @@
 .list__discount{
-    /* position: initial; */
     flex-wrap: wrap;
     row-gap: 50px;
     margin-top: 45px;

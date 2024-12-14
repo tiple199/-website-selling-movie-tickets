@@ -4,13 +4,15 @@
     // heading
     $film_categories= $conn->query("select * from film_categories");
     $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
+    // cinema_id
+    $check_cinema_id = $_REQUEST["cinema_id"];
     // schedule
     $check_schedule = $_REQUEST["schedule_id"];
     $_SESSION["schedule_id"] = $check_schedule;
     $sql = "select S.schedule_id,S.show_time from schedules S
         join room R on R.room_id = S.room_id
         join cinema C on C.cinema_id = R.cinema_id
-        where S.show_date = (select show_date from schedules where schedule_id = $check_schedule)
+        where S.show_date = (select show_date from schedules where schedule_id = $check_schedule) and S.movie_id = (select movie_id from schedules where schedule_id = $check_schedule) and C.cinema_id= $check_cinema_id
     ";
     $change_time = $conn->query($sql);
     // info_film
@@ -213,7 +215,7 @@
                                 <?php
                                     while($row=$change_time->fetch_assoc()){
                                 ?>
-                                    <a href="?schedule_id=<?php echo $row["schedule_id"];?>"><span class="border__time <?php if($row["schedule_id"] == $check_schedule) echo "active";?>"><?php echo $row["show_time"];?></span></a>
+                                    <a href="?schedule_id=<?php echo $row["schedule_id"];?>&cinema_id=<?=$check_cinema_id?>"><span class="border__time <?php if($row["schedule_id"] == $check_schedule) echo "active";?>"><?php echo $row["show_time"];?></span></a>
 
                                 <?php
                                     }

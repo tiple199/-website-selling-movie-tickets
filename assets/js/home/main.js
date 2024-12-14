@@ -132,14 +132,14 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 active_item += 4;
             }
-            reloadSlider();
+            reloadSlider_Discount();
         };
     
         setInterval(() => {
             next_discount.click();
         }, 5000);
     
-        function reloadSlider() {
+        function reloadSlider_Discount() {
             let checkLeft = discount_items[active_item].offsetLeft;
             list_discount.style.left = -checkLeft + 'px';
         }

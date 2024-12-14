@@ -1,0 +1,18 @@
+.list__discount{
+    flex-wrap: wrap;
+    row-gap: 50px;
+    margin-top: 45px;
+}
+.bold{
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.bold ~ p{
+    margin-bottom: 10px;
+}
+.item__discount{
+    transition: 0.5s;
+}
+.item__discount:hover{
+    transform: scale(1.1);
+}

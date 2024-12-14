@@ -158,7 +158,7 @@
                     <li class="header__item">Sự Kiện <i
                                 class="fa-solid fa-check list-icon"></i>
                         <ul class="header__submenu">
-                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">Ưu Đãi</a> <span class="decor__submenu"></span></li>
+                            <li class="header__submenu--item"><a href="./discount/show_discount.php" class="header__submenu--link">Ưu Đãi</a> <span class="decor__submenu"></span></li>
                             <li class="header__submenu--item"><a href="#!" class="header__submenu--link">Phim Hay Tháng</a> <span class="decor__submenu"></span></li>
                         </ul>
                     </li>
@@ -219,13 +219,35 @@
     <main>
         <!-- Poster -->
         <div class="poster">
-            <div class="container">
+
                 <div class="poster__list">
-                    <div class="post__item">
-                        <img src="./assets/image/poster/transformersmot.jpg" alt="" class="home__poster">
+                    <?php 
+                        $sql_poter = "select * from poster";
+                        $rs_poster = $conn->query($sql_poter);
+                        while($r = $rs_poster->fetch_assoc()){
+                    ?>
+                    <div class="poster__item">
+                        <a href="./show_detailfilm.php?movie_id=<?=$r["movie_id"]?>"><img src="./assets/image/poster/<?=$r["mv_imgposter"]?>" alt="" class="home__poster"></a>
                     </div>
+                    <?php }?>
                 </div>
-            </div>
+
+                <!-- button prev and next-->
+
+                <div class="buttons">
+                    <button id="prev"><</button>
+                    <button id="next">></button>
+                </div>
+
+                <!-- dots -->
+                 <ul class="dots">
+                    <li class="active_dot"></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                 </ul>
+
         </div>
         <!-- Film -->
         <div class="film">
@@ -304,6 +326,78 @@
                 <a  href="./all_film.php" class="show__more">Xem thêm <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
+        <!-- discount -->
+         <div class="discount">
+            <div class="container">
+                <div class="discount__inner">
+                    <span class="text__film">TIN KHUYẾN MÃI</span>
+                    <div class="list__discount">
+                        <?php
+                            $sql_discount = "select * from discount";
+                            $r_discount = $conn->query($sql_discount);
+                            while($r = $r_discount->fetch_assoc()){
+
+                        ?>
+                        <div class="discount__item">
+                            <a href="./discount/detail_discount.php?discount_id=<?=$r["discount_id"]?>">
+                                <figure class="img__wrap_discount">
+                                    <img src="./assets/image/image_discount/<?=$r["discount_img"]?>" alt="" class="img__discount">
+                                    <figcaption class="title__img_discount"><?=$r["discount_title"]?></figcaption>
+                                </figure>
+
+                            </a>
+                            
+                        </div>
+                        <?php
+                            }
+                        ?>
+                    </div>
+                    <button id="next_discount" hidden></button>
+                </div>
+            </div>
+         </div>
+        <!-- form đăng ký -->
+         <div class="container-login">
+
+            <!-- Lớp phủ làm tối -->
+            <div id="overlay"></div>
+
+            <!-- Khung đăng nhập -->
+            <div id="loginModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <img src="logo.png" alt="Login Image" class="form-image">
+                    <h2>Đăng Nhập Tài Khoản</h2>
+                    <p class="text__error">
+                        <?php echo $_SESSION["login_error"]?>
+                    </p>
+                    <form action="./login/login__action.php" method="post" name="f" onsubmit="return check()">
+                        <input type="text" placeholder="Username" name="txtusername">
+                        <input type="password" placeholder="Password" name="txtpassword">
+                        <button type="submit" class="action-btn">Đăng Nhập</button>
+                    </form>
+                    <p>Bạn chưa có tài khoản? <button id="showRegister" class="link-btn">Đăng ký</button></p>
+                </div>
+            </div>
+
+            <!-- Khung đăng ký -->
+            <div id="registerModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <img src="logo.png" alt="Register Image" class="form-image">
+                    <h2>Đăng Ký Tài Khoản</h2>
+                    <form action="./login/login__action.php" method="post">
+                        <input type="text" placeholder="Nhập Họ và tên">
+                        <input type="email" placeholder="Nhập Email">
+                        <input type="text" placeholder="Nhập Số điện thoại">
+                        <input type="password" placeholder="Nhập Mật khẩu">
+                        <input type="password" placeholder="Nhập lại Mật khẩu">
+                    <button class="action-btn">Hoàn thành</button>
+                    </form>
+                    <p>Bạn đã có tài khoản? <button id="showLogin" class="link-btn">Đăng nhập</button></p>
+                </div>
+             </div>
+        </div>
     </main>
     <!-- footer -->
     <footer class="footer">
@@ -350,47 +444,6 @@
         </div>
     </footer>
 </body>
-<div class="container-login">
-
-    <!-- Lớp phủ làm tối -->
-    <div id="overlay"></div>
-
-    <!-- Khung đăng nhập -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <img src="logo.png" alt="Login Image" class="form-image">
-            <h2>Đăng Nhập Tài Khoản</h2>
-            <p class="text__error">
-                <?php echo $_SESSION["login_error"]?>
-            </p>
-            <form action="./login/login__action.php" method="post" name="f" onsubmit="return check()">
-                <input type="text" placeholder="Username" name="txtusername">
-                <input type="password" placeholder="Password" name="txtpassword">
-                <button type="submit" class="action-btn">Đăng Nhập</button>
-            </form>
-            <p>Bạn chưa có tài khoản? <button id="showRegister" class="link-btn">Đăng ký</button></p>
-        </div>
-    </div>
-
-    <!-- Khung đăng ký -->
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <img src="logo.png" alt="Register Image" class="form-image">
-            <h2>Đăng Ký Tài Khoản</h2>
-            <form action="./login/login__action.php" method="post">
-                <input type="text" placeholder="Nhập Họ và tên">
-                <input type="email" placeholder="Nhập Email">
-                <input type="text" placeholder="Nhập Số điện thoại">
-                <input type="password" placeholder="Nhập Mật khẩu">
-                <input type="password" placeholder="Nhập lại Mật khẩu">
-            <button class="action-btn">Hoàn thành</button>
-            </form>
-            <p>Bạn đã có tài khoản? <button id="showLogin" class="link-btn">Đăng nhập</button></p>
-        </div>
-    </div>
-</div>
 <script>
     // Kiểm tra nếu có lỗi từ PHP để mở form đăng nhập tự động
     document.addEventListener('DOMContentLoaded', function() {
@@ -406,5 +459,6 @@
 
 </script>
 <script src = "./assets/js/home/main.js"></script>
+<script src = "./assets/js/slider.js"></script>
 <?php $_SESSION["login_error"] = ''?>
 </html>

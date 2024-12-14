@@ -119,3 +119,9 @@
     font-weight: bolder;
     color: #4A4A4A;
 }
+.poster{
+    height: 640px;
+}
+.dots{
+    bottom: 10px;
+}

@@ -433,3 +433,107 @@ a{
     width: 88vw;
     height: 80vh;
 }
+
+/* slider */
+.poster{
+    width: 100%;
+    /* max-width: 100vw; */
+    height: 600px;
+    margin: auto;
+    position: relative;
+    overflow:  hidden;
+}
+.poster__list{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: flex;
+    width: max-content;
+    transition: 1s;
+    
+}
+.poster__list img{
+    width: 100%;
+    max-width: 100vw;
+    height: 100%;
+    object-fit: contain;
+    cursor: pointer;
+}
+.buttons{
+    position: absolute;
+    top: 45%;
+    left: 5%;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+.buttons button{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #fff5;
+    color: #FFF;
+    border: none;
+    font-weight: bold;
+}
+.dots{
+    position: absolute;
+    bottom: 50px;
+    color: #FFF;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+.dots li{
+    width: 10px;
+    height: 10px;
+    background-color: #FFF;
+    margin: 20px;
+    border-radius: 20px;
+    transition: 1s;
+}
+.dots li.active_dot{
+    width: 30px;
+
+}
+
+/* discount */
+.discount{
+    border-top: 5px solid #CCC;
+    padding: 35px 0;
+    margin-top: 25px;
+}
+.discount__inner{
+    overflow: hidden;
+}
+.list__discount{
+    margin-top: 20px;
+    display: flex;
+    /* justify-content: space-between; */
+    gap: 15px;
+    transition: 1s;
+    width: 100%;
+    position: relative;
+}
+.img__discount{
+    width: 300px;
+    height: 350px;
+    object-fit: contain;
+}
+.title__img_discount{
+    text-align: center;
+    color: black;
+    margin-top: 10px;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+.img__wrap_discount{
+    display: inline-block;
+}
+#prev,#next{
+    cursor: pointer;
+}

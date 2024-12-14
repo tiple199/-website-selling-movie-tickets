@@ -1,0 +1,22 @@
+.img__discount{
+    width: 70%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: contain;
+    height: 500px;
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+.title_discount{
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.list__discount{
+    display: flex;
+}
+.img__discount_other{
+    width: 220px;
+    border-radius: 5px;
+}

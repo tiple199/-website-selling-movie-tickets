@@ -1,6 +1,24 @@
 <?php 
     session_start();
     require_once("../connect/connection.php");
+
+    // xử lý phần đăng nhập
+    if(!isset($_SESSION["login_error"])){
+        $_SESSION["login_error"] = '';
+    }
+    $loginError = $_SESSION["login_error"];
+
+    // kiểm tra nếu chưa đăng nhập thì yêu cầu đăng nhập
+    $is_logged_in = isset($_SESSION['login_status']);
+    // Nếu chưa đăng nhập, tạo thông báo lỗi
+    if (!$is_logged_in) {
+        $loginError1 = "Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục!";
+    } else {
+        $loginError1 = "";
+    }
+    // Lưu lại URL của trang hiện tại (showfilmdetail) vào session
+    $_SESSION['current_url'] = $_SERVER['REQUEST_URI'];
+
     $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
     $film_categories= $conn->query("select * from film_categories");
     // id rạp
@@ -444,7 +462,9 @@
                 <?php echo $_SESSION["login_error"]?>
             </p>
             <form action="../login/login__action.php" method="post" name="f" onsubmit="return check()">
+                <p class="text_label">Email</p>
                 <input type="text" placeholder="Username" name="txtusername">
+                <p class="text_label">Password</p>
                 <input type="password" placeholder="Password" name="txtpassword">
                 <button type="submit" class="action-btn">Đăng Nhập</button>
             </form>
@@ -458,11 +478,16 @@
             <span class="close">&times;</span>
             <img src="../logo.png" alt="Register Image" class="form-image">
             <h2>Đăng Ký Tài Khoản</h2>
-            <form action="./login/login__action.php" method="post">
+            <form action="" method="post">
+                <p class="text_label">Họ và tên</p>
                 <input type="text" placeholder="Nhập Họ và tên">
+                <p class="text_label">Email</p>
                 <input type="email" placeholder="Nhập Email">
+                <p class="text_label">Số điện thoại</p>
                 <input type="text" placeholder="Nhập Số điện thoại">
+                <p class="text_label">Mật khẩu</p>
                 <input type="password" placeholder="Nhập Mật khẩu">
+                <p class="text_label">Nhập lại mật khẩu</p>
                 <input type="password" placeholder="Nhập lại Mật khẩu">
             <button class="action-btn">Hoàn thành</button>
             </form>

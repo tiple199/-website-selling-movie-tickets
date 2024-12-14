@@ -372,7 +372,9 @@
                         <?php echo $_SESSION["login_error"]?>
                     </p>
                     <form action="./login/login__action.php" method="post" name="f" onsubmit="return check()">
+                        <p class="text_label">Email</p>
                         <input type="text" placeholder="Username" name="txtusername">
+                        <p class="text_label">Password</p>
                         <input type="password" placeholder="Password" name="txtpassword">
                         <button type="submit" class="action-btn">Đăng Nhập</button>
                     </form>
@@ -387,10 +389,15 @@
                     <img src="logo.png" alt="Register Image" class="form-image">
                     <h2>Đăng Ký Tài Khoản</h2>
                     <form action="./login/login__action.php" method="post">
+                        <p class="text_label">Họ và tên</p>
                         <input type="text" placeholder="Nhập Họ và tên">
+                        <p class="text_label">Email</p>
                         <input type="email" placeholder="Nhập Email">
+                        <p class="text_label">Số điện thoại</p>
                         <input type="text" placeholder="Nhập Số điện thoại">
+                        <p class="text_label">Mật khẩu</p>
                         <input type="password" placeholder="Nhập Mật khẩu">
+                        <p class="text_label">Nhập lại mật khẩu</p>
                         <input type="password" placeholder="Nhập lại Mật khẩu">
                     <button class="action-btn">Hoàn thành</button>
                     </form>

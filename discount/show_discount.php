@@ -190,11 +190,11 @@
                     
                     ?>
                     <div class="account">
-                        <img src="assets/image/avatar.jpg" alt="taikhoan" width="50px" height="50px">
+                        <img src="../assets/image/avatar.jpg" alt="taikhoan" width="50px" height="50px">
                         <h2 class="header__item"><?php echo $row1["fullname"];?>
                             <ul class="header__submenu">
                                 <li class="header__submenu--item"><a href="./profile/profile.php" class="header__submenu--link">Tài Khoản</a> <span class="decor__submenu"></span></li>
-                                <li class="header__submenu--item"><a href="./login/logout.php" class="header__submenu--link">Đăng Xuất</a> <span class="decor__submenu"></span></li>
+                                <li class="header__submenu--item"><a href="../login/logout.php" class="header__submenu--link">Đăng Xuất</a> <span class="decor__submenu"></span></li>
                             </ul>
                         </h2>
                         <?php
@@ -281,13 +281,15 @@
         <div id="loginModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <img src="logo.png" alt="Login Image" class="form-image">
+                <img src="../logo.png" alt="Login Image" class="form-image">
                 <h2>Đăng Nhập Tài Khoản</h2>
                 <p class="text__error">
                     <?php echo $_SESSION["login_error"]?>
                 </p>
-                <form action="./login/login__action.php" method="post" name="f" onsubmit="return check()">
+                <form action="../login/login__action.php" method="post" name="f" onsubmit="return check()">
+                    <p class="text_label">Email</p>
                     <input type="text" placeholder="Username" name="txtusername">
+                    <p class="text_label">Password</p>
                     <input type="password" placeholder="Password" name="txtpassword">
                     <button type="submit" class="action-btn">Đăng Nhập</button>
                 </form>
@@ -299,13 +301,18 @@
         <div id="registerModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <img src="logo.png" alt="Register Image" class="form-image">
+                <img src="../logo.png" alt="Register Image" class="form-image">
                 <h2>Đăng Ký Tài Khoản</h2>
-                <form action="./login/login__action.php" method="post">
+                <form action="" method="post">
+                    <p class="text_label">Họ và tên</p>
                     <input type="text" placeholder="Nhập Họ và tên">
+                    <p class="text_label">Email</p>
                     <input type="email" placeholder="Nhập Email">
+                    <p class="text_label">Số điện thoại</p>
                     <input type="text" placeholder="Nhập Số điện thoại">
+                    <p class="text_label">Mật khẩu</p>
                     <input type="password" placeholder="Nhập Mật khẩu">
+                    <p class="text_label">Nhập lại mật khẩu</p>
                     <input type="password" placeholder="Nhập lại Mật khẩu">
                 <button class="action-btn">Hoàn thành</button>
                 </form>
@@ -313,6 +320,33 @@
             </div>
         </div>
     </div>
+    <script>
+        // Kiểm tra nếu có lỗi từ PHP để mở form đăng nhập tự động
+        document.addEventListener('DOMContentLoaded', function() {
+            const overlay = document.getElementById('overlay');
+            const loginModal = document.getElementById('loginModal');
+            const loginError = <?php echo json_encode($loginError); ?>;
+            
+            if (loginError) {
+                overlay.style.display = 'block';
+                loginModal.style.display = 'block';
+            }
+
+        });
+
+        document.addEventListener1('DOMContentLoaded', function() {
+            const overlay = document.getElementById('overlay');
+            const loginModal = document.getElementById('loginModal');
+            const loginError = <?php echo json_encode($loginError1); ?>;
+            
+            if (loginError) {
+                overlay.style.display = 'block';
+                loginModal.style.display = 'block';
+            }
+
+        });
+    </script>
+    <script src = "../assets/js/home/main.js"></script>
     <!-- footer -->
     <footer class="footer">
         <div class="container">

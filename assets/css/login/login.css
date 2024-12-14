@@ -55,6 +55,13 @@
     cursor: pointer;
 }
 
+.text_label {
+    text-align: left;
+    font-size: 12px;
+    color: rgb(32, 28, 28);
+    margin: 2px;
+}
+
 input {
     padding: 10px;
     font-size: 16px;

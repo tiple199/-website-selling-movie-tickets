@@ -188,7 +188,7 @@
                                     </button>
                                 </div>
                                 <div class="function-add-film">
-                                    <a href = "./admin/quanlyphim/add-movie.php" class="add-movie-button">Thêm người dùng mới</a>
+                                    <a href = "./admin/manage_user/add_user.php" class="add-movie-button">Thêm người dùng mới</a>
                                 </div>
                             </div>
                             <?php 

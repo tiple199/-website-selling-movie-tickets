@@ -378,7 +378,7 @@
                                     </table>
                                 </form>
                             </div>
-                            <?php 
+                            <?php
                                 }
                             ?>
                         </div>

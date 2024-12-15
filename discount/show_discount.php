@@ -162,11 +162,18 @@
 
                     <li class="header__item">Rạp/Giá Vé <i
                                 class="fa-solid fa-check list-icon"></i>
-                        <ul class="header__submenu">
-                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">TTNP Cầu Giấy</a> <span class="decor__submenu"></span></li>
-                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">TTNP Giải Phóng</a> <span class="decor__submenu"></span></li>
-                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">TTNP Lê Văn Lương</a> <span class="decor__submenu"></span></li>
-                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">TTNP Láng Hạ</a> <span class="decor__submenu"></span></li>
+                                <ul class="header__submenu">
+                        <?php 
+                                //truy vấn lấy tên rạp
+                                $sql_cinema = "select * from cinema";
+                                $result_cinema = $conn->query($sql_cinema);
+                                
+                                while($r_cinema = $result_cinema->fetch_assoc()){
+                            ?>
+                            <li class="header__submenu--item"><a href="../cinema/cinema_detail.php?cinema_id=<?=$r_cinema['cinema_id']?>" class="header__submenu--link"><?=$r_cinema["cinema_name"]?></a> <span class="decor__submenu"></span></li>
+                            <?php
+                                }
+                            ?>
                         </ul>
                     </li>
                 </ul>
@@ -193,7 +200,7 @@
                         <img src="../assets/image/avatar.jpg" alt="taikhoan" width="50px" height="50px">
                         <h2 class="header__item"><?php echo $row1["fullname"];?>
                             <ul class="header__submenu">
-                                <li class="header__submenu--item"><a href="./profile/profile.php" class="header__submenu--link">Tài Khoản</a> <span class="decor__submenu"></span></li>
+                                <li class="header__submenu--item"><a href="../profile/profile.php" class="header__submenu--link">Tài Khoản</a> <span class="decor__submenu"></span></li>
                                 <li class="header__submenu--item"><a href="../login/logout.php" class="header__submenu--link">Đăng Xuất</a> <span class="decor__submenu"></span></li>
                             </ul>
                         </h2>

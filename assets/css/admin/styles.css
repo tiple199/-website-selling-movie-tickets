@@ -120,6 +120,11 @@ a{
     margin-top: 20px;
     gap: 10px;
 }
+.cinema_name {
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
 .function-search {
     display: flex;
     align-items: center;

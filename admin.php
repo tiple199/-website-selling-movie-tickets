@@ -8,6 +8,7 @@
     $action = $_POST['action'] ?? '';
 
     $searchQuery = $_POST['txtSearch'] ?? ''; // Search
+    $cinemaName = $_POST['cinema_name'] ?? ''; // Lấy tên rạp
     // Điều kiện tìm kiếm phim theo tên
     $searchCondition = "";
     if (!empty($searchQuery)) {
@@ -64,10 +65,8 @@
                         <a href="admin.php" class=""><img src="./logo.png" alt="logo">TTNP Cinema</a>
                         <a href="?option=movie" class="menu-item <?php if($option === "movie") echo "active";?>" id="movie">Phim</a>
                         <a href="#" class="menu-item <?php if($option === "schedule") echo "active";?>" id="schedule">Suất chiếu</a>
-                        <a href="#" class="menu-item <?php if($option === "cinema") echo "active";?>" id="cinema">Rạp chiếu</a>
+                        <a href="?option=room" class="menu-item <?php if($option === "room") echo "active";?>" id="room">Phòng chiếu</a>
                         <a href="#" class="menu-item <?php if($option === "product") echo "active";?>" id="product">Đồ ăn</a>
-                        <a href="#" class="menu-item <?php if($option === "promotion") echo "active";?>" id="promotion">Khuyến mãi</a>
-                        <a href="#" class="menu-item <?php if($option === "ticket") echo "active";?>" id="ticket-type">Loại vé</a>
                         <a href="?option=user" class="menu-item <?php if($option === "user") echo "active";?>" id="website">Người dùng</a>
                         <a href="home.php" class="menu-item" id="website">Đăng xuất</a>
                     </div>
@@ -250,6 +249,96 @@
                         </div>
                     </form>
                     <?php endif; ?>
+                    <!-- Quản phòng chiếu -->
+                    <?php if ($option === "room"): ?>
+                    <form action="admin.php?option=<?php echo $option;?>" method="post">
+                        <div class="inner-content">
+                            <select class="cinema_name" name="cinema_name" id="cinema_name">
+                                <option>Chọn rạp</option>
+                                <?php
+                                    // Lấy danh sách tên các rạp để hiển thị trong select
+                                    $cinemaSql = "SELECT cinema_name FROM cinema";
+                                    $cinemaResult = $conn->query($cinemaSql);
+                                    while ($cinema = $cinemaResult->fetch_assoc()) {
+                                        $selected = (!empty($cinemaName) && $cinema['cinema_name'] === $cinemaName) ? 'selected' : '';
+                                        echo "<option value='" . $cinema['cinema_name'] . "' $selected>" . $cinema['cinema_name'] . "</option>";
+                                    }
+                                ?>
+                            </select>
+                            <div class="function">
+                                <div class="function-search">
+                                    <!-- Thêm phần Select cho việc chọn tên rạp -->
+                                    
+                                    <!-- Ô tìm kiếm theo tên phòng -->
+                                    <input type="text" placeholder="Nhập tên phòng cần tìm" name="txtSearch" value="<?php echo htmlspecialchars($searchQuery); ?>">
+                                    <input type="hidden" name="action" value="search">
+                                    <button class="search-button">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                                <div class="function-add-film">
+                                    <a href = "./admin/manage_room/add_room.php" class="add-movie-button">Thêm phòng chiếu mới</a>
+                                </div>
+                            </div>
+                            <?php 
+                                if ($option == "room" || $action == "search") {
+                                    // Thêm điều kiện tìm kiếm theo tên rạp
+                                    $searchCondition = "";
+                                    if (!empty($searchQuery)) {
+                                        $searchCondition .= " WHERE r.room_name LIKE '%" . $conn->real_escape_string($searchQuery) . "%'";
+                                    }
+                                    if (!empty($cinemaName)) {
+                                        if ($searchCondition == "") {
+                                            $searchCondition .= " WHERE c.cinema_name = '" . $conn->real_escape_string($cinemaName) . "'";
+                                        } else {
+                                            $searchCondition .= " AND c.cinema_name = '" . $conn->real_escape_string($cinemaName) . "'";
+                                        }
+                                    }
+                            ?>  
+                            <div class="table-content">
+                                <form action="">
+                                    <table class="movie-table">
+                                        <tr class="table-header">
+                                            <th class="movie-id-header">Mã phòng</th>
+                                            <th class="movie-name-header">Tên phòng</th>
+                                            <th class="movie-tag-header">Rap</th>
+                                            <th class="movie-duration-header">Số ghế</th>
+                                        </tr>
+                                        <?php
+                                            // Hiển thị phòng 
+                                            $sql = "SELECT * FROM room r 
+                                            INNER JOIN cinema c ON r.cinema_id = c.cinema_id {$searchCondition}";
+
+                                            $result = $conn->query($sql);
+                                            while ($row = $result->fetch_assoc()): 
+                                        ?>
+                                        <tr class="table-row">
+                                            <td class="movie-id"><?php echo $row['room_id']; ?></td>
+                                            <td class="movie-name"><?php echo $row['room_name']; ?></td>
+                                            <td class="movie-tag"><?php echo $row['cinema_name']; ?></td>
+                                            <td class="movie-duration"><?php echo $row['seat_quantity']; ?></td>
+                                            </td>
+                                            <td class="movie-action">
+                                                <div class="action-menu">
+                                                    <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+                                                    <div class="action-dropdown">
+                                                        <a href="./admin/manage_room/edit_room.php?room_id=<?php echo $row['room_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                        <a onclick="return confirm('Bạn có chắc chắn muốn xóa phòng chiếu này không?')" href="./admin/manage_room/delete_room.php?id=<?php echo $row['room_id'];?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php endwhile; ?>
+                                    </table>
+                                </form>
+                            </div>
+                            <?php 
+                                }
+                            ?>
+                        </div>
+                    </form>
+                    <?php endif; ?>
+
                 </div>
             </div>
         </div>

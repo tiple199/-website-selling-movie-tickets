@@ -289,6 +289,10 @@ a{
     justify-content: center;
     align-items: center;
 }
+.container_1 {
+    width: 500px;
+    height: 300px;
+}
 
 
 

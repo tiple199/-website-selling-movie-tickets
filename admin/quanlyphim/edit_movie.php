@@ -260,53 +260,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="style_movie.css">
     <title>Sửa Phim</title>
 </head>
 <body>
-    <h1>Sửa Phim</h1>
     <form action="" method="post" enctype="multipart/form-data">
-        <table>
+        <a href="../../admin.php?option=movie"><i class="fa-solid fa-arrow-left"></i></a>
+        <h1>Sửa Phim</h1>
+        <table style="width: 100%">
             <tr>
-                <td>Tên phim:</td>
+                <td align="right">Tên phim:</td>
                 <td><input type="text" name="txtMovieName" value="<?php echo htmlspecialchars($movie['movie_name']); ?>"></td>
             </tr>
             <tr>
-                <td>Hình ảnh:</td>
+                <td align="right">Hình ảnh:</td>
                 <td><input type="file" name="txtMovieImage"></td>
             </tr>
             <tr>
-                <td>Trailer:</td>
+                <td align="right">Trailer:</td>
                 <td><input type="text" name="txtMovieTrailer" value="<?php echo htmlspecialchars($movie['movie_trailer']); ?>"></td>
             </tr>
             <tr>
-                <td>Nhãn:</td>
+                <td align="right">Nhãn:</td>
                 <td><input type="text" name="txtMovieMinage" value="<?php echo htmlspecialchars($movie['movie_minage']); ?>"></td>
             </tr>
             <tr>
-                <td>Thời gian:</td>
+                <td align="right">Thời gian:</td>
                 <td><input type="text" name="txtMovieTime" value="<?php echo htmlspecialchars($movie['movie_time']); ?>"></td>
             </tr>
             <tr>
-                <td>Ngày chiếu:</td>
+                <td align="right">Ngày chiếu:</td>
                 <td><input type="date" name="txtMovieDate" value="<?php echo htmlspecialchars($movie['movie_date']); ?>"></td>
             </tr>
             <tr>
-                <td>Quốc gia:</td>
+                <td align="right">Quốc gia:</td>
                 <td><input type="text" name="txtMovieNation" value="<?php echo htmlspecialchars($movie['movie_nation']); ?>"></td>
             </tr>
             <tr>
-                <td>Nhà sản xuất:</td>
+                <td align="right">Nhà sản xuất:</td>
                 <td><input type="text" name="txtMovieManufac" value="<?php echo htmlspecialchars($movie['movie_manufacturer']); ?>"></td>
             </tr>
             <tr>
-                <td>Trạng thái:</td>
+                <td align="right">Trạng thái:</td>
                 <td>
                     <input type="radio" name="txtMovieStatus" value="1" <?php if ($movie['movie_status'] == 1) echo 'checked'; ?>> Active
                     <input type="radio" name="txtMovieStatus" value="0" <?php if ($movie['movie_status'] == 0) echo 'checked'; ?>> Inactive
                 </td>
             </tr>
             <tr>
-                <td>Nội dung:</td>
+                <td align="right">Nội dung:</td>
                 <td>
                     <textarea name="txtMovieContentPart1"><?php echo $Contentfilm['content_part1']; ?></textarea>
                     <textarea name="txtMovieContentPart2"><?php echo $Contentfilm['content_part2']; ?></textarea>
@@ -316,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </td>
             </tr>
             <tr>
-                <td>Diễn viên:</td>
+                <td align="right">Diễn viên:</td>
                 <td>
                     <?php
                     // Hiển thị danh sách diễn viên với ô input cho mỗi diễn viên
@@ -328,7 +331,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </td>
             </tr>
             <tr>
-                <td>Đạo diễn:</td>
+                <td align="right">Đạo diễn:</td>
                 <td>
                     <?php
                     // Hiển thị danh sách đạo diễn với ô input cho mỗi đạo diễn
@@ -340,7 +343,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </td>
             </tr>
             <tr>
-                <td>Thể loại:</td>
+                <td align="right">Thể loại:</td>
                 <td>
                     <?php
                     // var_dump($genres);
@@ -354,7 +357,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </td>
             </tr>
             <tr>
-                <td>Danh mục phim:</td>
+                <td align="right">Danh mục phim:</td>
                 <td>
                     <?php
                     // var_dump($categories);
@@ -381,8 +384,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ?>
                 </td>
             </tr>
+            <tr>
+                <td><input type="reset" value="Hủy"></td>
+                <td align="right"><input type="submit" name="cmd" value="Cập nhật"></td>
+            </tr>
         </table>
-        <button type="submit">Cập nhật</button>
     </form>
 </body>
 </html>

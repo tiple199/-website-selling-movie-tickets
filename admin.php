@@ -14,13 +14,13 @@
     // Điều kiện tìm kiếm phim theo tên
     $searchCondition = "";
     if (!empty($searchQuery)) {
-        $searchCondition = " AND m.movie_name LIKE '%" . $conn->real_escape_string($searchQuery) . "%'";
+        $searchCondition = " AND movies.movie_name LIKE '%" . $conn->real_escape_string($searchQuery) . "%'";
     }
 
     // Lọc để lấy ra danh sách theo danh mục phim
     $categoryCondition = "";
     if ($catfilm === "dangchieu") {
-        $categoryCondition = "WHERE fc.cat_name = 'Đang chiếu'";
+        $categoryCondition = " WHERE fc.cat_name = 'Đang chiếu'";
     } elseif ($catfilm === "sapchieu") {
         $categoryCondition = "WHERE fc.cat_name = 'Sắp chiếu'";
     } elseif ($catfilm === "imax") {
@@ -29,18 +29,26 @@
 
     // Pagination
     $recordsPerPage = 8; // Số bản ghi trên mỗi trang
+    $recordsPerPageTimeMovie = 20; // Số bản ghi trên mỗi trang
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Trang hiện tại
     $offset = ($currentPage - 1) * $recordsPerPage; // Vị trí bắt đầu
+    $offsetTimeMovie = ($currentPage - 1) * $recordsPerPageTimeMovie;
 
-    // Đếm tổng số bản ghi
+    // Đếm tổng số bản ghi movies
     $countSql = "SELECT COUNT(*) as total 
-                 FROM movies m 
-                 INNER JOIN movie__categories mc ON m.movie_id = mc.movie_id
+                 FROM movies 
+                 INNER JOIN movie__categories mc ON movies.movie_id = mc.movie_id
                  INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id 
                  {$categoryCondition} {$searchCondition}";
     $countResult = $conn->query($countSql);
     $totalRecords = $countResult->fetch_assoc()['total'];
     $totalPages = ceil($totalRecords / $recordsPerPage); // Tổng số trang
+    // Đếm tổng số bản ghi lịch chiếu
+    $CountScheduleSql = "SELECT COUNT(schedule_id) as total 
+                 FROM schedules";
+    $CountScheduleResult = $conn->query($CountScheduleSql);
+    $totalSchedule = $CountScheduleResult->fetch_assoc()['total'];
+    $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng số trang
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,13 +77,12 @@
                         <a href="?option=schedule" class="menu-item <?php if($option === "schedule") echo "active";?>" id="schedule">Suất chiếu</a>
                         <a href="?option=room" class="menu-item <?php if($option === "room") echo "active";?>" id="room">Phòng chiếu</a>
                         <a href="?option=food" class="menu-item <?php if($option === "food") echo "active";?>" id="product">Đồ ăn</a>
+                        <a href="?option=discount" class="menu-item <?php if($option === "discount") echo "active";?>" id="discount">Khuyến mãi</a>
                         <a href="?option=user" class="menu-item <?php if($option === "user") echo "active";?>" id="website">Người dùng</a>
                         <a href="home.php" class="menu-item" id="website">Đăng xuất</a>
                     </div>
                 </div>
                 <div class="content">
-                    <!-- Quản Lý Phim -->
-
                     <!-- Chào -->
                     <?php
                     if($option == ""){
@@ -87,6 +94,7 @@
                     }
                     ?>
                     <!-- Xử lý -->
+                    <!-- Quản lý phim -->
                     <?php if ($option === "movie"): ?>
                     <form action="admin.php?option=<?php echo $option."&catfilm=$catfilm";?>" method="post">
                         <div class="inner-content">
@@ -126,8 +134,8 @@
                                             <th class="movie-category-header">Danh mục</th>
                                         </tr>
                                         <?php 
-                                            $sql = "SELECT * FROM movies m 
-                                            INNER JOIN movie__categories mc ON m.movie_id = mc.movie_id
+                                            $sql = "SELECT * FROM movies  
+                                            INNER JOIN movie__categories mc ON movies.movie_id = mc.movie_id
                                             INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id  
                                             {$categoryCondition} {$searchCondition}
                                             LIMIT $offset, $recordsPerPage";
@@ -152,7 +160,7 @@
                                                         <div class="action-dropdown">
                                                             <a href="./admin/quanlyphim/edit_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
                                                             <a onclick="return confirm('are you sure to delete')" href="admin/quanlyphim/delete_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
-                                                            <a href="schedule_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-solid fa-calendar-days"></i></a>
+                                                            <a href="admin/quanlylichchieu/schedule_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-solid fa-calendar-days"></i></a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -282,15 +290,185 @@
                                                     <?php echo $row1['food_name']; ?>
                                                 </td>
                                                 <td><?php echo $row1['food_desc']; ?></td>
-                                                <td><?php echo $row1['food_price']; ?></td>
+                                                <td><?php echo number_format($row1['food_price'], 0, ',', '.') . ' đ'; ?></td>
                                                 <td class="delete-icon-cell">                                                         
-                                                    <a onclick="return confirm('are you sure to delete')" href="admin/quanlydoan/delete_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                    <a onclick="return confirm('Bạn có chắc chắn muốn xóa không?')" href="admin/quanlydoan/delete_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
 
                                                 </td>
                                             </tr>
                                         <?php endwhile; ?>
                                     </table>
                                 </form>
+                            </div>
+                        </div>                       
+                    <?php endif; ?>
+                    <!-- Quản lý lịch chiếu -->
+                    <?php if ($option === "schedule"): ?>
+                        <form action="admin.php?option=<?php echo $option."&catfilm=$catfilm";?>" method="post">
+                        <div class="inner-content">
+                            <div class="categories-film">
+                                <a href="?option=schedule&catfilm=tatca" id="tab-tatca" class="tab-option <?php if($catfilm === "tatca") echo "active";?>" onclick="selectTab(this)">Tất cả</a>
+                                <div class="underline"></div>
+                            </div>
+                            <div class="function">
+                                <div class="function-search">
+                                    <input type="text" placeholder="Nhập tên phim cần tìm" name="txtSearch" value="<?php echo htmlspecialchars($searchQuery); ?>">
+
+                                    <input type="hidden" name="action" value="search">
+                                    <button class="search-button">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                                <div class="function-add-film">
+                                    <a href = "./admin/quanlylichchieu/add_time_movie.php" class="add-movie-button">Thêm lịch chiếu mới</a>
+                                </div>
+                            </div>
+                            <?php 
+                                if($catfilm != "" || $action = "search"){
+                            ?>  
+                            <div class="table-content">
+                                <form action="">
+                                    <table class="movie-table">
+                                        <tr class="table-header">
+                                            <th class="movie-id-header">Mã phim</th>
+                                            <th class="movie-name-header">Tên phim</th>
+                                            <th class="movie-tag-header">Rạp</th>
+                                            <th class="movie-duration-header">Phòng</th>
+                                            <th class="movie-nation-header">Giờ chiếu</th>
+                                            <th class="movie-release-header">Ngày chiếu</th>
+                                            <th class="movie-category-header">Thứ</th>
+                                        </tr>
+                                        <?php 
+                                            $sql2 = "SELECT * FROM schedules 
+                                            INNER JOIN movies ON schedules.movie_id = movies.movie_id
+                                            INNER JOIN room ON schedules.room_id = room.room_id
+                                            INNER JOIN cinema ON  room.cinema_id = cinema.cinema_id
+                                            INNER JOIN movie__categories mc ON movies.movie_id = mc.movie_id
+                                            INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id  
+                                            {$categoryCondition} {$searchCondition}
+                                            LIMIT $offsetTimeMovie, $recordsPerPageTimeMovie";
+                                
+                                            $result2 = $conn->query($sql2);
+                                            while ($row2 = $result2->fetch_assoc()): 
+                                        ?>
+                                            <tr class="table-row">
+                                                <td class="movie-id"><?php echo $row2['movie_id']; ?></td>
+                                                <td class="movie-name">
+                                                    <img src="assets/image/image__film/<?php echo $row2['movie_img']; ?>" alt="anh" class="movie-img">
+                                                    <?php echo $row2['movie_name']; ?>
+                                                </td>
+                                                <td class="movie-tag"><?php echo $row2['cinema_name']; ?></td>
+                                                <td class="movie-duration"><?php echo $row2['room_name']; ?></td>
+                                                <td class="movie-nation"><?php echo $row2['show_time']; ?></td>
+                                                <td class="movie-release"><?php echo $row2['show_date']; ?></td>
+                                                <td class="movie-category"><?php echo $row2['show_day']; ?></td>
+                                                <td class="movie-action">
+                                                    <div class="action-menu">
+                                                        <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+                                                        <div class="action-dropdown">
+                                                            <a href="admin/quanlylichchieu/edit_time_movie.php?schedule_id=<?php echo $row2['schedule_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                            <a onclick="return confirm('are you sure to delete')" href="admin/quanlylichchieu/delete_time_movie.php?schedule_id=<?php echo $row2['schedule_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    </table>
+                                </form>
+                            </div>
+                            <!-- Hiển thị phân trang -->
+                            <div class="pagination">
+                                <?php for ($page = 1; $page <= $totalPagesSchedule; $page++): ?>
+                                    <a href="?option=schedule&catfilm=<?php echo $catfilm; ?>&page=<?php echo $page; ?>"
+                                       class="pagination-link <?php if ($page == $currentPage) echo 'active'; ?>">
+                                        <?php echo $page; ?>
+                                    </a>
+                                <?php endfor; ?>
+                            </div>
+                            <?php 
+                                }
+                            ?>
+                        </div>
+                    </form>
+                    <?php endif; ?>
+                    <!-- Quản lý khuyến mãi -->
+                    <?php if ($option === "discount"): ?>
+                    <?php
+                    // Xử lý phân trang của khuyến mãi
+                    $recordsPerPage = 8; // Số bản ghi trên mỗi trang
+                    $recordsPerPageTimeMovie = 20; // Số bản ghi trên mỗi trang
+                    $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Trang hiện tại
+                    $offset = ($currentPage - 1) * $recordsPerPage; // Vị trí bắt đầu
+                    $offsetTimeMovie = ($currentPage - 1) * $recordsPerPageTimeMovie;
+
+                    // Đếm tổng số bản ghi khuyến mãi
+                    $countSql = "SELECT COUNT(*) as total 
+                                FROM discount";
+                    $countResult = $conn->query($countSql);
+                    $totalRecords = $countResult->fetch_assoc()['total'];
+                    $totalPages = ceil($totalRecords / $recordsPerPage); // Tổng số trang  
+                    ?>
+                    <form action="admin.php?option=<?php echo $option;?>" method="post">
+                        <div class="inner-content">
+                            <div class="function">
+                                <div class="function-add-film">
+                                    <a href = "./admin/manage_discount/add_discount.php" class="add-movie-button">Thêm khuyến mãi</a>
+                                </div>
+                            </div>
+                            <div class="table-content">
+                                <form action="">
+                                    <table class="movie-table">
+                                        <tr class="table-header">
+                                            <th class="movie-id-header">Mã khuyến mãi</th>
+                                            <th class="movie-name-header">Tên khuyến mãi</th>
+                                            <th class="movie-name-header">Hình ảnh</th>
+                                            <th class="movie-tag-header">Giá giảm</th>
+                                            <th class="movie-duration-header">Ngày kết thúc</th>
+                                            <th class="movie-duration-header">Trạng thái</th>
+                                        </tr>
+                                        <?php
+                                            // Hiển thị phòng 
+                                            $sql = "SELECT * FROM discount  
+                                            {$searchCondition}
+                                            LIMIT $offset, $recordsPerPage";
+                                            $result = $conn->query($sql);
+                                            while ($row = $result->fetch_assoc()): 
+                                        ?>
+                                        <tr class="table-row">
+                                            <td class="movie-id"><?php echo $row['discount_id']; ?></td>
+                                            <td class="movie-name"><?php echo $row['discount_title']; ?></td>
+                                            <td class="movie-tag"><img src="assets/image/image_discount/<?php echo $row['discount_img']; ?>" alt="anh" class="movie-img"></td>
+                                            <td class="movie-duration"><?php echo number_format($row['discount_price'], 0, ',', '.') . ' đ'; ?></td>
+                                            <td class="movie-duration"><?php echo $row['endDate']; ?></td>
+                                            <td class="movie-duration"><?php 
+                                                    if ($row['status'] == 1) {
+                                                        echo 'Đang hoạt động';
+                                                    } else {
+                                                        echo 'Ngừng hoạt động';
+                                                    }
+                                                ?></td>
+                                            </td>
+                                            <td class="movie-action">
+                                                <div class="action-menu">
+                                                    <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+                                                    <div class="action-dropdown">
+                                                        <a href="./admin/manage_discount/edit_discount.php?discount_id=<?php echo $row['discount_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                        <a onclick="return confirm('Bạn có chắc chắn muốn xóa khuyến mãi này không?')" href="./admin/manage_discount/delete_discount.php?discount_id=<?php echo $row['discount_id'];?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php endwhile; ?>
+                                    </table>
+                                </form>
+                            </div>
+                            <div class="pagination">
+                                <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                                    <a href="?option=discount&page=<?php echo $page; ?>"
+                                       class="pagination-link <?php if ($page == $currentPage) echo 'active'; ?>">
+                                        <?php echo $page; ?>
+                                    </a>
+                                <?php endfor; ?>
                             </div>
                         </div>
                     </form>

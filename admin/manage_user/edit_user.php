@@ -69,11 +69,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="style_user.css">
     <title>Sửa Người Dùng</title>
 </head>
 <body>
-    <h1>Sửa Người Dùng</h1>
     <form action="" method="post">
+    <a href="../../admin.php?option=user"><i class="fa-solid fa-arrow-left"></i></a>
+        <h1>Sửa Người Dùng</h1>
         <table border="0">
             <tr>
                 <td align="right">Họ và tên:</td>
@@ -135,8 +138,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </td>
             </tr>
             <tr>
-                <td colspan="2" align="center">
-                    <button type="submit">Lưu Thay Đổi</button>
+                <td colspan="2" align="right">
+                    <button type="submit">Cập nhật</button>
                 </td>
             </tr>
         </table>

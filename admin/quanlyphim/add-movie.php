@@ -115,11 +115,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="style_movie.css">
     <title>Add Movie</title>
 </head>
 <body>
-    <h1>Thêm Mới Phim</h1>
     <form action="add-movie.php" method="post" enctype="multipart/form-data">
+        <a href="../../admin.php?option=movie"><i class="fa-solid fa-arrow-left"></i></a>
+        <h1>Thêm Mới Phim</h1>
         <table border="0">
             <!-- Thông tin phim -->
             <tr>
@@ -172,7 +175,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <textarea name="txtMovieContentPart5" rows="3" cols="40" placeholder="Nội dung phần 5"></textarea>
                 </td>
             </tr>
-
             <!-- Thêm đạo diễn -->
             <tr>
                 <td align="right">Tên đạo diễn:</td>
@@ -180,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div id="directorsContainer">
                         <input type="text" name="txtNameDirector[]">
                     </div>
-                    <button type="button" onclick="addField('directorsContainer', 'txtNameDirector[]')">Thêm đạo diễn</button>
+                    <button type="button" onclick="addField('directorsContainer', 'txtNameDirector[]')">+</button>
                 </td>
             </tr>
 
@@ -191,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div id="actorsContainer">
                         <input type="text" name="txtNameActor[]">
                     </div>
-                    <button type="button" onclick="addField('actorsContainer', 'txtNameActor[]')">Thêm diễn viên</button>
+                    <button type="button" onclick="addField('actorsContainer', 'txtNameActor[]')">+</button>
                 </td>
             </tr>
 
@@ -202,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div id="genresContainer">
                         <input type="text" name="txtNameGenre[]">
                     </div>
-                    <button type="button" onclick="addField('genresContainer', 'txtNameGenre[]')">Thêm thể loại</button>
+                    <button type="button" onclick="addField('genresContainer', 'txtNameGenre[]')">+</button>
                 </td>
             </tr>
 
@@ -221,13 +223,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             ?>
                         </select>
                     </div>
-                    <button type="button" onclick="addField('categoriesContainer', 'txtMovieCategories[]', 'select')">Thêm danh mục</button>
+                    <button type="button" onclick="addField('categoriesContainer', 'txtMovieCategories[]', 'select')">+</button>
                 </td>
             </tr>
 
             <tr>
-                <td><input type="submit" name="cmd" value="Cập nhật"></td>
                 <td><input type="reset" value="Hủy"></td>
+                <td align="right"><input type="submit" name="cmd" value="Thêm"></td>
             </tr>
         </table>
     </form> 

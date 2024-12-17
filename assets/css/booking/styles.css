@@ -184,13 +184,7 @@
     border-color: #f58020;
     cursor: pointer;
 }
-.seat_readonly{
-    background: #ccc;
-}
-.seat_readonly:hover{
-    background: #ccc;
-    border-color: #CCC;
-}
+
 .row__seat{
     display: flex;
     align-items: center;
@@ -318,6 +312,9 @@
     display: inline-block;
 }
 /* select seat */
+.seat_vip_form{
+    border-color: #f58020;
+}
 [type="checkbox"]:checked ~ label .seat{
     background: #f58020;
     border-color: #f58020;
@@ -340,6 +337,15 @@
     background: #fff;
     border:1px solid #ccc;
 
+}
+.seat_readonly{
+    cursor: default;
+    background: #ccc !important;
+    border-color: #CCC !important;
+}
+.seat_readonly:hover{
+    background: #ccc !important;
+    border-color: #CCC !important;
 }
 /* error */
 .error-message {

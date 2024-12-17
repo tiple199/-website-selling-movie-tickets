@@ -355,3 +355,18 @@ input[type="radio"]:checked::after{
     color: red;
     font-size: 1.2rem;
 }
+.name__user{
+    padding: 20px 0;
+}
+.control_profile{
+    position: relative;
+}
+.control_profile:hover .name__user{
+    color: #f58020;
+}
+.control_profile:hover > .header__submenu{
+    display: block;
+    top: 55px;
+    left: -50px;
+    color: #f58020;
+}

@@ -177,18 +177,25 @@
                     <li class="header__item">Sự Kiện <i
                                 class="fa-solid fa-check list-icon"></i>
                         <ul class="header__submenu">
-                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">Ưu Đãi</a> <span class="decor__submenu"></span></li>
+                            <li class="header__submenu--item"><a href="./discount/show_discount.php" class="header__submenu--link">Ưu Đãi</a> <span class="decor__submenu"></span></li>
                             <li class="header__submenu--item"><a href="#!" class="header__submenu--link">Phim Hay Tháng</a> <span class="decor__submenu"></span></li>
                         </ul>
                     </li>
 
                     <li class="header__item">Rạp/Giá Vé <i
                                 class="fa-solid fa-check list-icon"></i>
-                        <ul class="header__submenu">
-                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">TTNP Cầu Giấy</a> <span class="decor__submenu"></span></li>
-                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">TTNP Giải Phóng</a> <span class="decor__submenu"></span></li>
-                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">TTNP Lê Văn Lương</a> <span class="decor__submenu"></span></li>
-                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">TTNP Láng Hạ</a> <span class="decor__submenu"></span></li>
+                                <ul class="header__submenu">
+                        <?php 
+                                //truy vấn lấy tên rạp
+                                $sql_cinema = "select * from cinema";
+                                $result_cinema = $conn->query($sql_cinema);
+                                
+                                while($r_cinema = $result_cinema->fetch_assoc()){
+                            ?>
+                            <li class="header__submenu--item"><a href="./cinema/cinema_detail.php?cinema_id=<?=$r_cinema['cinema_id']?>" class="header__submenu--link"><?=$r_cinema["cinema_name"]?></a> <span class="decor__submenu"></span></li>
+                            <?php
+                                }
+                            ?>
                         </ul>
                     </li>
                 </ul>
@@ -252,6 +259,7 @@
                 <!-- body__film -->
                 <div class="content__film__wrap">
                     <div class="content__film">
+                        <!-- info film -->
                         <div class="row__content__film">
                             <?php while($row = $search__film->fetch_assoc()){
                             ?>
@@ -322,6 +330,7 @@
                             }
                             ?>
                         </div>
+                        <!-- content -->
                         <div class="summary__content__wrap">
                             <p class="text_cat">Nội Dung Phim</p>
                             <?php while($row = $content_film->fetch_assoc()){?>

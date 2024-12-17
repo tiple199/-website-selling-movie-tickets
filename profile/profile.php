@@ -115,7 +115,7 @@
                                                     <p class="film__name header__filmname"><?php echo $row1["movie_name"];?></p>
                                                 </div>
                                                 <div class="book_film header__bookfilm">
-                                                    <div class="ticket__film header__ticket"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div>
+                                                <a href="../show_detailfilm.php?movie_id=<?php echo $row1["movie_id"]?>"><div class="ticket__film header__ticket"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
                                                 </div>
                                                 <div class="vote header__vote">
                                                     <span class="rate__film"><i class="fa-solid fa-star rate__star"></i><?php echo $row1["movie_rating"];?></span>
@@ -152,7 +152,7 @@
                     <li class="header__item">Sự Kiện <i
                                 class="fa-solid fa-check list-icon"></i>
                         <ul class="header__submenu">
-                            <li class="header__submenu--item"><a href="#!" class="header__submenu--link">Ưu Đãi</a> <span class="decor__submenu"></span></li>
+                            <li class="header__submenu--item"><a href="../discount/show_discount.php" class="header__submenu--link">Ưu Đãi</a> <span class="decor__submenu"></span></li>
                             <li class="header__submenu--item"><a href="#!" class="header__submenu--link">Phim Hay Tháng</a> <span class="decor__submenu"></span></li>
                         </ul>
                     </li>
@@ -186,8 +186,15 @@
                         <div class="avatar__userwrap">
                             <i class="fa-regular fa-user avatar__usser"></i>
                         </div>
-                        <P><?=$row_user["fullname"];?></P>
+                        <div class="control_profile">
+                            <P class="name__user"><?=$row_user["fullname"];?></P>
+                            <ul class="header__submenu">
+                                    <li class="header__submenu--item"><a href="../profile/profile.php" class="header__submenu--link">Tài Khoản</a> <span class="decor__submenu"></span></li>
+                                    <li class="header__submenu--item"><a href="../login/logout.php" class="header__submenu--link">Đăng Xuất</a> <span class="decor__submenu"></span></li>
+                                </ul>
+                        </div>
                     </div>
+                    
                 </div>
             </div>
         </div>

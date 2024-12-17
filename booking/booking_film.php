@@ -250,6 +250,10 @@
                                         join room R on R.room_id = SD.room_id
                                         where SD.schedule_id = $check_schedule";
                                         $result_seat_sold=$conn->query($sql_seat_sold);
+
+                                        // truy vấn lấy ghế vip
+                                        $sql_seat_vip = "select seat_id from seats where seat_type = 1";
+                                        $rs_seat_vip = $conn->query($sql_seat_vip);
                                         
                                         while($row = $result_seat->fetch_assoc()){
                                             
@@ -259,7 +263,7 @@
                                         <input type="checkbox" value="<?php echo $row["seat_id"];?>" id = "<?php echo $row["seat_id"];?>" data-price="<?php echo $row["seat_price"];?>" hidden <?php
                                             while($r = $result_seat_sold->fetch_assoc()){
                                                 if($row["seat_id"] == $r["seat_id"]){
-                                                    echo "disabled";
+                                                    echo " disabled ";
                                                     break;
                                                 }
                                             }
@@ -269,12 +273,23 @@
                                             <div class="seat <?php
                                                 while($r = $result_seat_sold->fetch_assoc()){
                                                     if($row["seat_id"] == $r["seat_id"]){
-                                                        echo "seat_readonly";
+                                                        echo " seat_readonly ";
+                                                        break;
+                                                    }
+                                                    
+
+                                                }
+                                                $result_seat_sold->data_seek(0);
+                                                while($r1 = $rs_seat_vip->fetch_assoc()){
+                                                    if($row["seat_id"] == $r1["seat_id"]){
+                                                        echo " seat_vip_form ";
                                                         break;
                                                     }
                                                 }
-                                                $result_seat_sold->data_seek(0);
-                                            ?>" >
+                                                $rs_seat_vip->data_seek(0);
+                                            ?>
+                                            
+                                            " >
                                                 <span hidden><?php echo $row["row"]?></span><?php echo $row["seat_number"];?>  
                                             </div>
                                         </label>

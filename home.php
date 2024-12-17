@@ -388,22 +388,32 @@
                     <span class="close">&times;</span>
                     <img src="logo.png" alt="Register Image" class="form-image">
                     <h2>Đăng Ký Tài Khoản</h2>
-                    <form action="./login/login__action.php" method="post">
+                    <form action="./login/signup__action.php" method="post">
                         <p class="text_label">Họ và tên</p>
-                        <input type="text" placeholder="Nhập Họ và tên">
+                        <input type="text" name="fullname" placeholder="Nhập Họ và tên" required>
+                        <p class="text_label">Ngày sinh</p>
+                        <input type="date" name="date" placeholder="Nhập Ngày sinh" required>
+                        <p class="text_label">Giới tính</p>
+                        <div class="gender">
+                            <input type="radio" name="gender" value="1">Nam
+                            <input type="radio" name="gender" value="2">Nữ
+                            <input type="radio" name="gender" value="3">Khác
+                        </div>
                         <p class="text_label">Email</p>
-                        <input type="email" placeholder="Nhập Email">
+                        <input type="email" name="email" placeholder="Nhập Email" required>
                         <p class="text_label">Số điện thoại</p>
-                        <input type="text" placeholder="Nhập Số điện thoại">
+                        <input type="text" name="phone" placeholder="Nhập Số điện thoại" required>
+                        <p class="text_label">Tài khoản đăng nhập</p>
+                        <input type="text" name="username" placeholder="Tên đăng nhập" required>
                         <p class="text_label">Mật khẩu</p>
-                        <input type="password" placeholder="Nhập Mật khẩu">
+                        <input type="password" name="password" placeholder="Nhập Mật khẩu" required>
                         <p class="text_label">Nhập lại mật khẩu</p>
-                        <input type="password" placeholder="Nhập lại Mật khẩu">
-                    <button class="action-btn">Hoàn thành</button>
+                        <input type="password" name="confirm_password" placeholder="Nhập lại Mật khẩu" required>
+                        <button type="submit" class="action-btn">Hoàn thành</button>
                     </form>
                     <p>Bạn đã có tài khoản? <button id="showLogin" class="link-btn">Đăng nhập</button></p>
                 </div>
-             </div>
+            </div>
         </div>
     </main>
     <!-- footer -->

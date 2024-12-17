@@ -1,6 +1,15 @@
 <?php
 // Kết nối cơ sở dữ liệu
 require_once("../../connect/connection.php");
+session_start();
+
+// Kiểm tra xem người dùng đã đăng nhập chưa
+if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
+    // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+    $_SESSION["login_error"] = "Nhập tài khoản admin để vào trang quản trị!";
+    header("Location: ../.././home.php"); // Đảm bảo bạn thay đổi URL này thành đúng trang đăng nhập của bạn
+    exit;
+}
 
 // Xử lý khi form được submit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

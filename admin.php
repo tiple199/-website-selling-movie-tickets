@@ -1,54 +1,62 @@
 <?php
-    require_once("connect/connection.php");
-    session_start();
+require_once("connect/connection.php");
+session_start();
 
-    $option = $_REQUEST['option'] ?? ''; // Biến dùng lựa chọn quản lý
-    $catfilm = $_REQUEST['catfilm'] ?? ''; // Biến dùng để Lọc danh mục phim
+// Kiểm tra xem người dùng đã đăng nhập chưa
+if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
+    // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+    $_SESSION["login_error"] = "Nhập tài khoản admin để vào trang quản trị!";
+    header("Location: ./home.php"); // Đảm bảo bạn thay đổi URL này thành đúng trang đăng nhập của bạn
+    exit;
+}
 
-    $action = $_POST['action'] ?? '';
+$option = $_REQUEST['option'] ?? ''; // Biến dùng lựa chọn quản lý
+$catfilm = $_REQUEST['catfilm'] ?? ''; // Biến dùng để Lọc danh mục phim
+
+$action = $_POST['action'] ?? '';
 
 
-    $searchQuery = $_POST['txtSearch'] ?? ''; // Search
-    $cinemaName = $_POST['cinema_name'] ?? ''; // Lấy tên rạp
+$searchQuery = $_POST['txtSearch'] ?? ''; // Search
+$cinemaName = $_POST['cinema_name'] ?? ''; // Lấy tên rạp
 
-    // Điều kiện tìm kiếm phim theo tên
-    $searchCondition = "";
-    if (!empty($searchQuery)) {
-        $searchCondition = " AND movies.movie_name LIKE '%" . $conn->real_escape_string($searchQuery) . "%'";
-    }
+// Điều kiện tìm kiếm phim theo tên
+$searchCondition = "";
+if (!empty($searchQuery)) {
+    $searchCondition = " AND movies.movie_name LIKE '%" . $conn->real_escape_string($searchQuery) . "%'";
+}
 
-    // Lọc để lấy ra danh sách theo danh mục phim
-    $categoryCondition = "";
-    if ($catfilm === "dangchieu") {
-        $categoryCondition = " WHERE fc.cat_name = 'Đang chiếu'";
-    } elseif ($catfilm === "sapchieu") {
-        $categoryCondition = "WHERE fc.cat_name = 'Sắp chiếu'";
-    } elseif ($catfilm === "imax") {
-        $categoryCondition = "WHERE fc.cat_name = 'Phim IMAX'";
-    }
+// Lọc để lấy ra danh sách theo danh mục phim
+$categoryCondition = "";
+if ($catfilm === "dangchieu") {
+    $categoryCondition = " WHERE fc.cat_name = 'Đang chiếu'";
+} elseif ($catfilm === "sapchieu") {
+    $categoryCondition = "WHERE fc.cat_name = 'Sắp chiếu'";
+} elseif ($catfilm === "imax") {
+    $categoryCondition = "WHERE fc.cat_name = 'Phim IMAX'";
+}
 
-    // Pagination
-    $recordsPerPage = 8; // Số bản ghi trên mỗi trang
-    $recordsPerPageTimeMovie = 20; // Số bản ghi trên mỗi trang
-    $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Trang hiện tại
-    $offset = ($currentPage - 1) * $recordsPerPage; // Vị trí bắt đầu
-    $offsetTimeMovie = ($currentPage - 1) * $recordsPerPageTimeMovie;
+// Pagination
+$recordsPerPage = 8; // Số bản ghi trên mỗi trang
+$recordsPerPageTimeMovie = 20; // Số bản ghi trên mỗi trang
+$currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Trang hiện tại
+$offset = ($currentPage - 1) * $recordsPerPage; // Vị trí bắt đầu
+$offsetTimeMovie = ($currentPage - 1) * $recordsPerPageTimeMovie;
 
-    // Đếm tổng số bản ghi movies
-    $countSql = "SELECT COUNT(*) as total 
-                 FROM movies 
-                 INNER JOIN movie__categories mc ON movies.movie_id = mc.movie_id
-                 INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id 
-                 {$categoryCondition} {$searchCondition}";
-    $countResult = $conn->query($countSql);
-    $totalRecords = $countResult->fetch_assoc()['total'];
-    $totalPages = ceil($totalRecords / $recordsPerPage); // Tổng số trang
-    // Đếm tổng số bản ghi lịch chiếu
-    $CountScheduleSql = "SELECT COUNT(schedule_id) as total 
-                 FROM schedules";
-    $CountScheduleResult = $conn->query($CountScheduleSql);
-    $totalSchedule = $CountScheduleResult->fetch_assoc()['total'];
-    $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng số trang
+// Đếm tổng số bản ghi movies
+$countSql = "SELECT COUNT(*) as total 
+                FROM movies 
+                INNER JOIN movie__categories mc ON movies.movie_id = mc.movie_id
+                INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id 
+                {$categoryCondition} {$searchCondition}";
+$countResult = $conn->query($countSql);
+$totalRecords = $countResult->fetch_assoc()['total'];
+$totalPages = ceil($totalRecords / $recordsPerPage); // Tổng số trang
+// Đếm tổng số bản ghi lịch chiếu
+$CountScheduleSql = "SELECT COUNT(schedule_id) as total 
+                FROM schedules";
+$CountScheduleResult = $conn->query($CountScheduleSql);
+$totalSchedule = $CountScheduleResult->fetch_assoc()['total'];
+$totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng số trang
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,7 +87,7 @@
                         <a href="?option=food" class="menu-item <?php if($option === "food") echo "active";?>" id="product">Đồ ăn</a>
                         <a href="?option=discount" class="menu-item <?php if($option === "discount") echo "active";?>" id="discount">Khuyến mãi</a>
                         <a href="?option=user" class="menu-item <?php if($option === "user") echo "active";?>" id="website">Người dùng</a>
-                        <a href="home.php" class="menu-item" id="website">Đăng xuất</a>
+                        <a href="./login/logout.php" class="menu-item" id="website">Đăng xuất</a>
                     </div>
                 </div>
                 <div class="content">

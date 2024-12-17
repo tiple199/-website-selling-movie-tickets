@@ -2,6 +2,10 @@
     require_once("../../connect/connection.php"); // Kết nối đến cơ sở dữ liệu
     session_start();
 
+    if (!isset($_SESSION["time_movie_error"])) {
+        $_SESSION["time_movie_error"] = "";
+    }
+
     // Lấy ID phim từ URL
     $schedule_id = isset($_GET['schedule_id']) ? $_GET['schedule_id'] : 0;
 
@@ -23,16 +27,16 @@
     $sqlCinemas = "SELECT cinema_id, cinema_name FROM cinema";
     $resultCinemas = $conn->query($sqlCinemas);
 
-   // Truy vấn dữ liệu phòng chiếu
-   $sqlRooms = "SELECT room_id, room_name FROM room";
-   $resultRooms = $conn->query($sqlRooms);
+    // Truy vấn dữ liệu phòng chiếu
+    $sqlRooms = "SELECT room_id, room_name FROM room";
+    $resultRooms = $conn->query($sqlRooms);
 
-   // Truy vấn dữ liệu phim
-   $sqlMovies = "SELECT movie_id, movie_name FROM movies";
-   $resultMovies = $conn->query($sqlMovies);
+    // Truy vấn dữ liệu phim
+    $sqlMovies = "SELECT movie_id, movie_name FROM movies";
+    $resultMovies = $conn->query($sqlMovies);
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Thu thập và làm sạch dữ liệu từ form
+        // Thu thập và làm sạch dữ liệu từ form
         $Cinema_name = isset($_POST['txtCinema']) ? trim($_POST['txtCinema']) : '';
         $Room_name = isset($_POST['txtRoom']) ? trim($_POST['txtRoom']) : '';
         $Movie_name = isset($_POST['txtMovieName']) ? $_POST['txtMovieName'] : '';
@@ -40,22 +44,62 @@
         $Date = isset($_POST['txtDate']) ? trim($_POST['txtDate']) : '';
         $Time = isset($_POST['txtTime']) ? trim($_POST['txtTime']) : '';
 
-    // Chuẩn bị câu lệnh SQL để cập nhật dữ liệu vào bảng schedules
-       $stmt = $conn->prepare("UPDATE schedules SET show_date = ?, show_day = ?, show_time = ? WHERE schedule_id = ?");
-       $stmt->bind_param("sssi",  $Date, $Day, $Time, $schedule['schedule_id']);
+        // Lấy thời lượng phim
+        $sqlTimeMovie = "SELECT movie_time FROM movies WHERE movie_id = ?";
+        $stmtTimeMovie = $conn->prepare($sqlTimeMovie);
+        $stmtTimeMovie->bind_param("i", $schedule['movie_id']);
+        $stmtTimeMovie->execute();
+        $stmtTimeMovie->bind_result($timeMovie);
+        $stmtTimeMovie->fetch();
+        $stmtTimeMovie->close();
 
-    // Thực thi câu lệnh
+        // Kiểm tra giờ chiếu trùng lặp
+        $sqlCheck = "SELECT show_time FROM schedules WHERE show_date = ? AND room_id = ? AND movie_id = ? AND schedule_id != ?";
+        $stmtCheck = $conn->prepare($sqlCheck);
+        $stmtCheck->bind_param("siii", $Date, $schedule['room_id'], $schedule['movie_id'], $schedule_id);
+        $stmtCheck->execute();
+        $resultCheck = $stmtCheck->get_result();
+
+        $isConflict = false;
+        while ($row = $resultCheck->fetch_assoc()) {
+        // Tách giờ và phút từ chuỗi thời gian
+            list($existingHour, $existingMinute) = explode(':', $row['show_time']);
+            list($newHour, $newMinute) = explode(':', $Time);
+
+        // Chuyển đổi thời gian từ giờ sang phút
+            $existingTimeInMinutes = $existingHour * 60 + $existingMinute;
+            $newTimeInMinutes = $newHour * 60 + $newMinute;
+
+            $timeDifference = abs($newTimeInMinutes - $existingTimeInMinutes); // Tính khoảng cách thời gian (phút)
+
+            if ($timeDifference < $timeMovie) { // Thời lượng phim đã tính bằng phút
+                $isConflict = true;
+                break;
+            }
+        }
+        $stmtCheck->close();
+
+        if ($isConflict) {
+            $_SESSION["time_movie_error"] = "Giờ chiếu bị trùng lặp hoặc không đủ khoảng cách thời gian!";
+        } else {
+        // Chuẩn bị câu lệnh SQL để cập nhật dữ liệu vào bảng schedules
+            $stmt = $conn->prepare("UPDATE schedules SET show_date = ?, show_day = ?, show_time = ? WHERE schedule_id = ?");
+            $stmt->bind_param("sssi", $Date, $Day, $Time, $schedule['schedule_id']);
+
+        // Thực thi câu lệnh
         if ($stmt->execute()) {
             echo "<script>alert('Đã sửa lịch chiếu thành công'); window.location.href='../../admin.php?option=schedule';</script>";
         } else {
             echo "Lỗi: " . $stmt->error;
         }
-    // Đóng câu lệnh
+        // Đóng câu lệnh
         $stmt->close();
+    }
 }
-    // Đóng kết nối
-    $conn->close();
+// Đóng kết nối
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,6 +166,9 @@
 </head>
 <body>
     <div class="container_1 d-flex">
+        <center>
+            <font color = "red"><?php echo $_SESSION["time_movie_error"];?></font>
+        </center>
         <h1 align="center">Sửa lịch chiếu</h1>
         <div class="inner-content">
             <form action="" method="post" enctype="multipart/form-data">
@@ -161,3 +208,4 @@
     </div>
 </body>
 </html>
+<?php $_SESSION["time_movie_error"] = "";?>

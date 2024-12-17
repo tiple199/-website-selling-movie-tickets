@@ -1,64 +1,84 @@
 <?php
-    session_start();
-    if(!isset($_SESSION["time_movie_error"])){
-        $_SESSION["time_movie_error"] = "";  
-    }
-    require_once("../../connect/connection.php");
-
-    // Lấy ID phim từ URL
-    $schedule_id = isset($_GET['schedule_id']) ? $_GET['schedule_id'] : 0;
-
-    // Lấy thông tin phim từ cơ sở dữ liệu
-    $sqlMovie = "SELECT * FROM schedules 
-        INNER JOIN movies ON schedules.movie_id = movies.movie_id
-        INNER JOIN room ON schedules.room_id = room.room_id
-        INNER JOIN cinema ON room.cinema_id = cinema.cinema_id
-        INNER JOIN movie__categories mc ON movies.movie_id = mc.movie_id
-        INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id  
-        WHERE schedule_id = ?";
-    $stmt = $conn->prepare($sqlMovie);
-    $stmt->bind_param("i", $schedule_id);
-    $stmt->execute();
-    $resultMovie = $stmt->get_result();
-    $schedule = $resultMovie->fetch_assoc();
-
-    // Truy vấn dữ liệu rạp phim
-    $sqlCinemas = "SELECT cinema_id, cinema_name FROM cinema";
-    $resultCinemas = $conn->query($sqlCinemas);
-
-
-    // Truy vấn dữ liệu phòng chiếu
-    $sqlRooms = "SELECT *  FROM room INNER JOIN cinema ON room.cinema_id = cinema.cinema_id";
-    $resultRooms = $conn->query($sqlRooms);
-
-   // Truy vấn dữ liệu phim
-   $sqlMovies = "SELECT movie_id, movie_name FROM movies";
-   $resultMovies = $conn->query($sqlMovies);
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Thu thập và làm sạch dữ liệu từ form
-        $Room_name = isset($_POST['txtRoom']) ? trim($_POST['txtRoom']) : '';
-        $Movie_name = isset($_POST['txtMovieName']) ? $_POST['txtMovieName'] : '';
-        $Day = isset($_POST['txtDay']) ? trim($_POST['txtDay']) : '';
-        $Date = isset($_POST['txtDate']) ? trim($_POST['txtDate']) : '';
-        $Time = isset($_POST['txtTime']) ? trim($_POST['txtTime']) : '';
-
-
-        $stmt = $conn->prepare("INSERT INTO schedules (movie_id, room_id, show_date, show_day, show_time) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $Movie_name, $Room_name, $Date, $Day, $Time);
-
-    // Execute the statement
-        if ($stmt->execute()) {
-            echo "<script>alert('Đã thêm lịch chiếu thành công'); window.location.href='../../admin.php?option=schedule';</script>";
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-
-    // Close the statement
-        $stmt->close();
-}
-
-?>
+     session_start();
+     if (!isset($_SESSION["time_movie_error"])) {
+         $_SESSION["time_movie_error"] = "";
+     }
+     require_once("../../connect/connection.php");
+     
+     // Truy vấn dữ liệu rạp phim
+     $sqlCinemas = "SELECT cinema_id, cinema_name FROM cinema";
+     $resultCinemas = $conn->query($sqlCinemas);
+     
+     // Truy vấn dữ liệu phòng chiếu
+     $sqlRooms = "SELECT * FROM room INNER JOIN cinema ON room.cinema_id = cinema.cinema_id";
+     $resultRooms = $conn->query($sqlRooms);
+     
+     // Truy vấn dữ liệu phim
+     $sqlMovies = "SELECT movie_id, movie_name FROM movies";
+     $resultMovies = $conn->query($sqlMovies);
+     
+     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+         // Thu thập và làm sạch dữ liệu từ form
+         $Room_name = isset($_POST['txtRoom']) ? trim($_POST['txtRoom']) : '';
+         $Movie_name = isset($_POST['txtMovieName']) ? $_POST['txtMovieName'] : '';
+         $Day = isset($_POST['txtDay']) ? trim($_POST['txtDay']) : '';
+         $Date = isset($_POST['txtDate']) ? trim($_POST['txtDate']) : '';
+         $Time = isset($_POST['txtTime']) ? trim($_POST['txtTime']) : '';
+     
+         // Lấy thời lượng phim
+         $sqlTimeMovie = "SELECT movie_time FROM movies WHERE movie_id = ?";
+         $stmtTimeMovie = $conn->prepare($sqlTimeMovie);
+         $stmtTimeMovie->bind_param("i", $Movie_name);
+         $stmtTimeMovie->execute();
+         $stmtTimeMovie->bind_result($timeMovie);
+         $stmtTimeMovie->fetch();
+         $stmtTimeMovie->close();
+     
+         // Kiểm tra giờ chiếu trùng lặp
+         $sqlCheck = "SELECT show_time FROM schedules WHERE show_date = ? AND room_id = ? AND movie_id = ?";
+         $stmtCheck = $conn->prepare($sqlCheck);
+         $stmtCheck->bind_param("sii", $Date, $Room_name, $Movie_name);
+         $stmtCheck->execute();
+         $resultCheck = $stmtCheck->get_result();
+     
+         $isConflict = false;
+         while ($row = $resultCheck->fetch_assoc()) {
+             // Tách giờ và phút từ chuỗi thời gian
+             list($existingHour, $existingMinute) = explode(':', $row['show_time']);
+             list($newHour, $newMinute) = explode(':', $Time);
+     
+             // Chuyển đổi thời gian từ giờ sang phút
+             $existingTimeInMinutes = $existingHour * 60 + $existingMinute;
+             $newTimeInMinutes = $newHour * 60 + $newMinute;
+     
+             $timeDifference = abs($newTimeInMinutes - $existingTimeInMinutes); // Tính khoảng cách thời gian (phút)
+     
+             if ($timeDifference < $timeMovie) { // Thời lượng phim đã tính bằng phút
+                 $isConflict = true;
+                 break;
+             }
+         }
+         $stmtCheck->close();
+     
+         if ($isConflict) {
+             $_SESSION["time_movie_error"] = "Giờ chiếu bị trùng lặp hoặc không đủ khoảng cách thời gian!";
+         } else {
+             // Chuẩn bị câu lệnh SQL để thêm dữ liệu vào bảng schedules
+             $stmt = $conn->prepare("INSERT INTO schedules (movie_id, room_id, show_date, show_day, show_time) VALUES (?, ?, ?, ?, ?)");
+             $stmt->bind_param("sssss", $Movie_name, $Room_name, $Date, $Day, $Time);
+     
+             // Thực thi câu lệnh
+             if ($stmt->execute()) {
+                 echo "<script>alert('Đã thêm lịch chiếu thành công'); window.location.href='../../admin.php?option=schedule';</script>";
+             } else {
+                 echo "Error: " . $stmt->error;
+             }
+     
+             // Đóng câu lệnh
+             $stmt->close();
+         }
+     }
+     ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -132,11 +152,11 @@
 
 </head>
 <body>
-    <center>
-        <font color = "red"><?php echo $_SESSION["time_movie_error"];?></font>
-    </center>
     <div class="container_1 d-flex">
         <h1 align="center">Thêm mới lịch chiếu</h1>
+        <center>
+            <font color = "red"><?php echo $_SESSION["time_movie_error"];?></font>
+        </center>
         <div class="inner-content">
             <form action="add_time_movie.php" method="post" enctype="multipart/form-data">
                 <table align="center" border="0">

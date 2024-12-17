@@ -290,7 +290,7 @@
                                                     <div class="action-menu">
                                                         <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
                                                         <div class="action-dropdown">
-                                                            <a href="admin/quanlylichchieu/edit_time_movie.php?schedule_id=<?php echo $row2['schedule_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                            <a href="admin/quanlylichchieu/edit_time_movie.php?schedule_id=<?php echo $row2['schedule_id']; ?>?movie_id=<?php echo $row2['movie_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
                                                             <a onclick="return confirm('are you sure to delete')" href="admin/quanlylichchieu/delete_time_movie.php?schedule_id=<?php echo $row2['schedule_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
                                                         </div>
                                                     </div>

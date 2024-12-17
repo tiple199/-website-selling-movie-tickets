@@ -1,32 +1,51 @@
 <?php
-    session_start();
-    if(!isset($_SESSION["food_add_error"])){
-        $_SESSION["food_add_error"] = "";  
-    }
-    require_once("../../connect/connection.php");
+session_start();
+if (!isset($_SESSION["food_add_error"])) {
+    $_SESSION["food_add_error"] = "";
+}
+require_once("../../connect/connection.php");
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect and sanitize form data
-        $foodName = isset($_POST['txtFoodName']) ? trim($_POST['txtFoodName']) : '';
-        $foodDesc = isset($_POST['txtFoodDesc']) ? trim($_POST['txtFoodDesc']) : '';
-        $foodPrice = isset($_POST['txtFoodPrice']) ? (int)$_POST['txtFoodPrice'] : 0;
-        $foodImage = isset($_POST['txtFoodImage']) ? trim($_POST['txtFoodImage']) : '';
+    $foodName = isset($_POST['txtFoodName']) ? trim($_POST['txtFoodName']) : '';
+    $foodDesc = isset($_POST['txtFoodDesc']) ? trim($_POST['txtFoodDesc']) : '';
+    $foodPrice = isset($_POST['txtFoodPrice']) ? (int)$_POST['txtFoodPrice'] : 0;
+    $foodImage = isset($_POST['txtFoodImage']) ? trim($_POST['txtFoodImage']) : '';
 
-    // Prepare SQL query to insert data into the food table using prepared statements
+    // Store form data in session
+    $_SESSION['form_data'] = [
+        'foodName' => $foodName,
+        'foodDesc' => $foodDesc,
+        'foodPrice' => $foodPrice,
+        'foodImage' => $foodImage
+    ];
+
+    // Check if the food already exists
+    $checkStmt = $conn->prepare("SELECT COUNT(*) FROM food WHERE food_name = ?");
+    $checkStmt->bind_param("s", $foodName);
+    $checkStmt->execute();
+    $checkStmt->bind_result($count);
+    $checkStmt->fetch();
+    $checkStmt->close();
+
+    if ($count > 0) {
+        $_SESSION["food_add_error"] = "Món ăn đã tồn tại!";
+    } else {
+        // Prepare SQL query to insert data into the food table using prepared statements
         $stmt = $conn->prepare("INSERT INTO food (food_name, food_desc, food_price, food_image) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssis", $foodName, $foodDesc, $foodPrice, $foodImage);
 
-    // Execute the statement
+        // Execute the statement
         if ($stmt->execute()) {
-            echo "New record created successfully";
+            $_SESSION["food_add_error"] = "New record created successfully";
         } else {
             echo "Error: " . $stmt->error;
         }
 
-    // Close the statement
+        // Close the statement
         $stmt->close();
+    }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -104,19 +123,19 @@
             <!-- Thông tin đồ ăn -->
                     <tr>
                         <td align="right">Tên đồ ăn:</td>
-                        <td><input type="text" name="txtFoodName"></td>
+                        <td><input type="text" name="txtFoodName" value="<?php echo isset($_SESSION['form_data']['foodName']) ? $_SESSION['form_data']['foodName'] : '';?>"></td>
                     </tr>
                     <tr>
                         <td align="right">Mô tả:</td>
-                        <td><input type="text" name="txtFoodDesc"></td>
+                        <td><input type="text" name="txtFoodDesc" name="txtFoodDesc" value="<?php echo isset($_SESSION['form_data']['foodDesc']) ? $_SESSION['form_data']['foodDesc'] : ''; ?>"></td>
                     </tr>
                     <tr>
                         <td align="right">Giá:</td>
-                        <td><input type="text" name="txtFoodPrice"></td>
+                        <td><input type="text" name="txtFoodPrice" value="<?php echo isset($_SESSION['form_data']['foodPrice']) ? $_SESSION['form_data']['foodPrice'] : ''; ?>"></td>
                     </tr>
                     <tr>
                         <td align="right">Ảnh:</td>
-                        <td><input type="text" name="txtFoodImage"></td>
+                        <td><input type="text" name="txtFoodImage" value="<?php echo isset($_SESSION['form_data']['foodImage']) ? $_SESSION['form_data']['foodImage'] : ''; ?>"></td>
                     </tr>
                     <tr>
                         <td><input type="submit" name = "cmd" value = "Submit"></td>

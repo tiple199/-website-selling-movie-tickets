@@ -60,10 +60,6 @@ a{
     transition: background-color 0.3s ease;
 }
 
-/* .sidebar a:hover {
-    background-color: #ddd;
-} */
-
 .sidebar a.active {
     background-color: #e97f12;
     color: white;
@@ -124,6 +120,11 @@ a{
     margin-top: 20px;
     gap: 10px;
 }
+.cinema_name {
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
 .function-search {
     display: flex;
     align-items: center;
@@ -162,6 +163,9 @@ a{
     justify-content: center;
     margin-top: 20px;
 }
+
+
+
 
 .movie-table {
     width: 100%;
@@ -258,3 +262,34 @@ a{
     color: #fff;
     font-weight: bold;
 }
+.food-img {
+    width: 200px;
+    height: 100px;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+.delete-icon-cell {
+    text-align: center; /* Căn giữa theo chiều ngang */
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+    padding: 10px; /* Thêm khoảng cách bên trong ô nếu cần */
+}
+.centered-cell {
+    text-align: center; /* Căn giữa theo chiều ngang */
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+    padding: 10px; /* Thêm khoảng cách bên trong ô nếu cần */
+}
+.centered-header {
+    text-align: center; /* Căn giữa theo chiều ngang */
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+    padding: 10px; /* Thêm khoảng cách bên trong ô nếu cần */
+}
+
+
+.function-add-food {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+

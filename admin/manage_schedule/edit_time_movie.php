@@ -54,9 +54,9 @@
         $stmtTimeMovie->close();
 
         // Kiểm tra giờ chiếu trùng lặp
-        $sqlCheck = "SELECT show_time FROM schedules WHERE show_date = ? AND room_id = ? AND movie_id = ? AND schedule_id != ?";
+        $sqlCheck = "SELECT show_time FROM schedules WHERE show_date = ? AND room_id = ?  AND schedule_id != ?";
         $stmtCheck = $conn->prepare($sqlCheck);
-        $stmtCheck->bind_param("siii", $Date, $schedule['room_id'], $schedule['movie_id'], $schedule_id);
+        $stmtCheck->bind_param("sii", $Date, $schedule['room_id'], $schedule_id);
         $stmtCheck->execute();
         $resultCheck = $stmtCheck->get_result();
 

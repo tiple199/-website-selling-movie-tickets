@@ -60,58 +60,39 @@ $cinema_result = $conn->query($cinema_query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <title>Thêm Phòng Chiếu</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        form {
-            max-width: 500px;
-            margin: auto;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" href="./style_room.css">
 </head>
 <body>
-    <h1>Thêm Phòng Chiếu</h1>
     <form method="POST">
-        <label for="room_name">Tên phòng chiếu</label>
-        <input type="text" id="room_name" name="room_name" placeholder="Nhập tên phòng chiếu" required>
+        <a href="../../admin.php?option=room"><i class="fa-solid fa-arrow-left"></i></a>
+        <h1>Thêm Phòng Chiếu</h1>
+        <div class="form-group">
+            <label for="room_name">Tên phòng chiếu</label>
+            <input type="text" id="room_name" name="room_name" placeholder="Nhập tên phòng chiếu" required>
+        </div>
 
-        <label for="cinema_id">Rạp chiếu</label>
-        <select id="cinema_id" name="cinema_id" required>
-            <option value="">Chọn rạp chiếu</option>
-            <?php while ($row = $cinema_result->fetch_assoc()) { ?>
-                <option value="<?php echo $row['cinema_id']; ?>">
-                    <?php echo $row['cinema_name']; ?>
-                </option>
-            <?php } ?>
-        </select>
+        <div class="form-group">
+            <label for="cinema_id">Rạp chiếu</label>
+            <select id="cinema_id" name="cinema_id" required>
+                <option value="">Chọn rạp chiếu</option>
+                <?php while ($row = $cinema_result->fetch_assoc()) { ?>
+                    <option value="<?php echo $row['cinema_id']; ?>">
+                        <?php echo $row['cinema_name']; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="length">Chiều dài</label>
+            <input type="number" id="length" name="length" placeholder="Nhập chiều dài" required>
+        </div>
 
-        <label for="length">Chiều dài</label>
-        <input type="number" id="length" name="length" placeholder="Nhập chiều dài" required>
-
-        <label for="width">Chiều rộng</label>
-        <input type="number" id="width" name="width" placeholder="Nhập chiều rộng" required>
+        <div class="form-group">
+            <label for="width">Chiều rộng</label>
+            <input type="number" id="width" name="width" placeholder="Nhập chiều rộng" required>
+        </div>
 
         <button type="submit">Thêm Phòng Chiếu</button>
     </form>

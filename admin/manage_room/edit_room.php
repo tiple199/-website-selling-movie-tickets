@@ -72,39 +72,13 @@ $room = $room_result->fetch_assoc();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sửa Phòng Chiếu</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        form {
-            max-width: 500px;
-            margin: auto;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        input, button {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" href="style_room.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
-    <h1>Sửa Phòng Chiếu</h1>
     <form method="POST">
+        <a href="../../admin.php?option=room"><i class="fa-solid fa-arrow-left"></i></a>
+        <h1>Sửa Phòng Chiếu</h1>
         <input type="hidden" name="room_id" value="<?php echo $room['room_id']; ?>">
 
         <label for="room_name">Tên phòng chiếu</label>

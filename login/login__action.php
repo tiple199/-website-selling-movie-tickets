@@ -16,6 +16,7 @@ if ($password == $row["password"]) {
 
         switch ($row["level_id"]) {
             case 1:
+                $_SESSION['user_logged_in'] = true;
                 header("Location: ../admin.php");
                 break;
             case 2:

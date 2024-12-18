@@ -1,0 +1,150 @@
+/* Tạo nền toàn trang */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    position: absolute;
+    top: -27px;
+    left: 8px;
+    margin-top: 30px;
+    text-decoration: none;
+    padding: 12px;
+    color: black;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+/* Tiêu đề form */
+h1 {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+/* Định dạng cho bảng và form */
+form {
+    position: relative;
+    width: 70%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 90%;
+}
+
+/* Định dạng cho các ô của bảng */
+td {
+    padding: 10px 15px;
+}
+
+/* Các trường input, select, radio, date */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"],input[type="number"],
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Hiệu ứng focus khi người dùng click vào các trường input */
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #e97f12;
+    outline: none;
+}
+
+/* Các nút bấm */
+button {
+    padding: 12px 20px;
+    background-color: #e97f12;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #cc6d0d;
+}
+
+/* Các trường radio button */
+input[type="radio"] {
+    margin-right: 5px;
+}
+
+/* Các trường chọn cấp độ (select) */
+select {
+    font-size: 16px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+/* Các trường nội dung và nút submit */
+input[type="submit"],
+input[type="reset"] {
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: auto;
+    transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+    background-color: #45a049;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    form {
+        width: 90%;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    td {
+        padding: 8px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="date"],
+    select {
+        font-size: 14px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}

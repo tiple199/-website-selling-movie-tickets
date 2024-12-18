@@ -123,7 +123,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                     </button>
                                 </div>
                                 <div class="function-add-film">
-                                    <a href = "./admin/quanlyphim/add-movie.php" class="add-movie-button">Thêm phim mới</a>
+                                    <a href = "./admin/manage_movie/add-movie.php" class="add-movie-button">Thêm phim mới</a>
                                 </div>
                             </div>
                             <?php 
@@ -166,9 +166,8 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                                     <div class="action-menu">
                                                         <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
                                                         <div class="action-dropdown">
-                                                            <a href="./admin/quanlyphim/edit_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                            <a onclick="return confirm('are you sure to delete')" href="admin/quanlyphim/delete_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
-                                                            <a href="admin/quanlylichchieu/schedule_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-solid fa-calendar-days"></i></a>
+                                                            <a href="./admin/manage_movie/edit_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                            <a onclick="return confirm('are you sure to delete')" href="admin/manage_movie/delete_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -269,7 +268,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                     <?php if ($option === "food"): ?>
                         <div class="inner-content">                         
                             <div class="function">                             
-                                <a href = "./admin/quanlydoan/add-food.php" class="add-movie-button">Thêm đồ ăn mới</a>
+                                <a href = "./admin/manage_food/add-food.php" class="add-movie-button">Thêm đồ ăn mới</a>
                             </div>
                             <br>
                             <div >
@@ -300,7 +299,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                                 <td><?php echo $row1['food_desc']; ?></td>
                                                 <td><?php echo number_format($row1['food_price'], 0, ',', '.') . ' đ'; ?></td>
                                                 <td class="delete-icon-cell">                                                         
-                                                    <a onclick="return confirm('Bạn có chắc chắn muốn xóa không?')" href="admin/quanlydoan/delete_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                    <a onclick="return confirm('Bạn có chắc chắn muốn xóa không?')" href="admin/manage_food/delete_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
 
                                                 </td>
                                             </tr>
@@ -328,7 +327,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                     </button>
                                 </div>
                                 <div class="function-add-film">
-                                    <a href = "./admin/quanlylichchieu/add_time_movie.php" class="add-movie-button">Thêm lịch chiếu mới</a>
+                                    <a href = "./admin/manage_schedule/add_time_movie.php" class="add-movie-button">Thêm lịch chiếu mới</a>
                                 </div>
                             </div>
                             <?php 
@@ -374,8 +373,8 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                                     <div class="action-menu">
                                                         <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
                                                         <div class="action-dropdown">
-                                                            <a href="admin/quanlylichchieu/edit_time_movie.php?schedule_id=<?php echo $row2['schedule_id']; ?>?movie_id=<?php echo $row2['movie_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                            <a onclick="return confirm('are you sure to delete')" href="admin/quanlylichchieu/delete_time_movie.php?schedule_id=<?php echo $row2['schedule_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                            <a href="admin/manage_schedule/edit_time_movie.php?schedule_id=<?php echo $row2['schedule_id']; ?>?movie_id=<?php echo $row2['movie_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                            <a onclick="return confirm('are you sure to delete')" href="admin/manage_schedule/delete_time_movie.php?schedule_id=<?php echo $row2['schedule_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -444,7 +443,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                         ?>
                                         <tr class="table-row">
                                             <td class="movie-id"><?php echo $row['discount_id']; ?></td>
-                                            <td class="movie-name"><?php echo $row['discount_title']; ?></td>
+                                            <td class=""><?php echo $row['discount_title']; ?></td>
                                             <td class="movie-tag"><img src="assets/image/image_discount/<?php echo $row['discount_img']; ?>" alt="anh" class="movie-img"></td>
                                             <td class="movie-duration"><?php echo number_format($row['discount_price'], 0, ',', '.') . ' đ'; ?></td>
                                             <td class="movie-duration"><?php echo $row['endDate']; ?></td>

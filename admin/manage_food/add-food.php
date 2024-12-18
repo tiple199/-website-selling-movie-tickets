@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 4px;
         }
         input[type="submit"], input[type="reset"], input[type="button"] {
-            background-color:rgb(8, 19, 239);
+            background-color: #e97f12;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-right: 10px;
         }
         input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover {
-            background-color: rgb(8, 19, 239);
+            background-color: #e97f12;
         }
         .button-container {
             text-align: center;

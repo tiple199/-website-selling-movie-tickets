@@ -222,7 +222,7 @@ a{
 .action-dropdown {
     display: none;
     position: absolute;
-    top: 0;
+    top: 15px;
     left: -10px;
     background-color: #fff;
     border-radius: 20px;

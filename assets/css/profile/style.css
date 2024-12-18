@@ -316,11 +316,6 @@ input[type="radio"]:checked::after{
 }
 
 
-.table__item td:last-child {
-    text-align: right;
-    font-weight: bold;
-    color: #e74c3c;
-}
 .page{
     margin-top: 10px;
     display: flex;
@@ -369,4 +364,9 @@ input[type="radio"]:checked::after{
     top: 55px;
     left: -50px;
     color: #f58020;
+}
+.amount_invoice{
+    text-align: right;
+    font-weight: bold;
+    color: #e74c3c;
 }

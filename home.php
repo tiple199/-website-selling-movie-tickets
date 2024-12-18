@@ -16,9 +16,7 @@
     if(!isset($_REQUEST["catid_active"])){
         $_REQUEST["catid_active"] = "active";
     }
-    else{
-        $_REQUEST["catid_active"] = "unactive";
-    }
+
     $check_catid = $_REQUEST["catid"];
     $check_active = $_REQUEST["catid_active"];
     if($check_catid != "3"){
@@ -229,7 +227,9 @@
                     <div class="poster__item">
                         <a href="./show_detailfilm.php?movie_id=<?=$r["movie_id"]?>"><img src="./assets/image/poster/<?=$r["mv_imgposter"]?>" alt="" class="home__poster"></a>
                     </div>
-                    <?php }?>
+                    <?php
+                    }
+                    ?>
                 </div>
 
                 <!-- button prev and next-->
@@ -256,18 +256,20 @@
                     <div class="type__film">
                         <span id="location_film"></span>
                         <span class="text__film">PHIM</span>
+                        <!-- Phân thẻ loại -->
                         <ul class="type__film--list">
                             <?php
                                 while($row = $film_categories->fetch_assoc()){
                             ?>
                                 
-                                <li class="type__film--item"><label for="" class="label__film"><a class="catid__link <?php if($row["cat_id"] == $check_catid || $check_catid == "active") echo "catid__active"?>" href = "./home.php?catid=<?php echo $row["cat_id"]?>&#location_film"><?php echo $row["cat_name"];?></a></label></li>
+                                <li class="type__film--item"><a class="catid__link <?php if($row["cat_id"] == $check_catid) echo "catid__active"?>" href = "./home.php?catid=<?php echo $row["cat_id"]?>&#location_film"><?php echo $row["cat_name"];?></a></li>
                             <?php
                             }
                             ?>
 
                         </ul>
                     </div>
+                    <!-- list film -->
                     <div class="row film__list">
                         
                         <?php

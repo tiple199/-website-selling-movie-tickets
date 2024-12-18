@@ -24,7 +24,7 @@ a{
     cursor: pointer;
 }
 /* body */
-.body__file__inner{
+.body__film__inner{
     display: flex;
     gap: 30px;
     margin-top: 30px;

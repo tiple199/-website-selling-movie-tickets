@@ -10,6 +10,10 @@
         where S.schedule_id = $check_schedule
     ";
     $result_infofilm = $conn->query($info_film);
+
+    // get cinema
+    $rs_cinema = $conn->query($info_film);
+    $r_cinema = $rs_cinema->fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,9 +39,9 @@
     <header class="header">
         <div class="container" style="--spacer:20px;">
             <div class="header__inner">
-                <a href="./home.php"><img src="../logo.png" alt="" class="header__img"></a>
+                <a href="../home.php"><img src="../logo.png" alt="" class="header__img"></a>
                 <div class="cancel_tran">
-                    <a href="#!" class="link__cancel">Hủy giao dịch <i class="fa-solid fa-xmark"></i></a>
+                    <a href="./unset_session.php" class="link__cancel">Hủy giao dịch <i class="fa-solid fa-xmark"></i></a>
                 </div>
             </div>
         </div>
@@ -57,7 +61,7 @@
         <div class="booking">
             <div class="container">
                 <div class="booking__inner">
-                    <!-- Chọn ghế -->
+                    <!-- Chọn đồ ăn -->
                     <div class="column_01">
                         <!-- list food -->
                         <form id="food-form" method="POST" action="save_food_selection.php">
@@ -165,9 +169,8 @@
                              <!-- selected_food -->
                               <div class="info_food selected-foods">             
                                 <ul class="food__quantity" id="selected-foods-list"></ul>
-                                <!-- <span class="price_total_seat bold">100đ</span> -->
-                                <!-- <p>Tổng cộng: <span id="total-price">0</span> đ</p> -->
                               </div>
+                              <!-- total price -->
                             <div class="total__booking">
                                 <span class="text__total">Tổng cộng</span>
                                 <span class="price__booking" id="total-price"><?=number_format($_SESSION["price_seat"])?> đ</span>
@@ -176,7 +179,7 @@
 
                         <div class="control__booking">
                             <div class="row__booking row">
-                                <div class="col-6 btn__booking"><a href="#!" class="btn__link">Quay lại</a></div>
+                                <div class="col-6 btn__booking"><a href="./booking_film.php?schedule_id=<?=$check_schedule?>&cinema_id=<?=$r_cinema["cinema_id"]?>" class="btn__link">Quay lại</a></div>
                                 <div class="col-6 btn__booking btn__link_continue"><label for="save_food_session" class="link__continue">Tiếp tục</label></div>
                             </div>
                         </div>
@@ -186,7 +189,6 @@
             </div>
         </div>
      </main>
-     <!-- <script src="../assets/js/booking/booking_food.js"></script> -->
      <script>
                 let selectedFoods = {};
                 
@@ -220,21 +222,14 @@
             const selectedFoodsList = document.getElementById("selected-foods-list");
             const totalPriceElement = document.getElementById("total-price");
 
-            
-            
-           
-            
             // Làm sạch danh sách cũ
             selectedFoodsList.innerHTML = "";
-            
-            
-
-            // Cập nhật danh sách mới
+             // Cập nhật danh sách mới
             let totalPrice = 0;
             for (const foodId in selectedFoods) {
                 const food = selectedFoods[foodId];
                 const listItem = document.createElement("li");
-                // listItem.textContent = `${food.name} x ${food.quantity} - ${food.price * food.quantity} đ`;
+
                 let price_total_food = (food.price * food.quantity).toLocaleString();
                 listItem.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="font-size:1.4rem;font-weight: 700;">${food.quantity}x</span> ${food.name}</div> <div> <span style="font-weight:700">${price_total_food} đ</span></div></div>`;
 

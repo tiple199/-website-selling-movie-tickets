@@ -344,6 +344,7 @@
                             if($result_film->num_rows > 0){
                                 while($r_film = $result_film->fetch_assoc()){
                         ?>
+                        <!-- item film -->
                         <div class="col-2">
                             <div class="item__film header__itemflim body_itemfilm">
                                 <div class="film__title">

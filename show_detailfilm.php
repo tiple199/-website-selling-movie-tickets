@@ -253,9 +253,9 @@
             </div>
         </div>
     </div>
-    <div class="body__file">
+    <div class="body__film">
         <div class="container">
-            <div class="body__file__inner">
+            <div class="body__film__inner">
                 <!-- body__film -->
                 <div class="content__film__wrap">
                     <div class="content__film">
@@ -342,10 +342,7 @@
                             <?php }?>
                         </div>
                         <!-- showtime_film -->
-                        <?php 
-                            while($row = $check_film_premiere->fetch_assoc()){
-                                if($row["movie_ispremiere"] == 1){
-                        ?>
+                        
                         <div class="showtime__film">
                             <p class="text_cat text__showtime">Lịch Chiếu Phim</p>
                             <div class="box__select_day">
@@ -418,7 +415,7 @@
                             <!-- select time -->
                             <div class="box_select__time">
                                 <?php while($row = $cinema->fetch_assoc()){
-                                    if(!isset($_REQUEST["select__cinema"]) || $_REQUEST["select__cinema"] = "allcinema"){
+                                    if(!isset($_REQUEST["select__cinema"]) || $_REQUEST["select__cinema"] == "allcinema"){
                                         $check_cinemaid = $row["cinema_id"];
                                     }
                                     else{               
@@ -454,8 +451,7 @@
                                 <?php }?>
                             </div>
                         </div>
-                        <?php }
-                        }?>
+                        
                     </div>
                 </div>
 

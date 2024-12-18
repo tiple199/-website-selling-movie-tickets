@@ -89,7 +89,7 @@
                                                     <p class="film__name header__filmname"><?php echo $row1["movie_name"];?></p>
                                                 </div>
                                                 <div class="book_film header__bookfilm">
-                                                    <a href="./show_detailfilm.php?movie_id=<?php echo $row1["movie_id"]?>"><div class="ticket__film header__ticket"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
+                                                    <a href="../show_detailfilm.php?movie_id=<?php echo $row1["movie_id"]?>"><div class="ticket__film header__ticket"><i class="fa-solid fa-ticket" style="margin-right:5px"></i> Mua vé</div></a>
                                                 </div>
                                                 <div class="vote header__vote">
                                                     <span class="rate__film"><i class="fa-solid fa-star rate__star"></i><?php echo $row1["movie_rating"];?></span>
@@ -244,7 +244,7 @@
                                         where SD.schedule_id = $check_schedule and S.row = '$check_row' order by S.row ASC,S.seat_number ASC
                                         ";
                                         $result_seat = $conn->query($sql_seat);
-                                    // truy vấn lấy ghế đã được chọn
+                                    // truy vấn lấy ghế đã được bán
                                         $sql_seat_sold="select S.seat_id from seat_booking S
                                         join schedules SD on SD.schedule_id = S.schedule_id
                                         join room R on R.room_id = SD.room_id
@@ -282,14 +282,12 @@
                                                 $result_seat_sold->data_seek(0);
                                                 while($r1 = $rs_seat_vip->fetch_assoc()){
                                                     if($row["seat_id"] == $r1["seat_id"]){
-                                                        echo " seat_vip_form ";
+                                                        echo "seat_vip_form";
                                                         break;
                                                     }
                                                 }
                                                 $rs_seat_vip->data_seek(0);
-                                            ?>
-                                            
-                                            " >
+                                            ?>">
                                                 <span hidden><?php echo $row["row"]?></span><?php echo $row["seat_number"];?>  
                                             </div>
                                         </label>
@@ -340,6 +338,7 @@
                         <div class="item__film_selected">
                             <?php
                                 while($row = $result_infofilm->fetch_assoc()){
+                                    $movie_id = $row["movie_id"];
                             ?>
                                 <div class="info_film">
                                     <img src="../assets/image/image__film/<?php echo $row["movie_img"];?>" alt="" class="film__img">
@@ -369,12 +368,12 @@
                              </div>
                             <div class="total__booking">
                                 <span class="text__total">Tổng cộng</span>
-                                <span class="price__booking"></span>
+                                <span class="price__booking">0 đ</span>
                             </div>
                         </div>
                         <div class="control__booking">
                             <div class="row__booking row">
-                                <div class="col-6 btn__booking"><a href="#!" class="btn__link">Quay lại</a></div>
+                                <div class="col-6 btn__booking"><a href="../show_detailfilm.php?movie_id=<?=$movie_id?>" class="btn__link">Quay lại</a></div>
                                 <div class="col-6 btn__booking btn__link_continue"><label for="next_step_booking" class="link__continue">Tiếp tục</label></div>
                             </div>
                         </div>
@@ -387,42 +386,43 @@
      <script>
         // Xử lý chọn ghế
         document.addEventListener("DOMContentLoaded", function () {
-            const seatCheckboxes = document.querySelectorAll('input[type="checkbox"]');
-            const ticketDetails = document.querySelector(".info_seat");
-            const seatQuantity = document.querySelector(".seat__quantity strong");
-            const selectedSeats = document.querySelector(".seat__selected strong");
-            const priceDisplay = document.querySelector(".price_total_seat");
-            const totalPriceDisplay = document.querySelector(".price__booking");
-
-            ticketDetails.style.display = "none"; // Ẩn thông tin vé ban đầu
-
-            seatCheckboxes.forEach((checkbox) => {
-                checkbox.addEventListener("change", () => {
-                    // Lấy danh sách các ghế được chọn
-                    const selectedSeatsList = Array.from(seatCheckboxes)
-                        .filter((seat) => seat.checked) // Chỉ lấy checkbox được chọn
-                        .map((seat) => {
-                            const seatNumber = seat.nextElementSibling.querySelector(".seat").textContent.trim(); // Lấy số ghế
-                            const seatPrice = parseInt(seat.dataset.price, 10); // Lấy giá ghế từ data-price
-                            return { seatNumber, seatPrice }; // Trả về số ghế và giá ghế
-                        });
-
-                    if (selectedSeatsList.length > 0) {
-                        ticketDetails.style.display = "flex"; // Hiện thông tin vé khi có ghế được chọn
-                        seatQuantity.textContent = `${selectedSeatsList.length}x`; // Cập nhật số lượng ghế
-                        selectedSeats.textContent = selectedSeatsList.map((seat) => seat.seatNumber).join(", "); // Hiển thị số ghế
-
-                        // Tính tổng giá
-                        const totalPrice = selectedSeatsList.reduce((total, seat) => total + seat.seatPrice, 0);
-                        priceDisplay.textContent = `${totalPrice.toLocaleString()} đ`; // Hiển thị giá
-                        totalPriceDisplay.textContent = `${totalPrice.toLocaleString()} đ`; // Hiển thị tổng giá
-                    } else {
-                        ticketDetails.style.display = "none"; // Ẩn thông tin vé nếu không chọn ghế nào
-                        totalPriceDisplay.textContent = "0 đ"; // Reset tổng giá về 0
+        const seatCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+        const ticketDetails = document.querySelector(".info_seat");
+        const seatQuantity = document.querySelector(".seat__quantity strong");
+        const selectedSeats = document.querySelector(".seat__selected strong");
+        const priceDisplay = document.querySelector(".price_total_seat");
+        const totalPriceDisplay = document.querySelector(".price__booking");
+            
+        ticketDetails.style.display = "none"; // Ẩn thông tin vé ban đầu
+            
+        seatCheckboxes.forEach((checkbox) => {
+            checkbox.addEventListener("change", () => {
+                let totalPrice = 0;
+                let selectedSeatNumbers = [];
+            
+                seatCheckboxes.forEach((seat) => {
+                    if (seat.checked) {
+                        const seatNumber = seat.nextElementSibling.querySelector(".seat").textContent.trim();
+                        const seatPrice = parseInt(seat.dataset.price, 10);
+                        selectedSeatNumbers.push(seatNumber);
+                        totalPrice += seatPrice;
                     }
                 });
+            
+                if (selectedSeatNumbers.length > 0) {
+                    ticketDetails.style.display = "flex"; // Hiện thông tin vé khi có ghế được chọn
+                    seatQuantity.textContent = `${selectedSeatNumbers.length}x`; // Cập nhật số lượng ghế
+                    selectedSeats.textContent = selectedSeatNumbers.join(", "); // Hiển thị số ghế
+                    priceDisplay.textContent = `${totalPrice.toLocaleString()} đ`; // Hiển thị giá
+                    totalPriceDisplay.textContent = `${totalPrice.toLocaleString()} đ`; // Hiển thị tổng giá
+                } else {
+                    ticketDetails.style.display = "none"; // Ẩn thông tin vé nếu không chọn ghế nào
+                    totalPriceDisplay.textContent = "0 đ"; // Reset tổng giá về 0
+                }
             });
         });
+        });
+
 
 
         

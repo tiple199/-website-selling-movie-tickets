@@ -4,19 +4,32 @@
     $discount = 0;
     $check_discount = false;
     $show_error_discount = false;
+    $user_id = $_SESSION['id_user'];
     if(isset($_REQUEST["input_discount"])){
         $check_discount = $_REQUEST["input_discount"];
         $sql = "select * from discount where discount_id = '$check_discount'";
         $result = $conn->query($sql);
+        // check người dùng dùng mã giảm giá chưa
+        $sql_check_discount = "select * from booking B
+        join invoices I on B.booking_id = I.booking_id
+        join discount D on I.discount_id = D.discount_id
+        where B.user_id = $user_id and D.discount_id = '$check_discount'";
+        $rs_check = $conn->query($sql_check_discount);
+
         if($result->num_rows > 0){
-            $row_discount = $result->fetch_assoc();
-            $check_discount= true;
+            if($rs_check->num_rows > 0){
+                $show_error_discount = true;
+                $check_discount= false;
+            }
+            else{
+                $row_discount = $result->fetch_assoc();
+                $check_discount= true;
+            }
         }
         else{
             $check_discount= false;
             $show_error_discount = true;
         }
-        
     }
 
 
@@ -64,7 +77,7 @@
             <div class="header__inner">
                 <a href="./home.php"><img src="../logo.png" alt="" class="header__img"></a>
                 <div class="cancel_tran">
-                    <a href="#!" class="link__cancel">Hủy giao dịch <i class="fa-solid fa-xmark"></i></a>
+                    <a href="./unset_session.php" class="link__cancel">Hủy giao dịch <i class="fa-solid fa-xmark"></i></a>
                 </div>
             </div>
         </div>
@@ -231,7 +244,7 @@
                                     $_SESSION["discount_id"] = $row_discount["discount_id"];
                                     $discount = $row_discount["discount_price"];                         
                                ?>
-                                    <div class="discount">
+                                    <div class="discount_payment">
                                         
                                         <span class="text_discount">Mã giảm giá: <?php echo $row_discount["discount_id"];?></span>
                                         <span class="bold"> -<?=number_format($row_discount["discount_price"])?> đ</span>
@@ -245,7 +258,7 @@
                                 if($show_error_discount){
                                ?>
                                     <div class="show_error" id="show_error">
-                                        <p class="text_error"><i class="fa-solid fa-circle-info"></i> Không tồn tại mã giảm giá!</p>
+                                        <p class="text_error"><i class="fa-solid fa-circle-info"></i> Không tồn tại mã giảm giá hoặc bạn đã dùng mã giảm giá này!</p>
                                         <button id="close_error">OK</button>
                                     </div>
                                <?php 
@@ -254,12 +267,12 @@
                                <!--  -->
                             <div class="total__booking">
                                 <span class="text__total">Tổng cộng</span>
-                                <span class="price__booking" id="total-price"><?=number_format($_SESSION["price_seat"] + $total_food - $discount)?> đ</span>
+                                <span class="price__booking" id="total-price"><?=number_format($_SESSION["amount"])?> đ</span>
                             </div>
                         </div>
                         <div class="control__booking">
                             <div class="row__booking">
-                                <div class="btn__booking style__btn"><a href="#!" class="btn__link ">Quay lại</a></div>
+                                <div class="btn__booking style__btn"><a href="./booking_food.php" class="btn__link ">Quay lại</a></div>
                                 <div class="btn__booking btn__link_continue style__btn"><label class="label__control" id="label_continue"><p class="text__continue">Tiếp tục</p></label></div>
                             </div>
                         </div>
@@ -270,7 +283,7 @@
                         <button id="close_error_method">OK</button>
                     </div>
                     <!-- ticket -->
-                        <div class="control__display">
+                    <div class="control__display">
                         <input type="checkbox" id="overlay" hidden>
                         <label for="overlay"><div class="overlay"></div></label>
                         <div class="ticket" id="ticket">
@@ -361,7 +374,7 @@
                             <p class="error_confirm" id="error_confirm">Vui lòng xác nhận lại thông tin đã đặt</p>
                             <button class="confirm__pay btn" id="btnpayment">Thanh Toán</button>
                         </div>
-                        </div>
+                    </div>
                         <!-- form insert vào data -->
                    <form action="save_data.php" hidden>
                         <input type="text" id="method" name="method_id">

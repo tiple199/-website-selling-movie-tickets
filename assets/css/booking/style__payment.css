@@ -214,7 +214,7 @@
 .info_food{
     display: block;
 }
-.discount{
+.discount_payment{
     padding: 20px 0;
     border-bottom: 1px dashed #CCC;
     display: flex;
@@ -245,4 +245,7 @@
     width: 200px;
     margin-top: 5px;
     display: none;
+}
+.text_error{
+    color: red;
 }

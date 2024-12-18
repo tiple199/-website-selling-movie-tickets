@@ -211,13 +211,13 @@
                                 <p><?=$row_user["fullname"];?></p>
                             </div>
                         </div>
-                        <!--  -->
+                        <!-- total_price -->
                         <div class="totalvalue">
                             <p>Tổng chi tiêu 2024</p>
                             <span class="price"><?php
                                 $sql_total_price = "select sum(I.amount) as total_price,user_id from invoices I
                                 join booking B on B.booking_id = I.booking_id
-                                where B.user_id = $user_id and I.date > '2024-01-01' and I.date < '2024-12-31'
+                                where B.user_id = $user_id and I.date > '".date('Y-01-01')."' and I.date < '".date('Y-12-31')."'
                                 group by user_id";
                                 $result_total_price = $conn->query($sql_total_price);
                                 $r = $result_total_price->fetch_assoc();
@@ -432,12 +432,12 @@
                                 <?php if(!empty($result_history_1)){?>
                                 <tr class="row_title">
                                     <th>STT</th>
-                                    
                                     <th>Tên phim</th> 
                                     <th>Ngày đặt</th>
                                     <th>Phương thức thanh toán</th>
                                     <th>Rạp</th>
                                     <th>Tổng hóa đơn</th>
+                                    <th>QR Code</th>
                                 </tr>
 
                                 <?php
@@ -451,9 +451,6 @@
                                         if($count == 21){
                                             break;
                                         }
-                                        if($count > 11){
-                                            $check_page = true;
-                                        }
                                 ?>
 
                                 <tr class="row_history_item">
@@ -463,7 +460,9 @@
                                     <td><?php $date = new DateTime($r["date"]);echo $date->format('d/m/Y H:i:s');?></td>
                                     <td><?=$r["pay_name"]?></td>
                                     <td><?=$r["cinema_name"]?></td>
-                                    <td><?=number_format($r["amount"])?> đ</td>
+                                    <td class="amount_invoice"><?=number_format($r["amount"])?> đ</td>
+                                    <td><span class="body_qr-<?=$r["invoice_id"]?>"></span></td>
+                                    
                                 </tr>
                                 <?php
                                         
@@ -477,7 +476,7 @@
                             <!-- Điều khiển phan trang -->
                             <div class="page">
                                 
-                                <?php if($check_page= true && !empty($result_history_1)){
+                                <?php if(!empty($result_history_1)){
                                     echo "<span>Trang </span>";
                                     for($i = 1; $i <= $num_page;$i++){
                                         if($i == $page){
@@ -546,6 +545,8 @@
         </div>
     </footer>
     <!-- script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded",function(){
             const btn_changepassword = document.getElementById('btn_submit');
@@ -634,5 +635,29 @@
             }?>
             
         })
+
+    // Xử lý mã qr
+    <?php
+        $result_history_1->data_seek(0);
+        while($r = $result_history_1->fetch_assoc()){
+    ?>
+        generateQRcode(<?=$r["invoice_id"]?>)
+    <?php
+        }
+    ?>
+    function generateQRcode(id_invoice) {
+        const fixedSize = 50;
+        const qr_codeblock = document.querySelector(`.body_qr-${id_invoice}`);
+    
+        // Tạo QR code với kích thước cố định và đoạn text đã có sẵn
+        let qrcode = new QRCode(qr_codeblock, {
+            text: id_invoice,
+            width: fixedSize,
+            height: fixedSize,
+            colorDark: "#000000",
+            colorLight: "#ffffff"
+        });
+    }
+
     </script>
 </body>

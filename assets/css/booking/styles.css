@@ -60,6 +60,7 @@
     padding: 30px 20px 30px 30px;
     align-items: center;
     border-radius: 3px;
+    flex-wrap: wrap;
 }
 .showtime{
     margin-left: 20px;
@@ -312,9 +313,7 @@
     display: inline-block;
 }
 /* select seat */
-.seat_vip_form{
-    border-color: #f58020;
-}
+
 [type="checkbox"]:checked ~ label .seat{
     background: #f58020;
     border-color: #f58020;
@@ -337,6 +336,9 @@
     background: #fff;
     border:1px solid #ccc;
 
+}
+.seat_vip_form{
+    border-color: #f58020;
 }
 .seat_readonly{
     cursor: default;

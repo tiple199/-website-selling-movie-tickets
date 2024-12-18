@@ -26,6 +26,18 @@ function check() {
     }
 }
 
+// js cho phần ẩn hiện nút tìm kiếm
+
+document.addEventListener('DOMContentLoaded', function () {
+    const searchIcon = document.querySelector('.search__icon');
+    const searchInput = document.querySelector('.search__input');
+
+    searchIcon.addEventListener('click', function () {
+        searchInput.classList.toggle('active');
+    });
+});
+
+
 // Lấy các phần tử từ DOM
 const loginBtn = document.getElementById('loginBtn');
 const overlay = document.getElementById('overlay');

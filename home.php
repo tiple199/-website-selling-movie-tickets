@@ -17,10 +17,12 @@
         $_REQUEST["catid_active"] = "active";
     }
 
-    $check_catid = $_REQUEST["catid"];
-    $check_active = $_REQUEST["catid_active"];
+    
+
+    $check_catid = $_REQUEST["catid"] ?? '';
+    $check_active = $_REQUEST["catid_active"] ?? '';
     if($check_catid != "3"){
-        $result_film = $conn->query("SELECT m.* FROM movie__categories mc, movies m WHERE mc.cat_id = $check_catid  AND mc.movie_id = m.movie_id and movie_status  = 1 ORDER BY m.movie_rating DESC");
+        $result_film = $conn->query("SELECT m.* FROM movie__categories mc, movies m WHERE mc.cat_id = $check_catid AND mc.movie_id = m.movie_id and movie_status  = 1 ORDER BY m.movie_rating DESC");
     }
     else{
         $result_film=$conn->query("SELECT m.*
@@ -33,6 +35,8 @@
                 END;
         ");
     }
+
+    
     $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
     $film_categories= $conn->query("select * from film_categories");
 ?>
@@ -180,9 +184,11 @@
                 </ul>
                 <div class="header__cta--wrap">
                     <div class="search__wrap">
-                        <label for="" class="header__search"><i
-                                class="fa-solid fa-magnifying-glass search__icon"></i></label>
-                        <form action=""></form>
+                        <form action="all_film.php" method="get">
+                            <label for="" class="header__search"><i class="fa-solid fa-magnifying-glass search__icon"></i></label>
+                            <input type="text" class="search__input" placeholder="Nhập tên phim cần tìm" name="txtSearch" value="">
+
+                        </form>
                     </div>
                     <!-- Xử lý phần đăng nhập tài khoản -->
                     <?php

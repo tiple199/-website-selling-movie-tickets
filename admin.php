@@ -116,7 +116,6 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                             <div class="function">
                                 <div class="function-search">
                                     <input type="text" placeholder="Nhập tên phim cần tìm" name="txtSearch" value="<?php echo htmlspecialchars($searchQuery); ?>">
-
                                     <input type="hidden" name="action" value="search">
                                     <button class="search-button">
                                         <i class="fa-solid fa-magnifying-glass"></i>

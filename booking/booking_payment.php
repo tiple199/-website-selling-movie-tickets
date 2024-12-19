@@ -5,9 +5,10 @@
     $check_discount = false;
     $show_error_discount = false;
     $user_id = $_SESSION['id_user'];
+    $date = date('Y-m-d');
     if(isset($_REQUEST["input_discount"])){
         $check_discount = $_REQUEST["input_discount"];
-        $sql = "select * from discount where discount_id = '$check_discount'";
+        $sql = "select * from discount where discount_id = '$check_discount' and endDate < '$date' and status = 1";
         $result = $conn->query($sql);
         // check người dùng dùng mã giảm giá chưa
         $sql_check_discount = "select * from booking B
@@ -258,7 +259,7 @@
                                 if($show_error_discount){
                                ?>
                                     <div class="show_error" id="show_error">
-                                        <p class="text_error"><i class="fa-solid fa-circle-info"></i> Không tồn tại mã giảm giá hoặc bạn đã dùng mã giảm giá này!</p>
+                                        <p class="text_error"><i class="fa-solid fa-circle-info"></i> Mã giảm giá không khả dụng hoặc bạn đã dùng mã giảm giá này!</p>
                                         <button id="close_error">OK</button>
                                     </div>
                                <?php 

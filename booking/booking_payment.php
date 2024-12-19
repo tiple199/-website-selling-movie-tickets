@@ -8,13 +8,13 @@
     $date = date('Y-m-d');
     if(isset($_REQUEST["input_discount"])){
         $check_discount = $_REQUEST["input_discount"];
-        $sql = "select * from discount where discount_id = '$check_discount' and endDate < '$date' and status = 1";
+        $sql = "select * from discount where discount_id = '$check_discount' and endDate > '$date' and status = 1";
         $result = $conn->query($sql);
         // check người dùng dùng mã giảm giá chưa
         $sql_check_discount = "select * from booking B
         join invoices I on B.booking_id = I.booking_id
         join discount D on I.discount_id = D.discount_id
-        where B.user_id = $user_id and D.discount_id = '$check_discount'";
+        where B.user_id = $user_id and I.discount_id = '$check_discount'";
         $rs_check = $conn->query($sql_check_discount);
 
         if($result->num_rows > 0){
@@ -246,9 +246,8 @@
                                     $discount = $row_discount["discount_price"];                         
                                ?>
                                     <div class="discount_payment">
-                                        
-                                        <span class="text_discount">Mã giảm giá: <?php echo $row_discount["discount_id"];?></span>
-                                        <span class="bold"> -<?=number_format($row_discount["discount_price"])?> đ</span>
+                                        <span class="text_discount seat__quantity">Mã giảm giá: <?php echo $row_discount["discount_id"];?></span>
+                                        <span class="bold seat__quantity"> -<?=number_format($row_discount["discount_price"])?> đ</span>
                                     </div>
                                <?php }
                                $_SESSION["amount"] = $_SESSION["price_seat"] + $total_food - $discount;

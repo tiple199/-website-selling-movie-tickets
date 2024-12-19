@@ -432,7 +432,7 @@
                                             $movie_showtime = $conn->query("select C.cinema_id,S.show_time,S.schedule_id from schedules S
                                             join room R on R.room_id = S.room_id
                                             join cinema C on R.cinema_id = C.cinema_id
-                                            where S.movie_id = $check_movieid and S.show_date = '$check_date' and C.cinema_id = $check_cinemaid order by S.show_time
+                                            where R.room_status = 1 and S.movie_id = $check_movieid and S.show_date = '$check_date' and C.cinema_id = $check_cinemaid order by S.show_time
                                             ");
                                             while ($row1 = $movie_showtime->fetch_assoc()){
                                                 

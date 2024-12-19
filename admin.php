@@ -28,11 +28,11 @@ if (!empty($searchQuery)) {
 // Lọc để lấy ra danh sách theo danh mục phim
 $categoryCondition = "";
 if ($catfilm === "dangchieu") {
-    $categoryCondition = " WHERE fc.cat_name = 'Đang chiếu'";
+    $categoryCondition = " and fc.cat_name = 'Đang chiếu'";
 } elseif ($catfilm === "sapchieu") {
-    $categoryCondition = "WHERE fc.cat_name = 'Sắp chiếu'";
+    $categoryCondition = " and fc.cat_name = 'Sắp chiếu'";
 } elseif ($catfilm === "imax") {
-    $categoryCondition = "WHERE fc.cat_name = 'Phim IMAX'";
+    $categoryCondition = " and fc.cat_name = 'Phim IMAX'";
 }
 
 // Pagination
@@ -46,7 +46,7 @@ $offsetTimeMovie = ($currentPage - 1) * $recordsPerPageTimeMovie;
 $countSql = "SELECT COUNT(*) as total 
                 FROM movies 
                 INNER JOIN movie__categories mc ON movies.movie_id = mc.movie_id
-                INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id 
+                INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id where movies.movie_status = 1 
                 {$categoryCondition} {$searchCondition}";
 $countResult = $conn->query($countSql);
 $totalRecords = $countResult->fetch_assoc()['total'];
@@ -82,6 +82,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                     <div class="inner-sidebar">
                         <a href="admin.php" class=""><img src="./logo.png" alt="logo">TTNP Cinema</a>
                         <a href="?option=movie" class="menu-item <?php if($option === "movie") echo "active";?>" id="movie">Phim</a>
+                        <a href="?option=genre" class="menu-item <?php if($option === "genre") echo "active";?>" id="genre">Thể loại</a>
                         <a href="?option=schedule" class="menu-item <?php if($option === "schedule") echo "active";?>" id="schedule">Suất chiếu</a>
                         <a href="?option=room" class="menu-item <?php if($option === "room") echo "active";?>" id="room">Phòng chiếu</a>
                         <a href="?option=food" class="menu-item <?php if($option === "food") echo "active";?>" id="product">Đồ ăn</a>
@@ -143,7 +144,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                         <?php 
                                             $sql = "SELECT * FROM movies  
                                             INNER JOIN movie__categories mc ON movies.movie_id = mc.movie_id
-                                            INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id  
+                                            INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id where movie_status = 1  
                                             {$categoryCondition} {$searchCondition}
                                             LIMIT $offset, $recordsPerPage";
 
@@ -479,7 +480,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                         </div>
                     </form>
                     <?php endif; ?>
-                    <!-- Quản phòng chiếu -->
+                    <!-- Quản lý phòng chiếu -->
                     <?php if ($option === "room"): ?>
                     <form action="admin.php?option=<?php echo $option;?>" method="post">
                         <div class="inner-content">
@@ -537,7 +538,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                         <?php
                                             // Hiển thị phòng 
                                             $sql = "SELECT * FROM room r 
-                                            INNER JOIN cinema c ON r.cinema_id = c.cinema_id {$searchCondition}";
+                                            INNER JOIN cinema c ON r.cinema_id = c.cinema_id {$searchCondition} and r.room_status = 1";
 
                                             $result = $conn->query($sql);
                                             while ($row = $result->fetch_assoc()): 
@@ -554,6 +555,55 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                                     <div class="action-dropdown">
                                                         <a href="./admin/manage_room/edit_room.php?room_id=<?php echo $row['room_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
                                                         <a onclick="return confirm('Bạn có chắc chắn muốn xóa phòng chiếu này không?')" href="./admin/manage_room/delete_room.php?id=<?php echo $row['room_id'];?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php endwhile; ?>
+                                    </table>
+                                </form>
+                            </div>
+                            <?php
+                                }
+                            ?>
+                        </div>
+                    </form>
+                    <?php endif; ?>
+                    <!-- Quản lý thể loại -->
+                    <?php if ($option === "genre"): ?>
+                    <form action="admin.php?option=<?php echo $option;?>" method="post">
+                        <div class="inner-content">
+                            <div class="function">
+                                <div class="function-add-film">
+                                    <a href = "./admin/manage_genre/add_genre.php" class="add-movie-button">Thêm thể loại mới</a>
+                                </div>
+                            </div>
+                            <?php 
+                                if ($option == "genre") {
+                            ?>  
+                            <div class="table-content">
+                                <form action="">
+                                    <table class="movie-table">
+                                        <tr class="table-header">
+                                            <th class="movie-id-header">Mã thể loại</th>
+                                            <th class="movie-name-header">Tên thể loại</th>
+                                        </tr>
+                                        <?php
+                                            // Hiển thị thể loại
+                                            $sql = "SELECT * FROM genre_film order by g_name";
+
+                                            $result = $conn->query($sql);
+                                            while ($row = $result->fetch_assoc()): 
+                                        ?>
+                                        <tr class="table-row">
+                                            <td class="movie-id"><?php echo $row['g_id']; ?></td>
+                                            <td class="movie-name"><?php echo $row['g_name']; ?></td>
+                                            <td class="movie-action">
+                                                <div class="action-menu">
+                                                    <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+                                                    <div class="action-dropdown">
+                                                        <a href="./admin/manage_genre/edit_genre.php?g_id=<?php echo $row['g_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                        <a onclick="return confirm('Bạn có chắc chắn muốn xóa thể loại này không?')" href="./admin/manage_genre/delete_genre.php?g_id=<?php echo $row['g_id'];?>"><i class="fa-regular fa-trash-can"></i></a>
                                                     </div>
                                                 </div>
                                             </td>

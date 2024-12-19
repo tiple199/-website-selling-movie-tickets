@@ -639,11 +639,13 @@
     // Xử lý mã qr
     <?php
         $result_history_1->data_seek(0);
+        if($result_history_1->num_rows > 0){
         while($r = $result_history_1->fetch_assoc()){
     ?>
         generateQRcode(<?=$r["invoice_id"]?>)
     <?php
         }
+    }
     ?>
     function generateQRcode(id_invoice) {
         const fixedSize = 50;

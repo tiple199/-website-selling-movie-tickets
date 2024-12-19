@@ -6,6 +6,7 @@
     $film_premiere = $conn->query("select * from movies where movie_ispremiere = 1 and movie_status  = 1");
     // cinema_id
     $check_cinema_id = $_REQUEST["cinema_id"];
+    $_SESSION["cinema_id"] = $_REQUEST["cinema_id"];
     // schedule
     $check_schedule = $_REQUEST["schedule_id"];
     $_SESSION["schedule_id"] = $check_schedule;

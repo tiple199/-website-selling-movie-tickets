@@ -249,3 +249,7 @@
 .text_error{
     color: red;
 }
+
+.check_payment:first-child:checked {
+    
+}

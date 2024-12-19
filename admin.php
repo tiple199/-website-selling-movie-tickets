@@ -166,7 +166,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                                         <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
                                                         <div class="action-dropdown">
                                                             <a href="./admin/manage_movie/edit_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                            <a onclick="return confirm('are you sure to delete')" href="admin/manage_movie/delete_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                            <a onclick="return confirm('Bạn có chắc chắn muốn xóa?')" href="admin/manage_movie/delete_movie.php?movie_id=<?php echo $row['movie_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
                                                         </div>
                                                     </div>
                                                 </td>

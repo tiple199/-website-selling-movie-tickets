@@ -196,15 +196,15 @@
                     </tr>
                     <tr>
                         <td align="right">Ngày chiếu:</td>
-                        <td><input type="date" name="txtDate"></td>
+                        <td><input type="date" name="txtDate" required></td>
                     </tr>
                     <tr>
                         <td align="right">Giờ chiếu:</td>
-                        <td><input type="text" name="txtTime"></td>
+                        <td><input type="text" name="txtTime" required></td>
                     </tr>
                     <tr>
                         <td align="right">Thứ chiếu:</td>
-                        <td><input type="text" name="txtDay"></td>
+                        <td><input type="text" name="txtDay" required value=""></td>
                     </tr>
                     <tr>
                         <td><input type="submit" name = "cmd" value = "Submit"></td>

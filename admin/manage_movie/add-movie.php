@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- Thông tin phim -->
             <tr>
                 <td align="right">Tên phim:</td>
-                <td><input type="text" name="txtMovieName"></td>
+                <td><input type="text" name="txtMovieName" required></td>
             </tr>
             <tr>
                 <td align="right">Hình ảnh:</td>
@@ -135,27 +135,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </tr>
             <tr>
                 <td align="right">Trailer:</td>
-                <td><input type="text" name="txtMovieTrailer"></td>
+                <td><input type="text" name="txtMovieTrailer" required></td>
             </tr>
             <tr>
                 <td align="right">Nhãn:</td>
-                <td><input type="text" name="txtMovieMinage"></td>
+                <td><input type="text" name="txtMovieMinage" required></td>
             </tr>
             <tr>
                 <td align="right">Thời gian:</td>
-                <td><input type="text" name="txtMovieTime"></td>
+                <td><input type="text" name="txtMovieTime" required></td>
             </tr>
             <tr>
                 <td align="right">Ngày Chiếu:</td>
-                <td><input type="date" name="txtMovieDate"></td>
+                <td><input type="date" name="txtMovieDate" required></td>
             </tr>
             <tr>
                 <td align="right">Quốc gia:</td>
-                <td><input type="text" name="txtMovieNation"></td>
+                <td><input type="text" name="txtMovieNation" required></td>
             </tr>
             <tr>
                 <td align="right">Nhà sản xuất:</td>
-                <td><input type="text" name="txtMovieManufac"></td>
+                <td><input type="text" name="txtMovieManufac" required></td>
             </tr>
             <tr>
                 <td align="right">Trạng thái:</td>

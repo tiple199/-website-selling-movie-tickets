@@ -13,6 +13,7 @@
         join room R on R.room_id = S.room_id
         join cinema C on C.cinema_id = R.cinema_id
         where S.show_date = (select show_date from schedules where schedule_id = $check_schedule) and S.movie_id = (select movie_id from schedules where schedule_id = $check_schedule) and C.cinema_id= $check_cinema_id
+        order by show_time
     ";
     $change_time = $conn->query($sql);
     // info_film

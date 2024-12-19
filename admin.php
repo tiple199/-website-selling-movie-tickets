@@ -352,7 +352,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                             INNER JOIN cinema ON  room.cinema_id = cinema.cinema_id
                                             INNER JOIN movie__categories mc ON movies.movie_id = mc.movie_id
                                             INNER JOIN film_categories fc ON mc.cat_id = fc.cat_id  
-                                            {$categoryCondition} {$searchCondition}
+                                            {$categoryCondition} {$searchCondition} and movies.movie_status = 1
                                             LIMIT $offsetTimeMovie, $recordsPerPageTimeMovie";
                                 
                                             $result2 = $conn->query($sql2);

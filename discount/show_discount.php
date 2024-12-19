@@ -214,9 +214,9 @@
         </div>
     </header>
     
-    <div class="body__file">
+    <div class="body__film">
         <div class="container">
-            <div class="body__file__inner">
+            <div class="body__film__inner">
                 <!-- body__film -->
                 <div class="content__film__wrap">
                     <p class="text_cat">ƯU ĐÃI</p>

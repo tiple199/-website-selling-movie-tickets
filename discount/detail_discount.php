@@ -219,9 +219,9 @@
         </div>
     </header>
     
-    <div class="body__file">
+    <div class="body__film">
         <div class="container">
-            <div class="body__file__inner">
+            <div class="body__film__inner">
                 <!-- body__discount -->
                  
                 <div class="content__film__wrap">
@@ -229,6 +229,7 @@
                     ?>
                     <h2 class="title_discount"><?=$r["discount_title"]?></h2>
                     <p>Mã giảm giá: <span class="bold"><?=$r["discount_id"]?></span></p>
+                    <p>Giảm giá: <?=$r["discount_price"]?> đ</p>
                     <img src="../assets/image/image_discount/<?=$r["discount_img"]?>" alt="" class="img__discount">
                     <p class="bold">Điều kiện áp dụng:</p>
                     <p>- Áp dụng Thứ Ba hàng tuần cho tất cả khách hàng.</p>

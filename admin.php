@@ -198,7 +198,7 @@
                                             <th>Tên đồ ăn</th>
                                             <th>Mô tả</th>
                                             <th>Giá</th>
-                                            <th>Xóa</th>
+                                            <th></th>
                                         </tr>
                                         <?php 
                                             $sql1 = "SELECT * FROM food";
@@ -216,9 +216,16 @@
                                                 </td>
                                                 <td><?php echo $row1['food_desc']; ?></td>
                                                 <td><?php echo $row1['food_price']; ?></td>
-                                                <td class="delete-icon-cell">                                                         
-                                                    <a onclick="return confirm('are you sure to delete')" href="admin/quanlydoan/delete_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                <td class="movie-action">
+                                                    <div class="action-menu">
+                                                        <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+                                                        <div class="action-dropdown">  
+                                                            <a href="admin/quanlydoan/edit_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>                                                       
+                                                            <a onclick="return confirm('are you sure to delete')" href="admin/quanlydoan/delete_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                        </div>
+                                                    </div>
                                                 </td>
+                                                
                                             </tr>
                                         <?php endwhile; ?>
                                     </table>

@@ -1,0 +1,3 @@
+- Dùng xamp để chạy web.
+- Chỉnh lại cổng mysql trong file connection.
+- Sửa lại bảng kết nối database trong file connection.

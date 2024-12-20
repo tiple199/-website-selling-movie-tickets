@@ -281,7 +281,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                             <th>Tên đồ ăn</th>
                                             <th>Mô tả</th>
                                             <th>Giá</th>
-                                            <th>Xóa</th>
+                                            <th></th>
                                         </tr>
                                         <?php 
                                             $sql1 = "SELECT * FROM food";
@@ -298,11 +298,17 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                                     <?php echo $row1['food_name']; ?>
                                                 </td>
                                                 <td><?php echo $row1['food_desc']; ?></td>
-                                                <td><?php echo number_format($row1['food_price'], 0, ',', '.') . ' đ'; ?></td>
-                                                <td class="delete-icon-cell">                                                         
-                                                    <a onclick="return confirm('Bạn có chắc chắn muốn xóa không?')" href="admin/manage_food/delete_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
-
+                                                <td><?php echo $row1['food_price']; ?></td>
+                                                <td class="movie-action">
+                                                    <div class="action-menu">
+                                                        <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+                                                        <div class="action-dropdown">  
+                                                            <a href="admin/manage_food/edit_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>                                                       
+                                                            <a onclick="return confirm('are you sure to delete')" href="admin/manage_food/delete_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                        </div>
+                                                    </div>
                                                 </td>
+                                                
                                             </tr>
                                         <?php endwhile; ?>
                                     </table>

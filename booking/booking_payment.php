@@ -76,7 +76,7 @@
     <header class="header">
         <div class="container" style="--spacer:20px;">
             <div class="header__inner">
-                <a href="./home.php"><img src="../logo.png" alt="" class="header__img"></a>
+                <a href="../home.php"><img src="../logo.png" alt="" class="header__img"></a>
                 <div class="cancel_tran">
                     <a href="./unset_session.php" class="link__cancel">Hủy giao dịch <i class="fa-solid fa-xmark"></i></a>
                 </div>
@@ -128,7 +128,7 @@
                                 ?>
 
                                 <div class="method__item">
-                                    <input type="radio" name="select__method" id="method_<?php echo $row["pay_id"];?>" value="<?php echo $row["pay_id"];?>">                                   
+                                    <input type="radio" name="select__method" id="method_<?php echo $row["pay_id"];?>" value="<?php echo $row["pay_id"];?>" checked>                                   
                                     <label for="method_<?=$row["pay_id"];?>" class="label__method">
                                         <img src="../assets/image/payment/<?php echo $row["pay_image"];?>" alt="" class="img__method">
                                         <p class="method__desc"><?php echo $row["pay_name"];?></p>

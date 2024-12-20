@@ -123,19 +123,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Thông tin đồ ăn -->
                     <tr>
                         <td align="right">Tên đồ ăn:</td>
-                        <td><input type="text" name="txtFoodName" value="<?php echo isset($_SESSION['form_data']['foodName']) ? $_SESSION['form_data']['foodName'] : '';?>"></td>
+                        <td><input type="text" name="txtFoodName" value="<?php echo isset($_SESSION['form_data']['foodName']) ? $_SESSION['form_data']['foodName'] : '';?>" required></td>
                     </tr>
                     <tr>
                         <td align="right">Mô tả:</td>
-                        <td><input type="text" name="txtFoodDesc" name="txtFoodDesc" value="<?php echo isset($_SESSION['form_data']['foodDesc']) ? $_SESSION['form_data']['foodDesc'] : ''; ?>"></td>
+                        <td><input type="text" name="txtFoodDesc" name="txtFoodDesc" value="<?php echo isset($_SESSION['form_data']['foodDesc']) ? $_SESSION['form_data']['foodDesc'] : ''; ?>" required></td>
                     </tr>
                     <tr>
                         <td align="right">Giá:</td>
-                        <td><input type="text" name="txtFoodPrice" value="<?php echo isset($_SESSION['form_data']['foodPrice']) ? $_SESSION['form_data']['foodPrice'] : ''; ?>"></td>
+                        <td><input type="text" name="txtFoodPrice" value="<?php echo isset($_SESSION['form_data']['foodPrice']) ? $_SESSION['form_data']['foodPrice'] : ''; ?>" required></td>
                     </tr>
                     <tr>
                         <td align="right">Ảnh:</td>
-                        <td><input type="text" name="txtFoodImage" value="<?php echo isset($_SESSION['form_data']['foodImage']) ? $_SESSION['form_data']['foodImage'] : ''; ?>"></td>
+                        <td><input type="text" name="txtFoodImage" value="<?php echo isset($_SESSION['form_data']['foodImage']) ? $_SESSION['form_data']['foodImage'] : ''; ?>" required></td>
                     </tr>
                     <tr>
                         <td><input type="submit" name = "cmd" value = "Submit"></td>

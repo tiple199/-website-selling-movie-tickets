@@ -229,7 +229,8 @@
                     ?>
                     <h2 class="title_discount"><?=$r["discount_title"]?></h2>
                     <p>Mã giảm giá: <span class="bold"><?=$r["discount_id"]?></span></p>
-                    <p>Giảm giá: <?=$r["discount_price"]?> đ</p>
+                    <br>
+                    <p>Giá giảm: <?= number_format($r["discount_price"])?> đ</p>
                     <img src="../assets/image/image_discount/<?=$r["discount_img"]?>" alt="" class="img__discount">
                     <p class="bold">Điều kiện áp dụng:</p>
                     <p>- Áp dụng Thứ Ba hàng tuần cho tất cả khách hàng.</p>

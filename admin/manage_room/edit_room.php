@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $row = chr(64 + $i); // Tạo hàng (A, B, C...)
 
                     // Điều chỉnh giá ghế và loại ghế cho hai hàng gần cuối
-                    if ($i >= $length - 2 && $i < $length) {
+                    if ($i >= $length - 2 && $i < $length && $j >= 3 && $j <= 8) {
                         $seat_price = 85000;
                         $seat_type = 1;
                     } else {

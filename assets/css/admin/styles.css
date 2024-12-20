@@ -295,5 +295,72 @@ a{
     height: 300px;
 }
 
+/* css phần hóa đơn */
 
+/* Phần lọc theo ngày bên trong */
+.function .filter-by-date {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Khoảng cách giữa các phần tử */
+}
+
+/* Label cho các trường nhập liệu */
+.function .filter-by-date label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-right: 5px;
+}
+
+/* Input kiểu date */
+.function .filter-by-date input[type="date"] {
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Hiệu ứng hover cho input */
+.function .filter-by-date input[type="date"]:hover {
+    border-color: #aaa;
+    background-color: #f3f3f3;
+}
+
+/* Nút lọc hóa đơn */
+.function .filter-by-date .filter-button {
+    padding: 8px 15px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #e97f12; /* Màu xanh */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hiệu ứng hover cho nút */
+.function .filter-by-date .filter-button:hover {
+    background-color: #e97f12; 
+}
+
+/* Responsive thiết kế cho màn hình nhỏ */
+@media (max-width: 768px) {
+    .function .filter-by-date {
+        flex-direction: column; /* Chuyển sang dọc */
+        align-items: flex-start;
+    }
+
+    .function .filter-by-date label {
+        margin-right: 0;
+    }
+
+    .function .filter-by-date input[type="date"],
+    .function .filter-by-date .filter-button {
+        width: 100%; /* Đầy đủ chiều rộng */
+    }
+}
 

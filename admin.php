@@ -298,7 +298,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                                     <?php echo $row1['food_name']; ?>
                                                 </td>
                                                 <td><?php echo $row1['food_desc']; ?></td>
-                                                <td><?php echo $row1['food_price']; ?></td>
+                                                <td><?php echo number_format($row1['food_price'], 0, ',', '.') . ' đ'; ?></td>
                                                 <td class="movie-action">
                                                     <div class="action-menu">
                                                         <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>

@@ -85,6 +85,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                         <a href="?option=genre" class="menu-item <?php if($option === "genre") echo "active";?>" id="genre">Thể loại</a>
                         <a href="?option=schedule" class="menu-item <?php if($option === "schedule") echo "active";?>" id="schedule">Suất chiếu</a>
                         <a href="?option=room" class="menu-item <?php if($option === "room") echo "active";?>" id="room">Phòng chiếu</a>
+                        <a href="?option=invoices" class="menu-item <?php if($option === "invoices") echo "active";?>" id="invoices">Thống kê hóa đơn</a>
                         <a href="?option=food" class="menu-item <?php if($option === "food") echo "active";?>" id="product">Đồ ăn</a>
                         <a href="?option=discount" class="menu-item <?php if($option === "discount") echo "active";?>" id="discount">Khuyến mãi</a>
                         <a href="?option=user" class="menu-item <?php if($option === "user") echo "active";?>" id="website">Người dùng</a>
@@ -280,7 +281,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                             <th>Tên đồ ăn</th>
                                             <th>Mô tả</th>
                                             <th>Giá</th>
-                                            <th>Xóa</th>
+                                            <th></th>
                                         </tr>
                                         <?php 
                                             $sql1 = "SELECT * FROM food";
@@ -298,10 +299,16 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                                                 </td>
                                                 <td><?php echo $row1['food_desc']; ?></td>
                                                 <td><?php echo number_format($row1['food_price'], 0, ',', '.') . ' đ'; ?></td>
-                                                <td class="delete-icon-cell">                                                         
-                                                    <a onclick="return confirm('Bạn có chắc chắn muốn xóa không?')" href="admin/manage_food/delete_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
-
+                                                <td class="movie-action">
+                                                    <div class="action-menu">
+                                                        <span class="action-button"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+                                                        <div class="action-dropdown">  
+                                                            <a href="admin/manage_food/edit_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-solid fa-pen-to-square"></i></a>                                                       
+                                                            <a onclick="return confirm('are you sure to delete')" href="admin/manage_food/delete_food.php?food_id=<?php echo $row1['food_id']; ?>"><i class="fa-regular fa-trash-can"></i></a>
+                                                        </div>
+                                                    </div>
                                                 </td>
+                                                
                                             </tr>
                                         <?php endwhile; ?>
                                     </table>
@@ -480,6 +487,102 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                         </div>
                     </form>
                     <?php endif; ?>
+                    <?php if ($option === "invoices"): ?>
+                        <?php
+                        // Xử lý lọc hóa đơn theo khoảng thời gian
+                        $recordsPerPage = 10; // Số bản ghi trên mỗi trang
+                        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Trang hiện tại
+                        $offset = ($currentPage - 1) * $recordsPerPage; // Vị trí bắt đầu
+                        $fromDate = isset($_POST['from_date']) ? $_POST['from_date'] : '';
+                        $toDate = isset($_POST['to_date']) ? $_POST['to_date'] : '';
+                        $lastMonth = isset($_POST['last_month']); // Kiểm tra nếu nhấn nút lấy hóa đơn tháng trước
+
+                        // Điều kiện lọc theo tháng trước hoặc khoảng thời gian
+                        $dateCondition = '';
+                        if ($lastMonth) {
+                            $startLastMonth = date('Y-m-01', strtotime('first day of last month'));
+                            $endLastMonth = date('Y-m-t', strtotime('last day of last month'));
+                            $dateCondition = "WHERE DATE(invoices.date) BETWEEN '$startLastMonth' AND '$endLastMonth'";
+                        } elseif (!empty($fromDate) && !empty($toDate)) {
+                            $dateCondition = "WHERE DATE(invoices.date) BETWEEN '$fromDate' AND '$toDate'";
+                        }
+
+                        // Đếm tổng số hóa đơn
+                        $countSql = "SELECT COUNT(*) as total FROM invoices $dateCondition";
+                        $countResult = $conn->query($countSql);
+                        $totalRecords = $countResult->fetch_assoc()['total'];
+                        $totalPages = ceil($totalRecords / $recordsPerPage); // Tổng số trang  
+
+                        // Lấy danh sách hóa đơn
+                        $sql = "SELECT invoices.*, user.id, paymethod.pay_name 
+                                FROM invoices
+                                JOIN booking ON invoices.booking_id = booking.booking_id
+                                JOIN user ON booking.user_id = user.id
+                                JOIN paymethod ON invoices.payment_id = paymethod.pay_id
+                                $dateCondition
+                                ORDER BY invoices.date ASC
+                                LIMIT $offset, $recordsPerPage";
+                        $result = $conn->query($sql);
+
+                        // Tính tổng doanh thu
+                        $totalRevenueSql = "SELECT SUM(amount) as totalRevenue FROM invoices $dateCondition";
+                        $totalRevenueResult = $conn->query($totalRevenueSql);
+                        $totalRevenue = $totalRevenueResult->fetch_assoc()['totalRevenue'];
+                        ?>
+                        <form action="admin.php?option=<?php echo $option; ?>" method="post">
+                            <div class="inner-content">
+                                <div class="function">
+                                    <div class="filter-by-date">
+                                        <label for="from_date">Từ ngày:</label>
+                                        <input type="date" id="from_date" name="from_date" value="<?php echo $fromDate; ?>">
+                                        
+                                        <label for="to_date">Đến ngày:</label>
+                                        <input type="date" id="to_date" name="to_date" value="<?php echo $toDate; ?>">
+                                        
+                                        <button type="submit" class="filter-button">Lọc hóa đơn</button>
+                                        <button type="submit" name="last_month" class="filter-button last-month-button">Lấy hóa đơn tháng trước</button>
+                                    </div>
+                                </div>
+                                <div class="table-content">
+                                    <table class="movie-table">
+                                        <tr class="table-header">
+                                            <th>Mã hóa đơn</th>
+                                            <th>Mã khách hàng</th>
+                                            <th>Phương thức thanh toán</th>
+                                            <th>Số tiền</th>
+                                            <th>Trạng thái</th>
+                                            <th>Ngày</th>
+                                            <th>Mã khuyến mãi</th>
+                                        </tr>
+                                        <?php while ($row = $result->fetch_assoc()): ?>
+                                        <tr class="table-row">
+                                            <td class="movie-id"><?php echo $row['invoice_id']; ?></td>
+                                            <td class="movie-duration"><?php echo $row['id']; ?></td>
+                                            <td class="movie-duration"><?php echo $row['pay_name']; ?></td>
+                                            <td class="movie-duration"><?php echo number_format($row['amount'], 0, ',', '.') . ' đ'; ?></td>
+                                            <td class="movie-duration"><?php echo $row['status'] == 1 ? 'Thành công' : 'Thất bại'; ?></td>
+                                            <td class="movie-duration"><?php echo $row['date']; ?></td>
+                                            <td class="movie-duration"><?php echo $row['discount_id']; ?></td>
+                                        </tr>
+                                        <?php endwhile; ?>
+                                        <tr class="table-footer">
+                                            <td colspan="3" class="movie-duration">Tổng doanh thu:</td>
+                                            <td colspan="4" class="movie-duration"><?php echo number_format($totalRevenue, 0, ',', '.') . ' đ'; ?></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="pagination">
+                                    <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                                        <a href="?option=invoices&page=<?php echo $page; ?>"
+                                        class="pagination-link <?php if ($page == $currentPage) echo 'active'; ?>">
+                                            <?php echo $page; ?>
+                                        </a>
+                                    <?php endfor; ?>
+                                </div>
+                            </div>
+                        </form>
+                    <?php endif; ?>
+
                     <!-- Quản lý phòng chiếu -->
                     <?php if ($option === "room"): ?>
                     <form action="admin.php?option=<?php echo $option;?>" method="post">

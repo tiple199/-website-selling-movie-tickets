@@ -429,7 +429,7 @@
                             <p class="txt_history">Lưu ý: chỉ hiển thị 20 giao dịch gần nhất</p>
                             
                             <table border= 1 class="table__item">
-                                <?php if(!empty($result_history_1)){?>
+                                <?php if(isset($result_history_1)){?>
                                 <tr class="row_title">
                                     <th>STT</th>
                                     <th>Tên phim</th> 
@@ -446,13 +446,12 @@
                                         $_REQUEST["stt"] = 1;
                                     }
                                     $count = $_REQUEST["stt"];
-                                    if(!empty($result_history_1) && $result_history_1->num_rows > 0){
+                                    if(isset($result_history_1) && $result_history_1->num_rows > 0){
                                     while($r = $result_history_1->fetch_assoc()){
                                         if($count == 21){
                                             break;
                                         }
                                 ?>
-
                                 <tr class="row_history_item">
                                     <td><?=$count?></td>
                                     
@@ -461,8 +460,7 @@
                                     <td><?=$r["pay_name"]?></td>
                                     <td><?=$r["cinema_name"]?></td>
                                     <td class="amount_invoice"><?=number_format($r["amount"])?> đ</td>
-                                    <td><span class="body_qr-<?=$r["invoice_id"]?>"></span></td>
-                                    
+                                    <td><span class="body_qr-<?=$r["invoice_id"]?>"></span></td> 
                                 </tr>
                                 <?php
                                         
@@ -476,7 +474,7 @@
                             <!-- Điều khiển phan trang -->
                             <div class="page">
                                 
-                                <?php if(!empty($result_history_1)){
+                                <?php if(isset($result_history_1)){
                                     echo "<span>Trang </span>";
                                     for($i = 1; $i <= $num_page;$i++){
                                         if($i == $page){
@@ -638,12 +636,14 @@
 
     // Xử lý mã qr
     <?php
-        $result_history_1->data_seek(0);
-        if($result_history_1->num_rows > 0){
-        while($r = $result_history_1->fetch_assoc()){
+        if(isset($result_history_1)){
+            $result_history_1->data_seek(0);
+            if($result_history_1->num_rows > 0){
+                while($r = $result_history_1->fetch_assoc()){
     ?>
-        generateQRcode(<?=$r["invoice_id"]?>)
+        generateQRcode(<?=$r["invoice_id"]?>);
     <?php
+            }
         }
     }
     ?>

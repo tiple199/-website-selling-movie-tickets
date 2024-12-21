@@ -85,7 +85,7 @@ $totalPagesSchedule = ceil($totalSchedule / $recordsPerPageTimeMovie); // Tổng
                         <a href="?option=genre" class="menu-item <?php if($option === "genre") echo "active";?>" id="genre">Thể loại</a>
                         <a href="?option=schedule" class="menu-item <?php if($option === "schedule") echo "active";?>" id="schedule">Suất chiếu</a>
                         <a href="?option=room" class="menu-item <?php if($option === "room") echo "active";?>" id="room">Phòng chiếu</a>
-                        <a href="?option=invoices" class="menu-item <?php if($option === "invoices") echo "active";?>" id="invoices">Hóa đơn</a>
+                        <a href="?option=invoices" class="menu-item <?php if($option === "invoices") echo "active";?>" id="invoices">Thống kê hóa đơn</a>
                         <a href="?option=food" class="menu-item <?php if($option === "food") echo "active";?>" id="product">Đồ ăn</a>
                         <a href="?option=discount" class="menu-item <?php if($option === "discount") echo "active";?>" id="discount">Khuyến mãi</a>
                         <a href="?option=user" class="menu-item <?php if($option === "user") echo "active";?>" id="website">Người dùng</a>

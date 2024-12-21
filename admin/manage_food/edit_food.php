@@ -22,7 +22,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $Food_name = isset($_POST['txtNameFood']) ? trim($_POST['txtNameFood']) : '';
     $Food_desc = isset($_POST['txtDesc']) ? trim($_POST['txtDesc']) : '';
     $Food_price = isset($_POST['txtPrice']) ? trim($_POST['txtPrice']) : '';
-    $Food_image = isset($_POST['txtImage']) ? trim($_POST['txtImage']) : '';
+
+    // Xử lý hình ảnh tải lên
+    if (isset($_FILES['foodImage']) && $_FILES['foodImage']['error'] == UPLOAD_ERR_OK) {
+        $imageDir = '../../assets/image/food/'; // Thư mục lưu hình ảnh
+        $imageFile = $imageDir . basename($_FILES['foodImage']['name']);
+        
+        // Kiểm tra và di chuyển tệp tải lên
+        if (move_uploaded_file($_FILES['foodImage']['tmp_name'], $imageFile)) {
+            $Food_image = basename($_FILES['foodImage']['name']);
+        } else {
+            $_SESSION["food_edit_error"] = "Không thể tải lên hình ảnh.";
+        }
+    } else {
+        $Food_image = $food['food_image']; // Giữ nguyên nếu không có hình ảnh mới được tải lên
+    }
 
     // Kiểm tra xem tên món ăn mới có tồn tại trong cơ sở dữ liệu không
     $checkStmt = $conn->prepare("SELECT COUNT(*) FROM food WHERE food_name = ? AND food_id != ?");
@@ -53,8 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
+    <title>Sửa đồ ăn</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -115,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container_1 d-flex">
         <center>
-            <font color = "red"><?php echo $_SESSION["food_edit_error"];?></font>
+            <font color="red"><?php echo $_SESSION["food_edit_error"]; ?></font>
         </center>
         <h1 align="center">Sửa đồ ăn</h1>
         <div class="inner-content">
@@ -135,20 +148,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </tr>
                     <tr>
                         <td align="right">Ảnh:</td>
-                        <td><input type="text" name="txtImage" value="<?php echo htmlspecialchars($food['food_image']); ?>"></td>
+                        <td>
+                            <input type="file" name="foodImage">
+                            <br>
+                            <br>
+                            Ảnh hiện tại: <?php echo htmlspecialchars($food['food_image']); ?>
+                        </td>
                     </tr>
-                    
                     <tr>
-                        <td><input type="submit" name = "cmd" value = "Submit"></td>
-                        <td><input type="reset" value = "Reset"></td>
-                        <td><input type="button" value = "Back" onclick="window.location.href='../../admin.php?option=food'"></td>
+                        <td><input type="submit" name="cmd" value="Submit"></td>
+                        <td><input type="reset" value="Reset"></td>
+                        <td><input type="button" value="Back" onclick="window.location.href='../../admin.php?option=food'"></td>
                     </tr>
-                </table>      
+                </table>
             </form>
         </div>
     </div>
 </body>
 </html>
-<?php $_SESSION["food_edit_error"] = "";?>
-</body>
-</html>
+<?php $_SESSION["food_edit_error"] = ""; ?>

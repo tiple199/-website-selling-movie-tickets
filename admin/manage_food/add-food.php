@@ -10,7 +10,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $foodName = isset($_POST['txtFoodName']) ? trim($_POST['txtFoodName']) : '';
     $foodDesc = isset($_POST['txtFoodDesc']) ? trim($_POST['txtFoodDesc']) : '';
     $foodPrice = isset($_POST['txtFoodPrice']) ? (int)$_POST['txtFoodPrice'] : 0;
-    $foodImage = isset($_POST['txtFoodImage']) ? trim($_POST['txtFoodImage']) : '';
+
+    // Handle image upload
+    if (isset($_FILES['foodImage']) && $_FILES['foodImage']['error'] == UPLOAD_ERR_OK) {
+        $imageDir = '../../assets/image/food/'; // Directory to store images
+        $imageFile = $imageDir . basename($_FILES['foodImage']['name']);
+
+        // Move uploaded file to target directory
+        if (move_uploaded_file($_FILES['foodImage']['tmp_name'], $imageFile)) {
+            $foodImage = basename($_FILES['foodImage']['name']);
+        } else {
+            $_SESSION["food_add_error"] = "Không thể tải lên hình ảnh.";
+        }
+    } else {
+        $foodImage = ''; // Set default if no image uploaded
+    }
 
     // Store form data in session
     $_SESSION['form_data'] = [
@@ -37,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Execute the statement
         if ($stmt->execute()) {
-            $_SESSION["food_add_error"] = "New record created successfully";
+            $_SESSION["food_add_error"] = "Đã thêm đồ ăn thành công!";
         } else {
             echo "Error: " . $stmt->error;
         }
@@ -52,8 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
+    <title>Thêm mới đồ ăn</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -115,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container_1 d-flex">
         <h1 align="center">Thêm mới đồ ăn</h1>
         <center>
-            <font color = "red"><?php echo $_SESSION["food_add_error"];?></font>
+            <font color="red"><?php echo $_SESSION["food_add_error"]; ?></font>
         </center>
         <div class="inner-content">
             <form action="add-food.php" method="post" enctype="multipart/form-data">
@@ -123,11 +136,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Thông tin đồ ăn -->
                     <tr>
                         <td align="right">Tên đồ ăn:</td>
-                        <td><input type="text" name="txtFoodName" value="<?php echo isset($_SESSION['form_data']['foodName']) ? $_SESSION['form_data']['foodName'] : '';?>" required></td>
+                        <td><input type="text" name="txtFoodName" value="<?php echo isset($_SESSION['form_data']['foodName']) ? $_SESSION['form_data']['foodName'] : ''; ?>" required></td>
                     </tr>
                     <tr>
                         <td align="right">Mô tả:</td>
-                        <td><input type="text" name="txtFoodDesc" name="txtFoodDesc" value="<?php echo isset($_SESSION['form_data']['foodDesc']) ? $_SESSION['form_data']['foodDesc'] : ''; ?>" required></td>
+                        <td><input type="text" name="txtFoodDesc" value="<?php echo isset($_SESSION['form_data']['foodDesc']) ? $_SESSION['form_data']['foodDesc'] : ''; ?>" required></td>
                     </tr>
                     <tr>
                         <td align="right">Giá:</td>
@@ -135,12 +148,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </tr>
                     <tr>
                         <td align="right">Ảnh:</td>
-                        <td><input type="text" name="txtFoodImage" value="<?php echo isset($_SESSION['form_data']['foodImage']) ? $_SESSION['form_data']['foodImage'] : ''; ?>" required></td>
+                        <td><input type="file" name="foodImage" required></td>
                     </tr>
                     <tr>
-                        <td><input type="submit" name = "cmd" value = "Submit"></td>
-                        <td><input type="reset" value = "Reset"></td>
-                        <td><input type="button" value = "Back" onclick="window.location.href='../../admin.php?option=food'"></td>
+                        <td><input type="submit" name="cmd" value="Submit"></td>
+                        <td><input type="reset" value="Reset"></td>
+                        <td><input type="button" value="Back" onclick="window.location.href='../../admin.php?option=food'"></td>
                     </tr>
                 </table>
             </form>
@@ -148,4 +161,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </body>
 </html>
-<?php $_SESSION["food_add_error"] = "";?>
+<?php $_SESSION["food_add_error"] = ""; ?>

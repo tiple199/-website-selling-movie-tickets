@@ -370,3 +370,8 @@ input[type="radio"]:checked::after{
     font-weight: bold;
     color: #e74c3c;
 }
+#error_email{
+    font-size: 1.4rem;
+    color: red;
+    margin-bottom: 5px;
+}

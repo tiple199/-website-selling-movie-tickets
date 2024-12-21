@@ -362,6 +362,7 @@
                                 <form action="./profile.php?action_save=save_email" method="POST">
                                     <label for="input__email" class="label__change_mail">Email mới</label>
                                     <input type="email" id="input__email" name="email_change" placeholder="Nhập địa chỉ email mới">
+                                    <span id="error_email"></span>
                                     <button class="btn_continue" id="btn_continue">Tiếp Tục</button>
                                 </form>
                             </div>
@@ -373,15 +374,15 @@
                                 <i class="fa-regular fa-circle-xmark icon_close" id="btn_close__password"></i>
                                 <!-- current pass -->
                                 <form action="./profile.php?action_save=save_password" method="POST">
-                                    <label for="input__email" class="label__change_mail">Mật khẩu hiện tại</label>
+                                    <label for="input_current_password" class="label__change_mail">Mật khẩu hiện tại</label>
                                     <input type="password" class="input__password" id="input_current_password" name="current_password" placeholder="Nhập mật khẩu hiện tại">
                                     <span id="error_current_pass"></span>
                                     <!-- new pass -->
-                                    <label for="input__email" class="label__change_mail">Mật khẩu mới</label>
+                                    <label for="input_new_password" class="label__change_mail">Mật khẩu mới</label>
                                     <input type="password" class="input__password" id="input_new_password" name="new_password" placeholder="Nhập mật khẩu mới">
                                     <span id="error_new_pass"></span>
                                     <!-- confirm pass -->
-                                    <label for="input__email" class="label__change_mail">Xác nhận mật khẩu mới</label>
+                                    <label for="input_confirm_password" class="label__change_mail">Xác nhận mật khẩu mới</label>
                                     <input type="password" class="input__password" id="input_confirm_password" placeholder="Xác nhận mật khẩu mới">
                                     <span id="error_confirm_pass"></span>
                                     <!-- button an -->
@@ -556,6 +557,7 @@
             const btn_close_pass = document.getElementById('btn_close__password');
             const active__his = document.getElementById('active__history');
             const active__pro = document.getElementById('active__profile');
+            const btn_changeEmail = document.getElementById('btn_continue');
             show_overlay.addEventListener("click",function(){
                 overlay.style.display = "none";
                 change_email.style.display = "none";
@@ -622,6 +624,14 @@
                 }
 
             })
+
+            btn_changeEmail.addEventListener("click",function(){
+                if(input__email.value == ""){
+                    error_email.textContent = "Bạn cần nhập email thay đổi trước khi bấm thi đổi";
+                    event.preventDefault();
+                }
+            })
+
             <?php
                 if(isset($_REQUEST["error_save_password"])){
                     

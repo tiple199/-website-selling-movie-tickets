@@ -37,7 +37,7 @@
     join room R on R.room_id = S.room_id
     join cinema C on C.cinema_id = R.cinema_id
     join movies M on M.movie_id = S.movie_id
-    where S.show_date = '$check_date' and C.cinema_id = $cinema_id
+    where S.show_date = '$check_date' and C.cinema_id = $cinema_id and M.movie_status = 1
     group by S.movie_id 
     ";
     $result_film = $conn->query($sql_film);
